@@ -821,6 +821,8 @@ namespace SM_MOTORS
                     //обновить цену
                     List<string> listProduct = nethouse.getProductList(cookieBike18, urlTovarBike);
                     string priceBike = listProduct[9];
+                    if (priceBike == "")
+                        priceBike = 0.ToString();
                     otv = webRequest.PostRequest(cookie, urlTovar);
                     int price = Price(otv, discountPrice);
                     if (Convert.ToInt32(priceBike) != price)
