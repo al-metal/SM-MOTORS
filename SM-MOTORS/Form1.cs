@@ -24,7 +24,7 @@ namespace SM_MOTORS
 
         int addCount = 0;
         int countEditProduct = 0;
-        string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold; \"\">";
+        string boldOpen = "<span style=\"font-weight: bold; font-weight: bold;\">";
         string boldClose = "</span>";
 
         public Form1()
@@ -651,6 +651,7 @@ namespace SM_MOTORS
             {
                 EditSizeImages(urlImage, article);
             }
+
             if (availability == "1")
             {
                 bool b = false;
@@ -666,6 +667,7 @@ namespace SM_MOTORS
                         break;
                     }
                 }
+
                 if (!b)
                 {
                     otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + name);
@@ -889,6 +891,12 @@ namespace SM_MOTORS
                         listProduct[8] = fullText;
                         nethouse.saveTovar(cookieBike18, listProduct);
                         countEditProduct++;
+                    }
+                    else
+                    {
+                        //Обновление поля "Полное описание" товара
+                        listProduct[8] = fullText;
+                        nethouse.saveTovar(cookieBike18, listProduct);
                     }
                 }
             }
