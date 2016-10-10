@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using Bike18;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,7 @@ namespace SM_MOTORS
     public partial class Form1 : Form
     {
         web.WebRequest webRequest = new web.WebRequest();
+        nethouse nethouse = new nethouse();
         int addCount = 0;
         int countEditProduct = 0;
 
@@ -866,14 +868,15 @@ namespace SM_MOTORS
                 else
                 {
                     //обновить цену
-                    List<string> listProduct = webRequest.arraySaveimage(webRequest, cookieBike18, urlTovarBike);
+                    List<string> listProduct = nethouse.getProductList(cookieBike18, urlTovarBike);
                     string priceBike = listProduct[9];
                     otv = webRequest.PostRequest(cookie, urlTovar);
                     int price = Price(otv, discountPrice);
                     if (Convert.ToInt32(priceBike) != price)
                     {
                         listProduct[9] = price.ToString();
-                        webRequest.saveImage(cookie, listProduct);
+                        nethouse.saveTovar(cookieBike18, listProduct);
+                        //webRequest.saveImage(cookie, listProduct);
                         countEditProduct++;
                     }
                 }
