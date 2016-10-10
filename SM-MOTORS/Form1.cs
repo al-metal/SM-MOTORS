@@ -20,8 +20,12 @@ namespace SM_MOTORS
     {
         web.WebRequest webRequest = new web.WebRequest();
         nethouse nethouse = new nethouse();
+        CHPU chpu = new CHPU();
+
         int addCount = 0;
         int countEditProduct = 0;
+        string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold; \"\">";
+        string boldClose = "</span>";
 
         public Form1()
         {
@@ -96,16 +100,17 @@ namespace SM_MOTORS
             Properties.Settings.Default.login = tbLogin.Text;
             Properties.Settings.Default.password = tbPassword.Text;
             Properties.Settings.Default.Save();
-            string login = tbLogin.Text;
-            string password = tbPassword.Text;
-            CookieContainer cookieBike18 = webRequest.webCookieBike18(login, password);
 
-            string otv = null;
-            double discountPrice = 0.02;
-            CookieContainer cookie = webRequest.webCookie("https://www.sm-motors.ru/");
             File.Delete("naSite.csv");
             newFileNaSite();
 
+            string otv = null;
+            string login = tbLogin.Text;
+            string password = tbPassword.Text;
+            double discountPrice = 0.02;
+            CookieContainer cookieBike18 = webRequest.webCookieBike18(login, password);
+            CookieContainer cookie = webRequest.webCookie("https://www.sm-motors.ru/");
+            
             otv = webRequest.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
@@ -628,11 +633,10 @@ namespace SM_MOTORS
         {
             List<string> newProduct = new List<string>();
             string urlTovarBike = null;
-            CHPU chpu = new CHPU();
             CookieContainer cookie = new CookieContainer();
+
             string availability = new Regex("(?<=<input type=\"text\" maxlength=\"3\" value=\").*(?=\" data-max)").Match(otv).ToString();
             string article = new Regex("(?<=<span>Артикул:</span>).*?(?=</div>)").Match(otv).ToString();
-
             string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
             name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Trim();
             
@@ -685,8 +689,7 @@ namespace SM_MOTORS
                     cookie = webRequest.webCookie("https://www.sm-motors.ru/");
                     otv = webRequest.PostRequest(cookie, urlTovar);//+ "?bxrand=1465655290358");
                     int price = Price(otv, discountPrice);
-                    string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold; \"\">";
-                    string boldClose = "</span>";
+                    
                     string razdel = "Запчасти и расходники => Каталог запчастей SM-MOTORS => ";
                     string minitext = null;
                     string titleText = null;
@@ -867,6 +870,16 @@ namespace SM_MOTORS
                 }
                 else
                 {
+                    string fullText = null;
+                    fullText = FullText();
+
+                    string nameNoProd = name;
+                    string nameText = boldOpen + nameNoProd + boldClose;
+                    fullText = fullText.Replace("ПОДРАЗДЕЛ", podRazdel).Replace("НАЗВАНИЕ", nameText).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("&#43;", "+").Replace("&#40;", "(").Replace("&#41;", ")").Replace("&nbsp;", " ").Replace("<p><br /></p>", "");
+                    if (fullText.Contains('&'))
+                    {
+
+                    }
                     //обновить цену
                     List<string> listProduct = nethouse.getProductList(cookieBike18, urlTovarBike);
                     string priceBike = listProduct[9];
@@ -875,8 +888,8 @@ namespace SM_MOTORS
                     if (Convert.ToInt32(priceBike) != price)
                     {
                         listProduct[9] = price.ToString();
+                        listProduct[8] = fullText;
                         nethouse.saveTovar(cookieBike18, listProduct);
-                        //webRequest.saveImage(cookie, listProduct);
                         countEditProduct++;
                     }
                 }
