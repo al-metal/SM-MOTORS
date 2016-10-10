@@ -36,6 +36,8 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.btnUpdateImages = new System.Windows.Forms.Button();
+            this.tbLogin = new System.Windows.Forms.TextBox();
+            this.tbPassword = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnUpdate
@@ -105,11 +107,28 @@
             this.btnUpdateImages.UseVisualStyleBackColor = true;
             this.btnUpdateImages.Click += new System.EventHandler(this.button3_Click);
             // 
+            // tbLogin
+            // 
+            this.tbLogin.Location = new System.Drawing.Point(695, 105);
+            this.tbLogin.Name = "tbLogin";
+            this.tbLogin.Size = new System.Drawing.Size(100, 20);
+            this.tbLogin.TabIndex = 9;
+            // 
+            // tbPassword
+            // 
+            this.tbPassword.Location = new System.Drawing.Point(803, 105);
+            this.tbPassword.Name = "tbPassword";
+            this.tbPassword.Size = new System.Drawing.Size(100, 20);
+            this.tbPassword.TabIndex = 10;
+            this.tbPassword.UseSystemPasswordChar = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(928, 344);
+            this.Controls.Add(this.tbPassword);
+            this.Controls.Add(this.tbLogin);
             this.Controls.Add(this.btnUpdateImages);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
@@ -135,6 +154,8 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button btnUpdateImages;
+        private System.Windows.Forms.TextBox tbLogin;
+        private System.Windows.Forms.TextBox tbPassword;
     }
 }
 

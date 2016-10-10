@@ -24,6 +24,9 @@ namespace SM_MOTORS
         public Form1()
         {
             InitializeComponent();
+            tbLogin.Text = Properties.Settings.Default.login;
+            tbPassword.Text = Properties.Settings.Default.password;
+
             if (!File.Exists("miniText.txt"))
             {
                 File.Create("miniText.txt");
@@ -88,6 +91,10 @@ namespace SM_MOTORS
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.login = tbLogin.Text;
+            Properties.Settings.Default.password = tbPassword.Text;
+            Properties.Settings.Default.Save();
+
             string otv = null;
             double discountPrice = 0.02;
             CookieContainer cookie = webRequest.webCookie("https://www.sm-motors.ru/");
