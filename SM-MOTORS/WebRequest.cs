@@ -39,7 +39,7 @@ namespace web
             return otv;
         }
 
-        public CookieContainer webCookieBike18()
+        public CookieContainer webCookieBike18(string login, string password)
         {
             CookieContainer cooc = new CookieContainer();
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("https://nethouse.ru/signin");
@@ -48,7 +48,7 @@ namespace web
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
             req.CookieContainer = cooc;
-            byte[] ms = Encoding.ASCII.GetBytes("login=bike18.ru&password=nethouse182016Bike&quick_expire=0&submit=%D0%92%D0%BE%D0%B9%D1%82%D0%B8");
+            byte[] ms = Encoding.ASCII.GetBytes("login=" + login + "&password=" + password + "&quick_expire=0&submit=%D0%92%D0%BE%D0%B9%D1%82%D0%B8");
             req.ContentLength = ms.Length;
             Stream stre = req.GetRequestStream();
             stre.Write(ms, 0, ms.Length);
@@ -288,12 +288,11 @@ namespace web
             StreamReader ressr = new StreamReader(res.GetResponseStream());
         }
 
-        internal string loadImage(string imgDirectory, string imgName, string startFile, string endFile)
+        internal string loadImage(CookieContainer cookie, string imgDirectory, string imgName, string startFile, string endFile)
         {
             string otv = null;
             CookieContainer coockie = new CookieContainer();
             WebRequest webRequest = new WebRequest();
-            CookieContainer cookie = webRequest.webCookieBike18();
 
             string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/putimg?fileapi" + epoch);
@@ -319,11 +318,10 @@ namespace web
             return otv;
         }
 
-        internal string saveImg(string url, string productId, double widthImg, double heigthImg)
+        internal string saveImg(CookieContainer cookie, string url, string productId, double widthImg, double heigthImg)
         {
             CookieContainer coockie = new CookieContainer();
             WebRequest webRequest = new WebRequest();
-            CookieContainer cookie = webRequest.webCookieBike18();
             string otv = null;
 
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/catalog/save-image");
@@ -344,12 +342,11 @@ namespace web
             return otv;
         }
 
-        internal string loadCSV(string csvName, string csvStart, string csvEnd)
+        internal string loadCSV(CookieContainer cookie, string csvName, string csvStart, string csvEnd)
         {
             string otv = null;
             CookieContainer coockie = new CookieContainer();
             WebRequest webRequest = new WebRequest();
-            CookieContainer cookie = webRequest.webCookieBike18();
 
             string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/export-import/import-from-csv?fileapi" + epoch);
@@ -374,12 +371,11 @@ namespace web
             return otv;
         }
 
-        internal string chekedCSV()
+        internal string chekedCSV(CookieContainer cookie)
         {
             string otv = null;
             CookieContainer coockie = new CookieContainer();
             WebRequest webRequest = new WebRequest();
-            CookieContainer cookie = webRequest.webCookieBike18();
 
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/export-import/check-import");
             req.Accept = "application/json, text/plain, */*";
