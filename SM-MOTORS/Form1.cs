@@ -24,8 +24,6 @@ namespace SM_MOTORS
 
         int addCount = 0;
         int countEditProduct = 0;
-        string boldOpen = "<span style=\"font-weight: bold; font-weight: bold;\">";
-        string boldClose = "</span>";
         double discountPrice = 0.02;
 
         public Form1()
@@ -110,13 +108,13 @@ namespace SM_MOTORS
             string password = tbPassword.Text;
             CookieContainer cookieBike18 = webRequest.webCookieBike18(login, password);
             CookieContainer cookie = webRequest.webCookie("https://www.sm-motors.ru/");
-            
+
             otv = webRequest.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
             {
                 string urlsCategory = urls[i].ToString();
-                if (urlsCategory == "/catalog/zapchasti/" || urls[i].ToString() == "/catalog/velogibridy/" || urls[i].ToString() == "/catalog/zapchasti-dlya-lodochnykh-motorov/" ||  urls[i].ToString() == "/catalog/akkumulyatory/" || urls[i].ToString() == "/catalog/tyuning-dlya-skuterov/" || urls[i].ToString() == "/catalog/pokryshki-kamery/" || urls[i].ToString() == "/catalog/gsm/")
+                if (urlsCategory == "/catalog/zapchasti/" || urls[i].ToString() == "/catalog/velogibridy/" || urls[i].ToString() == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urls[i].ToString() == "/catalog/akkumulyatory/" || urls[i].ToString() == "/catalog/tyuning-dlya-skuterov/" || urls[i].ToString() == "/catalog/pokryshki-kamery/" || urls[i].ToString() == "/catalog/gsm/")
                 {
                     string pages = "";
                     otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
@@ -641,8 +639,11 @@ namespace SM_MOTORS
             string urlTovarBike = null;
             CookieContainer cookie = new CookieContainer();
             string otv = null;
+            string discount = Discount();
+            string dblProduct = "НАЗВАНИЕ также подходит для аналогичных моделей.";
 
             List<string> tovarSMMotors = getTovarSMMotors(urlTovar, urlsCategory);
+
             string name = tovarSMMotors[0].ToString();
             string article = tovarSMMotors[1].ToString();
             string availability = tovarSMMotors[2].ToString();
@@ -651,13 +652,14 @@ namespace SM_MOTORS
             string descriptionTovar = tovarSMMotors[5].ToString();
             string characteristics = tovarSMMotors[6].ToString();
             string urlImage = tovarSMMotors[7].ToString();
-            string podRazdel = tovarSMMotors[8].ToString();
+            string podRazdelSeo = tovarSMMotors[8].ToString();
             string priceNoProd = tovarSMMotors[9].ToString();
             string chpuNoProd = tovarSMMotors[10].ToString();
             string metka = tovarSMMotors[11].ToString();
             string razdel = tovarSMMotors[12].ToString();
             string razdelSeo = tovarSMMotors[13].ToString();
-            string podrazdelSeo = tovarSMMotors[14].ToString();
+
+
 
             //MatchCollection section = new Regex("(?<=\" title=\").*?(?=\">)").Matches(otv);
             if (!File.Exists("Pic\\" + article + ".jpg"))
@@ -701,7 +703,7 @@ namespace SM_MOTORS
                 }
 
                 if (!b)
-                { 
+                {
                     string minitext = null;
                     string titleText = null;
                     string descriptionText = null;
@@ -710,94 +712,110 @@ namespace SM_MOTORS
                     string dblProdSEO = null;
                     string artNoProd = article;
                     string razdelmini = null;
-                    
-                        string dblProduct = "НАЗВАНИЕ также подходит для аналогичных моделей.";
+                    string podRazdel = null;
+                    string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
+                    string boldClose = "</span>";
 
-                        minitext = MiniText();
-                        fullText = FullText();
-                        titleText = textBox1.Lines[0].ToString();
-                        descriptionText = textBox2.Lines[0].ToString() + " " + dblProdSEO;
-                        keywordsText = textBox3.Lines[0].ToString();
-                        string discount = Discount();
+                    minitext = MiniText();
+                    fullText = FullText();
+                    titleText = textBox1.Lines[0].ToString();
+                    descriptionText = textBox2.Lines[0].ToString() + " " + dblProdSEO;
+                    keywordsText = textBox3.Lines[0].ToString();
 
-                        podRazdel = boldOpen + podRazdel + boldClose;
-                        razdelmini = boldOpen + razdelSeo + boldClose;
-                        string nameText = boldOpen + name + boldClose;
+                    podRazdel = boldOpen + podRazdelSeo + boldClose;
+                    razdelmini = boldOpen + razdelSeo + boldClose;
+                    string nameText = boldOpen + name + boldClose;
 
-                        minitext = minitext.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p><p></p><p><br /></p>", "<p><br /></p>").Replace("<p><br /></p><p><br /></p><p><br /></p>", "");
+                    minitext = minitext.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p><p></p><p><br /></p>", "<p><br /></p>").Replace("&nbsp;", " ").Replace("<p><br /></p><p><br /></p><p><br /></p>", "");
+                    if (minitext.Contains('&'))
+                    {
+                        minitext = fullText.Replace("&nbsp;", " ");
+                    }
 
-                        fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("&#43;", "+").Replace("&#40;", "(").Replace("&#41;", ")").Replace("<p><br /></p>", "");
+                    fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("<p><br /></p>", "");
+                    if (fullText.Contains('&'))
+                    {
+                        fullText = fullText.Replace("&nbsp;", " ");
+                    }
 
-                        titleText = titleText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podrazdelSeo).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
+                    titleText = titleText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
 
-                        descriptionText = descriptionText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podrazdelSeo).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
+                    descriptionText = descriptionText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdelSeo).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
 
-                        keywordsText = keywordsText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podrazdelSeo).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
+                    keywordsText = keywordsText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
 
-                        if (name.Length > 255)
-                        {
-                            name = name.Remove(255);
-                            name = name.Remove(name.LastIndexOf(" "));
-                        }
-                        if (titleText.Length > 255)
-                        {
-                            titleText = titleText.Remove(255);
-                            titleText = titleText.Remove(titleText.LastIndexOf(" "));
-                        }
-                        if (descriptionText.Length > 200)
-                        {
-                            descriptionText = descriptionText.Remove(200);
-                            descriptionText = descriptionText.Remove(descriptionText.LastIndexOf(" "));
-                        }
-                        if (keywordsText.Length > 100)
-                        {
-                            keywordsText = keywordsText.Remove(100);
-                            keywordsText = keywordsText.Remove(keywordsText.LastIndexOf(" "));
-                        }
-                        if (chpuNoProd.Length > 64)
-                        {
-                            chpuNoProd = chpuNoProd.Remove(64);
-                            chpuNoProd = chpuNoProd.Remove(chpuNoProd.LastIndexOf(" "));
-                        }
+                    if (name.Length > 255)
+                    {
+                        name = name.Remove(255);
+                        name = name.Remove(name.LastIndexOf(" "));
+                    }
+                    if (titleText.Length > 255)
+                    {
+                        titleText = titleText.Remove(255);
+                        titleText = titleText.Remove(titleText.LastIndexOf(" "));
+                    }
+                    if (descriptionText.Length > 200)
+                    {
+                        descriptionText = descriptionText.Remove(200);
+                        descriptionText = descriptionText.Remove(descriptionText.LastIndexOf(" "));
+                    }
+                    if (keywordsText.Length > 100)
+                    {
+                        keywordsText = keywordsText.Remove(100);
+                        keywordsText = keywordsText.Remove(keywordsText.LastIndexOf(" "));
+                    }
+                    if (chpuNoProd.Length > 64)
+                    {
+                        chpuNoProd = chpuNoProd.Remove(64);
+                        chpuNoProd = chpuNoProd.Remove(chpuNoProd.LastIndexOf(" "));
+                    }
 
-                        newProduct = new List<string>();
-                        newProduct.Add("");                                   //id
-                        newProduct.Add("\"" + artNoProd + "\"");                                    //артикул
-                        newProduct.Add("\"" + name + "\"");                               //название
-                        newProduct.Add("\"" + priceNoProd + "\"");                                 //стоимость
-                        newProduct.Add("\"" + "" + "\"");                              //со скидкой
-                        newProduct.Add("\"" + razdel + "\"");                                     //раздел товара
-                        newProduct.Add("\"" + "100" + "\"");                                  //в наличии
-                        newProduct.Add("\"" + "0" + "\"");                                    //поставка
-                        newProduct.Add("\"" + "1" + "\"");                                 //срок поставки
-                        newProduct.Add("\"" + minitext + "\"");                                       //краткий текст
-                        newProduct.Add("\"" + fullText + "\"");                               //полностью текст
-                        newProduct.Add("\"" + titleText + "\"");                                 //заголовок страницы
-                        newProduct.Add("\"" + descriptionText + "\"");                              //описание
-                        newProduct.Add("\"" + keywordsText + "\"");                               //ключевые слова
-                        newProduct.Add("\"" + chpuNoProd + "\"");                                //ЧПУ
-                        newProduct.Add("");                                                      //с этим товаром покупают
-                        newProduct.Add("\"" + metka + "\"");                                                     //рекламные метки
-                        newProduct.Add("\"" + "1" + "\"");                                      //показывать
-                        newProduct.Add("\"" + "0" + "\"");                                     //удалить
+                    newProduct = new List<string>();
+                    newProduct.Add("");                                   //id
+                    newProduct.Add("\"" + artNoProd + "\"");                                    //артикул
+                    newProduct.Add("\"" + name + "\"");                               //название
+                    newProduct.Add("\"" + priceNoProd + "\"");                                 //стоимость
+                    newProduct.Add("\"" + "" + "\"");                              //со скидкой
+                    newProduct.Add("\"" + razdel + "\"");                                     //раздел товара
+                    newProduct.Add("\"" + "100" + "\"");                                  //в наличии
+                    newProduct.Add("\"" + "0" + "\"");                                    //поставка
+                    newProduct.Add("\"" + "1" + "\"");                                 //срок поставки
+                    newProduct.Add("\"" + minitext + "\"");                                       //краткий текст
+                    newProduct.Add("\"" + fullText + "\"");                               //полностью текст
+                    newProduct.Add("\"" + titleText + "\"");                                 //заголовок страницы
+                    newProduct.Add("\"" + descriptionText + "\"");                              //описание
+                    newProduct.Add("\"" + keywordsText + "\"");                               //ключевые слова
+                    newProduct.Add("\"" + chpuNoProd + "\"");                                //ЧПУ
+                    newProduct.Add("");                                                      //с этим товаром покупают
+                    newProduct.Add("\"" + metka + "\"");                                            //рекламные метки
+                    newProduct.Add("\"" + "1" + "\"");                                      //показывать
+                    newProduct.Add("\"" + "0" + "\"");                                     //удалить
 
-                        if (priceNoProd != "0")
-                            webRequest.fileWriterCSV(newProduct, "naSite");
-                    
+                    if (priceNoProd != "0")
+                        webRequest.fileWriterCSV(newProduct, "naSite");
+
                 }
                 else
                 {
-                    #region
                     string fullText = null;
+                    string razdelmini = null;
+                    string podRazdel = null;
                     fullText = FullText();
+                    string boldOpen = "<span style=\"font-weight: bold; font-weight: bold;\">";
+                    string boldClose = "</span>";
 
+                    podRazdel = boldOpen + podRazdelSeo + boldClose;
+                    razdelmini = boldOpen + razdelSeo + boldClose;
+                    string nameText = boldOpen + name + boldClose;
                     string nameNoProd = name;
-                    string nameText = boldOpen + nameNoProd + boldClose;
-                    fullText = fullText.Replace("ПОДРАЗДЕЛ", podRazdel).Replace("НАЗВАНИЕ", nameText).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("&#43;", "+").Replace("&#40;", "(").Replace("&#41;", ")").Replace("&nbsp;", " ").Replace("&quot;", "\"").Replace("<p><br /></p>", "");
+
+                    fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("<p><br /></p>", "");
+
                     if (fullText.Contains('&'))
                     {
-                        fullText = fullText.Replace("&quot;", "\"");
+                        fullText = fullText.Replace("&nbsp;", " ");
                     }
+
                     //обновить цену
                     List<string> listProduct = nethouse.getProductList(cookieBike18, urlTovarBike);
                     string priceBike = listProduct[9];
@@ -867,7 +885,6 @@ namespace SM_MOTORS
                     countEditProduct++;
                 }
             }
-            #endregion
         }
 
         private List<string> getTovarSMMotors(string urlTovar, string urlsCategory)
@@ -977,11 +994,11 @@ namespace SM_MOTORS
 
             podRazdel = new Regex("(?<=\">" + razdelmini + "</a></span><span><a href=\").*?(?=>)").Match(otv).ToString();
             podRazdel = new Regex("(?<=title=\").*?(?=\")").Match(podRazdel).ToString();
-            string str = new Regex("(?<=<div class=\"breadcrumbs-container\"><span><a href=\"/\" title=\").*?(?=</span></div></div></section>)").Match(otv).ToString();
-            MatchCollection mc = new Regex("(?<=\" title=\").*?(?=\">)").Matches(str);
-            int mcCOunt = mc.Count - 1;
+            //string str = new Regex("(?<=<div class=\"breadcrumbs-container\"><span><a href=\"/\" title=\").*?(?=</span></div></div></section>)").Match(otv).ToString();
+            //MatchCollection mc = new Regex("(?<=\" title=\").*?(?=\">)").Matches(str);
+            //int mcCOunt = mc.Count - 1;
             string podrazdelSeo = podRazdel;
-            podRazdel = podRazdel + " - " + mc[mcCOunt].ToString();
+            //podRazdel = podRazdel + " - " + mc[mcCOunt].ToString();
 
             getTovar.Add(name);
             getTovar.Add(article);
@@ -998,8 +1015,7 @@ namespace SM_MOTORS
             getTovar.Add(razdel);
             getTovar.Add(razdelSeo);
             getTovar.Add(podrazdelSeo);
-            getTovar.Add(podRazdel);
-            
+
             return getTovar;
         }
 
