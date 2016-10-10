@@ -141,8 +141,7 @@ namespace SM_MOTORS
                         for (int m = 0; tovars.Count > m; m++)
                         {
                             string urlTovar = "https://www.sm-motors.ru" + tovars[m].ToString();
-                            otv = webRequest.getRequest(urlTovar);
-                            AddTovarInCSV(cookieBike18, otv, urlTovar, discountPrice, urlsCategory);
+                            AddTovarInCSV(cookieBike18, urlTovar, discountPrice, urlsCategory);
                         }
                         if (x == 0)
                         {
@@ -629,26 +628,25 @@ namespace SM_MOTORS
             return otvSave;
         }
 
-        public void AddTovarInCSV(CookieContainer cookieBike18, string otv, string urlTovar, double discountPrice, string urlsCategory)
+        public void AddTovarInCSV(CookieContainer cookieBike18, string urlTovar, double discountPrice, string urlsCategory)
         {
             List<string> newProduct = new List<string>();
             string urlTovarBike = null;
             CookieContainer cookie = new CookieContainer();
+            string otv = null;
 
-            string availability = new Regex("(?<=<input type=\"text\" maxlength=\"3\" value=\").*(?=\" data-max)").Match(otv).ToString();
-            string article = new Regex("(?<=<span>Артикул:</span>).*?(?=</div>)").Match(otv).ToString();
-            string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
-            name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Trim();
-            
-            string newMetka = new Regex("(?<=<div class=\"icons-container\">)[\\w\\W]*?(?=<div class=\"ico\"></div></div>)").Match(otv).ToString().Trim();
-            string saleMEtka = new Regex("(?<=<div class=\"old-price\">).*?(?=</div>)").Match(otv).ToString();
-            string descriptionTovar = descriptionsTovar(otv);
-            string characteristics = new Regex("(?<=<div class=\"tab-content columns-content\">)[\\w\\W]*?(?=</ul>)").Match(otv).ToString().Replace("<ul>", "").Replace("<li>", "").Replace("</li>", "").Trim();
-            string urlImage = new Regex("(?<=<div class=\"gallery\">)[\\w\\W]*?(?=data-large=)").Match(otv).ToString().Replace("<a href=\"", "").Replace("\"", "").Trim();
-            urlImage = "https://www.sm-motors.ru" + urlImage;
-            string podRazdel = podrazdel(otv);
+            List<string> tovarSMMotors = getTovarSMMotors(urlTovar);
+            string name = tovarSMMotors[0].ToString();
+            string article = tovarSMMotors[1].ToString();
+            string availability = tovarSMMotors[2].ToString();
+            string newMetka = tovarSMMotors[3].ToString();
+            string saleMEtka = tovarSMMotors[4].ToString();
+            string descriptionTovar = tovarSMMotors[5].ToString();
+            string characteristics = tovarSMMotors[6].ToString();
+            string urlImage = tovarSMMotors[7].ToString();
+            string podRazdel = tovarSMMotors[8].ToString();
 
-            MatchCollection section = new Regex("(?<=\" title=\").*?(?=\">)").Matches(otv);
+            //MatchCollection section = new Regex("(?<=\" title=\").*?(?=\">)").Matches(otv);
             if (!File.Exists("Pic\\" + article + ".jpg"))
             {
                 EditSizeImages(urlImage, article);
@@ -904,6 +902,37 @@ namespace SM_MOTORS
 
                 }
             }
+        }
+
+        private List<string> getTovarSMMotors(string urlTovar)
+        {
+            List<string> getTovar = new List<string>();
+            string otv = webRequest.getRequest(urlTovar);
+
+            string availability = new Regex("(?<=<input type=\"text\" maxlength=\"3\" value=\").*(?=\" data-max)").Match(otv).ToString();
+            string article = new Regex("(?<=<span>Артикул:</span>).*?(?=</div>)").Match(otv).ToString();
+            string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
+            name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Trim();
+
+            string newMetka = new Regex("(?<=<div class=\"icons-container\">)[\\w\\W]*?(?=<div class=\"ico\"></div></div>)").Match(otv).ToString().Trim();
+            string saleMEtka = new Regex("(?<=<div class=\"old-price\">).*?(?=</div>)").Match(otv).ToString();
+            string descriptionTovar = descriptionsTovar(otv);
+            string characteristics = new Regex("(?<=<div class=\"tab-content columns-content\">)[\\w\\W]*?(?=</ul>)").Match(otv).ToString().Replace("<ul>", "").Replace("<li>", "").Replace("</li>", "").Trim();
+            string urlImage = new Regex("(?<=<div class=\"gallery\">)[\\w\\W]*?(?=data-large=)").Match(otv).ToString().Replace("<a href=\"", "").Replace("\"", "").Trim();
+            urlImage = "https://www.sm-motors.ru" + urlImage;
+            string podRazdel = podrazdel(otv);
+
+            getTovar.Add(name);
+            getTovar.Add(article);
+            getTovar.Add(availability);
+            getTovar.Add(newMetka);
+            getTovar.Add(saleMEtka);
+            getTovar.Add(descriptionTovar);
+            getTovar.Add(characteristics);
+            getTovar.Add(urlImage);
+            getTovar.Add(podRazdel);
+            
+            return getTovar;
         }
 
         private void ErrorDownloadInSite37(string otvimg)
