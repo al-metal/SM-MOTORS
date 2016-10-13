@@ -146,7 +146,7 @@ namespace SM_MOTORS
                             x++;
                         }
                     }
-                    MessageBox.Show("Изменено товаров " + countEditProduct);
+                    
                     System.Threading.Thread.Sleep(20000);
 
                     string trueOtv = null;
@@ -258,8 +258,11 @@ namespace SM_MOTORS
                         //    }
                         //}
                     }
+                    File.Delete("naSite.csv");
+                    newFileNaSite();
                 }
             }
+            MessageBox.Show("Изменено товаров " + countEditProduct);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -291,7 +294,7 @@ namespace SM_MOTORS
             writers.Close();
 
             MessageBox.Show("Сохранено");
-        } // сохранить шаблон
+        }
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -728,17 +731,9 @@ namespace SM_MOTORS
 
                     minitext = minitext.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p><p></p><p><br /></p>", "<p><br /></p>").Replace("<p><br /></p><p><br /></p><p><br /></p>", "");
                     minitext = specChar(minitext);
-                    if (minitext.Contains('&'))
-                    {
-                        minitext = fullText.Replace("&nbsp;", " ");
-                    }
 
                     fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
                     fullText = specChar(fullText);
-                    if (fullText.Contains('&'))
-                    {
-                        
-                    }
 
                     titleText = titleText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
 
@@ -769,7 +764,6 @@ namespace SM_MOTORS
                     if (chpuNoProd.Length > 64)
                     {
                         chpuNoProd = chpuNoProd.Remove(64);
-                        chpuNoProd = chpuNoProd.Remove(chpuNoProd.LastIndexOf(" "));
                     }
 
                     newProduct = new List<string>();
@@ -814,10 +808,6 @@ namespace SM_MOTORS
                     fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
                     fullText = specChar(fullText);
 
-                    if (fullText.Contains('&'))
-                    {
-                    }
-
                     //обновить цену
                     List<string> listProduct = nethouse.getProductList(cookieBike18, urlTovarBike);
                     string priceBike = listProduct[9];
@@ -842,8 +832,6 @@ namespace SM_MOTORS
             }
             else
             {
-                //тут надо реализовать если на сайте товара нет в наличии и проверить есть ли на байк18
-
                 bool b = false;
 
                 //поиск по артикулу
@@ -1007,11 +995,11 @@ namespace SM_MOTORS
 
             podRazdel = new Regex("(?<=\">" + razdelmini + "</a></span><span><a href=\").*?(?=>)").Match(otv).ToString();
             podRazdel = new Regex("(?<=title=\").*?(?=\")").Match(podRazdel).ToString();
-            //string str = new Regex("(?<=<div class=\"breadcrumbs-container\"><span><a href=\"/\" title=\").*?(?=</span></div></div></section>)").Match(otv).ToString();
-            //MatchCollection mc = new Regex("(?<=\" title=\").*?(?=\">)").Matches(str);
-            //int mcCOunt = mc.Count - 1;
+            string str = new Regex("(?<=<div class=\"breadcrumbs-container\"><span><a href=\"/\" title=\").*?(?=</span></div></div></section>)").Match(otv).ToString();
+            MatchCollection mc = new Regex("(?<=\" title=\").*?(?=\">)").Matches(str);
+            int mcCOunt = mc.Count - 1;
             string podrazdelSeo = podRazdel;
-            //podRazdel = podRazdel + " - " + mc[mcCOunt].ToString();
+            podRazdel = podRazdel + " - " + mc[mcCOunt].ToString();
 
             getTovar.Add(name);
             getTovar.Add(article);
