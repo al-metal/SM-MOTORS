@@ -672,40 +672,14 @@ namespace SM_MOTORS
 
             if (availability == "1")
             {
-                bool b = false;
-
                 //поиск по артикулу
-                otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + article);
-                MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                for (int t = 0; strUrlProd1.Count > t; t++)
-                {
-                    string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Trim();
-                    if (name == nameProduct1)
-                    {
-                        b = true;
-                        urlTovarBike = strUrlProd1[t].ToString();
-                        break;
-                    }
-                }
+                urlTovarBike = searchTovar(article, article);
 
                 //Поиск по названию товара
-                if (!b)
-                {
-                    otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + name);
-                    strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                    for (int t = 0; strUrlProd1.Count > t; t++)
-                    {
-                        string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Trim();
-                        if (name == nameProduct1)
-                        {
-                            b = true;
-                            urlTovarBike = strUrlProd1[t].ToString();
-                            break;
-                        }
-                    }
-                }
-
-                if (!b)
+                if (urlTovarBike == null)
+                    urlTovarBike = searchTovar(name, name);
+                
+                if (urlTovarBike == null)
                 {
                     string minitext = null;
                     string titleText = null;
@@ -879,6 +853,25 @@ namespace SM_MOTORS
                     countEditProduct++;
                 }
             }
+        }
+
+        private string searchTovar(string name, string searchString)
+        {
+            string otv = null;
+            string urlTovarBike = null;
+
+            otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + searchString);
+            MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
+            for (int t = 0; strUrlProd1.Count > t; t++)
+            {
+                string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Trim();
+                if (name == nameProduct1)
+                {
+                    urlTovarBike = strUrlProd1[t].ToString();
+                    break;
+                }
+            }
+            return urlTovarBike;
         }
 
         private string specChar(string text)
