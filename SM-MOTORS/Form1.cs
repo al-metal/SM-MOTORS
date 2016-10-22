@@ -322,7 +322,7 @@ namespace SM_MOTORS
                         MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                         for (int m = 0; product2.Count > m; m++)
                         {
-                            string urlProduct = product[m].ToString();
+                            string urlProduct = product2[m].ToString();
 
                             UploadImage(cookieBike18, urlProduct);
                         }
