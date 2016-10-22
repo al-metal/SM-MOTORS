@@ -146,7 +146,7 @@ namespace SM_MOTORS
                             x++;
                         }
                     }
-                    
+
                     System.Threading.Thread.Sleep(20000);
 
                     string trueOtv = null;
@@ -308,61 +308,88 @@ namespace SM_MOTORS
             string otv = null;
             otv = webRequest.getRequest("http://bike18.ru/products/category/1689456");
             MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
-            for (int i = 0; razdel.Count > i; i++)
+            for (int i = 1; razdel.Count > i; i++)
             {
                 otv = webRequest.getRequest(razdel[i].ToString() + "/page/all");
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                for (int n = 0; product.Count > n; n++)
+                MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+
+                if (podRazdel.Count != 0)
                 {
-                    otv = webRequest.getRequest(product[n].ToString());
-                    string artProd = new Regex("(?<=Артикул:)[\\w\\W]*?(?=</title><)").Match(otv).ToString().Trim();
-                    if (System.IO.File.Exists("Pic\\" + artProd + ".jpg"))
+                    for (int p = 0; podRazdel.Count > p; p++)
                     {
-
-                        otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + artProd);
-
-                        string url = product[n].ToString();
-                        url = url.Replace("http://bike18.ru", "http://bike18.nethouse.ru");
-                        otv = webRequest.PostRequest(cookieBike18, url);
-
-                        MatchCollection prId = new Regex("(?<=data-id=\").*?(?=\")").Matches(otv);
-                        string productId = prId[0].ToString();
-
-                        Image newImg = Image.FromFile("Pic\\" + artProd + ".jpg");
-                        double widthImg = newImg.Width;
-                        double heigthImg = newImg.Height;
-                        if (widthImg > heigthImg)
+                        otv = webRequest.getRequest(podRazdel[p].ToString() + "/page/all");
+                        MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
+                        for (int m = 0; product2.Count > m; m++)
                         {
-                            double dblx = widthImg * 0.9;
-                            if (dblx < heigthImg)
-                            {
-                                heigthImg = heigthImg * 0.9;
-                            }
-                            else
-                                widthImg = widthImg * 0.9;
+                            string urlProduct = product[m].ToString();
+
+                            UploadImage(cookieBike18, urlProduct);
                         }
-                        else
-                        {
-                            double dblx = heigthImg * 0.9;
-                            if (dblx < widthImg)
-                            {
-                                widthImg = widthImg * 0.9;
-                            }
-                            else
-                                heigthImg = heigthImg * 0.9;
-                        }
+                    }
 
-                        UploadImageInBike18(cookieBike18, artProd, productId, widthImg, heigthImg);
+                }
 
-                        List<string> listProd = nethouse.GetProductList(cookieBike18, url);
-                        listProd[3] = "10833347";
+                if (product.Count != 0)
+                {
+                    for (int n = 0; product.Count > n; n++)
+                    {
+                        string urlProduct = product[n].ToString();
 
-                        //webRequest.saveImage(cookieBike18, listProd);
-                        nethouse.SaveTovar(cookieBike18, listProd);
+                        UploadImage(cookieBike18, urlProduct);
                     }
                 }
             }
         } //загрузка картинок
+
+        private void UploadImage(CookieContainer cookieBike18, string urlProduct)
+        {
+            string otv = null;
+            otv = webRequest.getRequest(urlProduct);
+            string artProd = new Regex("(?<=Артикул:)[\\w\\W]*?(?=</title><)").Match(otv).ToString().Trim();
+            if (System.IO.File.Exists("Pic\\" + artProd + ".jpg"))
+            {
+
+                otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + artProd);
+
+                urlProduct = urlProduct.Replace("http://bike18.ru", "http://bike18.nethouse.ru");
+                otv = webRequest.PostRequest(cookieBike18, urlProduct);
+
+                MatchCollection prId = new Regex("(?<=data-id=\").*?(?=\")").Matches(otv);
+                string productId = prId[0].ToString();
+
+                Image newImg = Image.FromFile("Pic\\" + artProd + ".jpg");
+                double widthImg = newImg.Width;
+                double heigthImg = newImg.Height;
+                if (widthImg > heigthImg)
+                {
+                    double dblx = widthImg * 0.9;
+                    if (dblx < heigthImg)
+                    {
+                        heigthImg = heigthImg * 0.9;
+                    }
+                    else
+                        widthImg = widthImg * 0.9;
+                }
+                else
+                {
+                    double dblx = heigthImg * 0.9;
+                    if (dblx < widthImg)
+                    {
+                        widthImg = widthImg * 0.9;
+                    }
+                    else
+                        heigthImg = heigthImg * 0.9;
+                }
+
+                UploadImageInBike18(cookieBike18, artProd, productId, widthImg, heigthImg);
+
+                List<string> listProd = nethouse.GetProductList(cookieBike18, urlProduct);
+                listProd[3] = "10833347";
+
+                nethouse.SaveTovar(cookieBike18, listProd);
+            }
+        }
 
         private void UploadImageInBike18(CookieContainer cookieBike18, string artProd, string productId, double widthImg, double heigthImg)
         {
@@ -685,7 +712,7 @@ namespace SM_MOTORS
                 //Поиск по названию товара
                 if (urlTovarBike == null)
                     urlTovarBike = searchTovar(name, name);
-                
+
                 if (urlTovarBike == null)
                 {
                     string minitext = null;
