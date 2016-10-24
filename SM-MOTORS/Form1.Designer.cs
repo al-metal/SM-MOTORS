@@ -36,8 +36,14 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.btnUpdateImages = new System.Windows.Forms.Button();
-            this.tbLogin = new System.Windows.Forms.TextBox();
-            this.tbPassword = new System.Windows.Forms.TextBox();
+            this.tbLoginBike = new System.Windows.Forms.TextBox();
+            this.tbPasswordBike = new System.Windows.Forms.TextBox();
+            this.gbBike18 = new System.Windows.Forms.GroupBox();
+            this.gbSMMOTORS = new System.Windows.Forms.GroupBox();
+            this.tbLoginSM = new System.Windows.Forms.TextBox();
+            this.tbPasswordSM = new System.Windows.Forms.TextBox();
+            this.gbBike18.SuspendLayout();
+            this.gbSMMOTORS.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnUpdate
@@ -107,28 +113,65 @@
             this.btnUpdateImages.UseVisualStyleBackColor = true;
             this.btnUpdateImages.Click += new System.EventHandler(this.button3_Click);
             // 
-            // tbLogin
+            // tbLoginBike
             // 
-            this.tbLogin.Location = new System.Drawing.Point(695, 105);
-            this.tbLogin.Name = "tbLogin";
-            this.tbLogin.Size = new System.Drawing.Size(100, 20);
-            this.tbLogin.TabIndex = 9;
+            this.tbLoginBike.Location = new System.Drawing.Point(0, 19);
+            this.tbLoginBike.Name = "tbLoginBike";
+            this.tbLoginBike.Size = new System.Drawing.Size(100, 20);
+            this.tbLoginBike.TabIndex = 9;
             // 
-            // tbPassword
+            // tbPasswordBike
             // 
-            this.tbPassword.Location = new System.Drawing.Point(803, 105);
-            this.tbPassword.Name = "tbPassword";
-            this.tbPassword.Size = new System.Drawing.Size(100, 20);
-            this.tbPassword.TabIndex = 10;
-            this.tbPassword.UseSystemPasswordChar = true;
+            this.tbPasswordBike.Location = new System.Drawing.Point(106, 19);
+            this.tbPasswordBike.Name = "tbPasswordBike";
+            this.tbPasswordBike.Size = new System.Drawing.Size(100, 20);
+            this.tbPasswordBike.TabIndex = 10;
+            this.tbPasswordBike.UseSystemPasswordChar = true;
+            // 
+            // gbBike18
+            // 
+            this.gbBike18.Controls.Add(this.tbLoginBike);
+            this.gbBike18.Controls.Add(this.tbPasswordBike);
+            this.gbBike18.Location = new System.Drawing.Point(696, 105);
+            this.gbBike18.Name = "gbBike18";
+            this.gbBike18.Size = new System.Drawing.Size(207, 47);
+            this.gbBike18.TabIndex = 11;
+            this.gbBike18.TabStop = false;
+            this.gbBike18.Text = "Bike18.ru";
+            // 
+            // gbSMMOTORS
+            // 
+            this.gbSMMOTORS.Controls.Add(this.tbLoginSM);
+            this.gbSMMOTORS.Controls.Add(this.tbPasswordSM);
+            this.gbSMMOTORS.Location = new System.Drawing.Point(696, 158);
+            this.gbSMMOTORS.Name = "gbSMMOTORS";
+            this.gbSMMOTORS.Size = new System.Drawing.Size(207, 47);
+            this.gbSMMOTORS.TabIndex = 12;
+            this.gbSMMOTORS.TabStop = false;
+            this.gbSMMOTORS.Text = "SM-MOTORS";
+            // 
+            // tbLoginSM
+            // 
+            this.tbLoginSM.Location = new System.Drawing.Point(0, 19);
+            this.tbLoginSM.Name = "tbLoginSM";
+            this.tbLoginSM.Size = new System.Drawing.Size(100, 20);
+            this.tbLoginSM.TabIndex = 9;
+            // 
+            // tbPasswordSM
+            // 
+            this.tbPasswordSM.Location = new System.Drawing.Point(106, 19);
+            this.tbPasswordSM.Name = "tbPasswordSM";
+            this.tbPasswordSM.Size = new System.Drawing.Size(100, 20);
+            this.tbPasswordSM.TabIndex = 10;
+            this.tbPasswordSM.UseSystemPasswordChar = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(928, 344);
-            this.Controls.Add(this.tbPassword);
-            this.Controls.Add(this.tbLogin);
+            this.Controls.Add(this.gbSMMOTORS);
+            this.Controls.Add(this.gbBike18);
             this.Controls.Add(this.btnUpdateImages);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
@@ -139,6 +182,11 @@
             this.Controls.Add(this.btnUpdate);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.gbBike18.ResumeLayout(false);
+            this.gbBike18.PerformLayout();
+            this.gbSMMOTORS.ResumeLayout(false);
+            this.gbSMMOTORS.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -154,8 +202,12 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button btnUpdateImages;
-        private System.Windows.Forms.TextBox tbLogin;
-        private System.Windows.Forms.TextBox tbPassword;
+        private System.Windows.Forms.TextBox tbLoginBike;
+        private System.Windows.Forms.TextBox tbPasswordBike;
+        private System.Windows.Forms.GroupBox gbBike18;
+        private System.Windows.Forms.GroupBox gbSMMOTORS;
+        private System.Windows.Forms.TextBox tbLoginSM;
+        private System.Windows.Forms.TextBox tbPasswordSM;
     }
 }
 

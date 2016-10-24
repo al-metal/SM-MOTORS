@@ -52,7 +52,9 @@ namespace Bike18
                 String price = new Regex("(?<=<span class=\"product-price-data\" data-cost=\").*?(?=\">)").Match(otv).Value;
                 String imgId = new Regex("(?<=<div id=\"avatar-).*(?=\")").Match(otv).Value;
                 String desc = new Regex("(?<=<div class=\"user-inner\">).*?(?=</div>)").Match(otv).Value;
+                desc = desc.Replace("&nbsp;", " ");
                 String fulldesc = new Regex("(?<=<div id=\"product-full-desc\" data-ng-non-bindable class=\"user-inner\">).*?(?=</div>)").Match(otv).Value.Replace("&nbsp;&nbsp;", " ").Replace("&deg;", "°");
+                fulldesc = fulldesc.Replace("&nbsp;", " ");
                 String seometa = new Regex("(?<=<meta name=\"description\" content=\").*?(?=\" >)").Match(otv).Value;
                 String keywords = new Regex("(?<=<meta name=\"keywords\" content=\").*?(?=\" >)").Match(otv).Value;
                 String title = new Regex("(?<=<title>).*?(?=</title>)").Match(otv).Value;
