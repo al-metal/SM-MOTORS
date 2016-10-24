@@ -46,5 +46,29 @@ namespace SM_MOTORS.Properties {
                 this["password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string loginSM {
+            get {
+                return ((string)(this["loginSM"]));
+            }
+            set {
+                this["loginSM"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string passwordSM {
+            get {
+                return ((string)(this["passwordSM"]));
+            }
+            set {
+                this["passwordSM"] = value;
+            }
+        }
     }
 }

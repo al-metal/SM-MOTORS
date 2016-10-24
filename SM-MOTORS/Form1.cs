@@ -29,8 +29,6 @@ namespace SM_MOTORS
         public Form1()
         {
             InitializeComponent();
-            tbLogin.Text = Properties.Settings.Default.login;
-            tbPassword.Text = Properties.Settings.Default.password;
 
             if (!File.Exists("miniText.txt"))
             {
@@ -96,19 +94,35 @@ namespace SM_MOTORS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.login = tbLogin.Text;
-            Properties.Settings.Default.password = tbPassword.Text;
+            Properties.Settings.Default.login = tbLoginBike.Text;
+            Properties.Settings.Default.password = tbPasswordBike.Text;
+            Properties.Settings.Default.loginSM = tbLoginSM.Text;
+            Properties.Settings.Default.passwordSM = tbPasswordSM.Text;
             Properties.Settings.Default.Save();
+
+            string otv = null;
+            string loginBike = tbLoginBike.Text;
+            string passwordBike = tbPasswordBike.Text;
+            string loginSM = tbLoginSM.Text;
+            string passwordSM = tbPasswordSM.Text;
+
+            CookieContainer cookieBike18 = webRequest.webCookieBike18(loginBike, passwordBike);
+            CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
+
+            if(cookieBike18.Count != 4)
+            {
+                MessageBox.Show("Логин/пароль для сайта BIKE18.RU введен не верно!");
+                return;
+            }
+            if (cookieSM.Count != 4)
+            {
+                MessageBox.Show("Логин/пароль для сайта SM-MOTORS введен не верно!");
+                return;
+            }
 
             File.Delete("naSite.csv");
             newFileNaSite();
-
-            string otv = null;
-            string login = tbLogin.Text;
-            string password = tbPassword.Text;
-            CookieContainer cookieBike18 = webRequest.webCookieBike18(login, password);
-            CookieContainer cookie = webRequest.webCookie("https://www.sm-motors.ru/");
-
+            
             otv = webRequest.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
@@ -298,17 +312,17 @@ namespace SM_MOTORS
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.login = tbLogin.Text;
-            Properties.Settings.Default.password = tbPassword.Text;
+            Properties.Settings.Default.login = tbLoginBike.Text;
+            Properties.Settings.Default.password = tbPasswordBike.Text;
             Properties.Settings.Default.Save();
-            string login = tbLogin.Text;
-            string password = tbPassword.Text;
+            string login = tbLoginBike.Text;
+            string password = tbPasswordBike.Text;
             CookieContainer cookieBike18 = webRequest.webCookieBike18(login, password);
 
             string otv = null;
             otv = webRequest.getRequest("http://bike18.ru/products/category/1689456");
             MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
-            for (int i = 1; razdel.Count > i; i++)
+            for (int i = 2; razdel.Count > i; i++)
             {
                 otv = webRequest.getRequest(razdel[i].ToString() + "/page/all");
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
@@ -1092,6 +1106,34 @@ namespace SM_MOTORS
                 strslug2 += countAdd;
             naSite[u] = naSite[u].Replace(strslug, strslug2);
             File.WriteAllLines("naSite.csv", naSite, Encoding.GetEncoding(1251));
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            tbLoginBike.Text = Properties.Settings.Default.login;
+            tbPasswordBike.Text = Properties.Settings.Default.password;
+            tbLoginSM.Text = Properties.Settings.Default.loginSM;
+            tbPasswordSM.Text = Properties.Settings.Default.passwordSM;
+        }
+
+        public CookieContainer LoginSMMOTORS(string login, string password)
+        {
+            CookieContainer cookie = new CookieContainer();
+            login = login.Replace("@", "%40");
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("https://www.sm-motors.ru/bitrix/templates/sm_motors/ajax/connector.php?act=validate&rule=auth");
+            req.Accept = "application/json, text/javascript, */*; q=0.01";
+            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36";
+            req.Method = "POST";
+            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            req.ContentType = "application/x-www-form-urlencoded";
+            req.CookieContainer = cookie;
+            byte[] ms = Encoding.ASCII.GetBytes("backurl=%2F&AUTH_FORM=Y&TYPE=AUTH&USER_REMEMBER=Y&USER_LOGIN=" + login + "&USER_PASSWORD=" + password);
+            req.ContentLength = ms.Length;
+            Stream stre = req.GetRequestStream();
+            stre.Write(ms, 0, ms.Length);
+            stre.Close();
+            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+            return cookie;
         }
     }
 }
