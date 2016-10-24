@@ -121,7 +121,7 @@ namespace SM_MOTORS
             }
 
             File.Delete("naSite.csv");
-            newFileNaSite();
+            nethouse.NewListUploadinBike18("naSite");
             
             otv = webRequest.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
@@ -273,8 +273,8 @@ namespace SM_MOTORS
                         //}
                     }
                     File.Delete("naSite.csv");
-                    newFileNaSite();
-                }
+                    nethouse.NewListUploadinBike18("naSite");
+                                    }
             }
             MessageBox.Show("Изменено товаров " + countEditProduct);
         }
@@ -444,31 +444,6 @@ namespace SM_MOTORS
             HttpWebResponse resSave = (HttpWebResponse)req.GetResponse();
             StreamReader ressrSave = new StreamReader(resSave.GetResponseStream());
             String otvSave = ressrSave.ReadToEnd();
-        }
-
-        public void newFileNaSite()
-        {
-            List<string> newProduct = new List<string>();
-            newProduct.Add("id");
-            newProduct.Add("Артикул *");
-            newProduct.Add("Название товара *");
-            newProduct.Add("Стоимость товара *");
-            newProduct.Add("Стоимость со скидкой");
-            newProduct.Add("Раздел товара *");
-            newProduct.Add("Товар в наличии *");
-            newProduct.Add("Поставка под заказ *");
-            newProduct.Add("Срок поставки (дни) *");
-            newProduct.Add("Краткий текст");
-            newProduct.Add("Текст полностью");
-            newProduct.Add("Заголовок страницы (title)");
-            newProduct.Add("Описание страницы (description)");
-            newProduct.Add("Ключевые слова страницы (keywords)");
-            newProduct.Add("ЧПУ страницы (slug)");
-            newProduct.Add("С этим товаром покупают");
-            newProduct.Add("Рекламные метки");
-            newProduct.Add("Показывать на сайте *");
-            newProduct.Add("Удалить *");
-            webRequest.fileWriterCSV(newProduct, "naSite");
         }
 
         public int countPagesSM(string otv)
