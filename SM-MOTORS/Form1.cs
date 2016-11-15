@@ -166,6 +166,10 @@ namespace SM_MOTORS
                                 if (x == 0)
                                     x++;
                             }
+
+                            string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
+                            if (naSite1.Length > 1)
+                                nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
                         }
                     }
                 }
@@ -219,46 +223,9 @@ namespace SM_MOTORS
 
                             System.Threading.Thread.Sleep(20000);
 
-                            string trueOtv = null;
                             string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
                             if (naSite1.Length > 1)
-                            {
-                                do
-                                {
-                                    string otvimg = DownloadNaSite(cookieBike18);
-                                    string check = "{\"success\":true,\"imports\":{\"state\":1,\"errorCode\":0,\"errorLine\":0}}";
-                                    do
-                                    {
-                                        System.Threading.Thread.Sleep(2000);
-                                        otvimg = ChekedLoading(cookieBike18);
-                                    }
-                                    while (otvimg == check);
-
-                                    trueOtv = new Regex("(?<=\":{\"state\":).*?(?=,\")").Match(otvimg).ToString();
-                                    string error = new Regex("(?<=errorCode\":).*?(?=,\")").Match(otvimg).ToString();
-                                    if (error == "13")
-                                    {
-                                        ErrorDownloadInSite13(otvimg);
-                                    }
-                                    if (error == "37")
-                                    {
-                                        ErrorDownloadInSite37(otvimg);
-                                    }
-                                    if (error == "27")
-                                    {
-                                        string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-                                        string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                                        int u = Convert.ToInt32(errstr) - 1;
-                                        string[] s = naSite[u].ToString().Split(';');
-                                    }
-                                    if (error == "11")
-                                    {
-                                        string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-
-                                    }
-                                }
-                                while (trueOtv != "2");
-                            }
+                                nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
                         }
                     }
                 }
@@ -300,46 +267,10 @@ namespace SM_MOTORS
 
                     System.Threading.Thread.Sleep(20000);
 
-                    string trueOtv = null;
                     string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
                     if (naSite1.Length > 1)
-                    {
-                        do
-                        {
-                            string otvimg = DownloadNaSite(cookieBike18);
-                            string check = "{\"success\":true,\"imports\":{\"state\":1,\"errorCode\":0,\"errorLine\":0}}";
-                            do
-                            {
-                                System.Threading.Thread.Sleep(2000);
-                                otvimg = ChekedLoading(cookieBike18);
-                            }
-                            while (otvimg == check);
+                        nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
 
-                            trueOtv = new Regex("(?<=\":{\"state\":).*?(?=,\")").Match(otvimg).ToString();
-                            string error = new Regex("(?<=errorCode\":).*?(?=,\")").Match(otvimg).ToString();
-                            if (error == "13")
-                            {
-                                ErrorDownloadInSite13(otvimg);
-                            }
-                            if (error == "37")
-                            {
-                                ErrorDownloadInSite37(otvimg);
-                            }
-                            if (error == "27")
-                            {
-                                string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-                                string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                                int u = Convert.ToInt32(errstr) - 1;
-                                string[] s = naSite[u].ToString().Split(';');
-                            }
-                            if (error == "11")
-                            {
-                                string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-
-                            }
-                        }
-                        while (trueOtv != "2");
-                    }
                     File.Delete("naSite.csv");
                     nethouse.NewListUploadinBike18("naSite");
                 }
