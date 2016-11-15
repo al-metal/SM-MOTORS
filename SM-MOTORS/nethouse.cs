@@ -482,8 +482,19 @@ namespace Bike18
 
                 if (error == "37")
                     ErrUpload37(otvimg, nameFile);
+
+                if (error == "27")
+                    ErrUpload27(otvimg, nameFile);
             }
             while (trueOtv != "2");
+        }
+
+        private void ErrUpload27(string otv, string nameFile)
+        {
+            string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otv).ToString();
+            string[] naSite = File.ReadAllLines(nameFile, Encoding.GetEncoding(1251));
+            int u = Convert.ToInt32(errstr) - 1;
+            string[] s = naSite[u].ToString().Split(';');
         }
 
         private void ErrUpload13(string otv, string nameFile)
