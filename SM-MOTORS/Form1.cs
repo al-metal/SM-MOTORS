@@ -145,17 +145,13 @@ namespace SM_MOTORS
                             for (int x = 0; maxVal >= x; x++)
                             {
                                 if (x == 1)
-                                {
                                     pages = "";
-                                }
                                 else
-                                {
                                     pages = "&PAGEN_1=" + x;
-                                }
+
                                 if (maxVal == 0)
-                                {
                                     pages = "";
-                                }
+
                                 otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsZapchasti + "?count=60" + pages);
                                 MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                                 for (int m = 0; tovars.Count > m; m++)
@@ -166,6 +162,8 @@ namespace SM_MOTORS
                                 if (x == 0)
                                     x++;
                             }
+
+                            System.Threading.Thread.Sleep(20000);
 
                             string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
                             if (naSite1.Length > 1)
@@ -195,17 +193,13 @@ namespace SM_MOTORS
                                     for (int x = 0; maxVal >= x; x++)
                                     {
                                         if (x == 1)
-                                        {
                                             pages = "";
-                                        }
                                         else
-                                        {
                                             pages = "&PAGEN_1=" + x;
-                                        }
+
                                         if (maxVal == 0)
-                                        {
                                             pages = "";
-                                        }
+
                                         otv = webRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
                                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                                         for (int m = 0; tovars.Count > m; m++)
@@ -241,17 +235,13 @@ namespace SM_MOTORS
                     for (int x = 0; maxVal >= x; x++)
                     {
                         if (x == 1)
-                        {
                             pages = "";
-                        }
                         else
-                        {
                             pages = "&PAGEN_1=" + x;
-                        }
+
                         if (maxVal == 0)
-                        {
                             pages = "";
-                        }
+
                         otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                         for (int m = 0; tovars.Count > m; m++)
