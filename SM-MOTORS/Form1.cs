@@ -25,6 +25,8 @@ namespace SM_MOTORS
         int addCount = 0;
         int countEditProduct = 0;
         double discountPrice = 0.02;
+        string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
+        string boldClose = "</span>";
 
         public Form1()
         {
@@ -129,15 +131,14 @@ namespace SM_MOTORS
             {
                 string urlsCategory = urls[i].ToString();
 
-                #region ГСМ
-                if (urlsCategory == "/catalog/gsm/")
+                #region ГСМ и покрышки
+                if (urlsCategory == "/catalog/gsm/" || urlsCategory == "/catalog/pokryshki-kamery/")
                 {
                     for (int t = i; urls.Count > t; t++)
                     {
                         string urlsZapchasti = urls[t].ToString();
-                        if (urlsZapchasti == "/catalog/gsm/maslo-agip-eni/" || urlsZapchasti == "/catalog/gsm/maslo-liqui-moly/" || urlsZapchasti == "/catalog/gsm/maslo-motul/" || urlsZapchasti == "/catalog/gsm/maslo-repsol/")
+                        if (urlsZapchasti == "/catalog/gsm/maslo-agip-eni/" || urlsZapchasti == "/catalog/gsm/maslo-liqui-moly/" || urlsZapchasti == "/catalog/gsm/maslo-motul/" || urlsZapchasti == "/catalog/gsm/maslo-repsol/" || urlsZapchasti == "/catalog/pokryshki-kamery/aksessuary-dlya-pokryshek/" || urlsZapchasti == "/catalog/pokryshki-kamery/kamery/" || urlsZapchasti == "/catalog/pokryshki-kamery/pokryshki-dlya-atv/" || urlsZapchasti == "/catalog/pokryshki-kamery/pokryshki-dlya-mototsiklov/" || urlsZapchasti == "/catalog/pokryshki-kamery/pokryshki-dlya-skuterov/")
                         {
-
                             string pages = "";
                             otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsZapchasti + "?count=60" + pages);
                             int maxVal = countPagesSM(otv);
@@ -165,11 +166,12 @@ namespace SM_MOTORS
 
                             System.Threading.Thread.Sleep(20000);
 
-                            string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                            if (naSite1.Length > 1)
-                                nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
+                            
                         }
                     }
+                    string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
+                    if (naSite1.Length > 1)
+                        nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
                 }
                 #endregion
 
@@ -226,7 +228,7 @@ namespace SM_MOTORS
                 #endregion
 
                 #region Остальные каталоги
-                if (urls[i].ToString() == "/catalog/velogibridy/" || urls[i].ToString() == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urls[i].ToString() == "/catalog/akkumulyatory/" || urls[i].ToString() == "/catalog/tyuning-dlya-skuterov/" || urls[i].ToString() == "/catalog/pokryshki-kamery/" || urls[i].ToString() == "/catalog/gsm/")
+                if (urls[i].ToString() == "/catalog/velogibridy/" || urls[i].ToString() == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urls[i].ToString() == "/catalog/akkumulyatory/" || urls[i].ToString() == "/catalog/tyuning-dlya-skuterov/" || urls[i].ToString() == "/catalog/gsm/")
                 {
                     string pages = "";
                     otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
@@ -577,7 +579,7 @@ namespace SM_MOTORS
 
         public string Discount()
         {
-            string discount = "<p style=\"\"text-align: right;\"\"><span style=\"\"font -weight: bold; font-weight: bold;\"\"> Сделай ТРОЙНОЙ удар по нашим ценам! </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font -weight: bold; font-weight: bold;\"\"> 1. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Скидки за отзывы о товарах!</a> </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font -weight: bold; font-weight: bold;\"\"> 2. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Друзьям скидки и подарки!</a> </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font -weight: bold; font-weight: bold;\"\"> 3. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Нашли дешевле!? 110% разницы Ваши!</a></span></p>";
+            string discount = "<p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> Сделай ТРОЙНОЙ удар по нашим ценам! </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> 1. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Скидки за отзывы о товарах!</a> </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> 2. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Друзьям скидки и подарки!</a> </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> 3. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Нашли дешевле!? 110% разницы Ваши!</a></span></p>";
             return discount;
         }
 
@@ -716,8 +718,6 @@ namespace SM_MOTORS
                     string artNoProd = article;
                     string razdelmini = null;
                     string podRazdel = null;
-                    string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
-                    string boldClose = "</span>";
 
                     minitext = MiniText();
                     fullText = FullText();
@@ -797,9 +797,7 @@ namespace SM_MOTORS
                     string razdelmini = null;
                     string podRazdel = null;
                     fullText = FullText();
-                    string boldOpen = "<span style=\"font-weight: bold; font-weight: bold;\">";
-                    string boldClose = "</span>";
-
+                    
                     podRazdel = boldOpen + podRazdelSeo + boldClose;
                     razdelmini = boldOpen + razdelSeo + boldClose;
                     string nameText = boldOpen + name + boldClose;
@@ -902,7 +900,7 @@ namespace SM_MOTORS
 
         private string specChar(string text)
         {
-            text = text.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&laquo;", "«").Replace("&raquo;", "»").Replace("&ndash;", "-").Replace("&mdash;", "-").Replace("&lsquo;", "‘").Replace("&rsquo;", "’").Replace("&sbquo;", "‚").Replace("&ldquo;", "\"").Replace("&rdquo;", "”").Replace("&bdquo;", "„").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&#39;", "'");
+            text = text.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&laquo;", "«").Replace("&raquo;", "»").Replace("&ndash;", "-").Replace("&mdash;", "-").Replace("&lsquo;", "‘").Replace("&rsquo;", "’").Replace("&sbquo;", "‚").Replace("&ldquo;", "\"").Replace("&rdquo;", "”").Replace("&bdquo;", "„").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&#39;", "'").Replace(",", "").Replace("\"", "");
 
             return text;
         }
@@ -965,6 +963,31 @@ namespace SM_MOTORS
                     razdel = razdel + "Запчасти => Запчасти для питбайков и китайских мотоциклов => " + titlesMenu[2].ToString();
                     razdelmini = titlesMenu[2].ToString();
                     razdelSeo = titlesMenu[2].ToString();
+                    break;
+                case ("/catalog/pokryshki-kamery/aksessuary-dlya-pokryshek/"):
+                    razdel = razdel + "Покрышки / Камеры => Аксессуары для покрышек";
+                    razdelmini = "Аксессуары для покрышек";
+                    razdelSeo = "Аксессуары для покрышек";
+                    break;
+                case ("/catalog/pokryshki-kamery/kamery/"):
+                    razdel = razdel + "Покрышки / Камеры => Камеры";
+                    razdelmini = "Камеры";
+                    razdelSeo = "Камеры";
+                    break;
+                case ("/catalog/pokryshki-kamery/pokryshki-dlya-atv/"):
+                    razdel = razdel + "Покрышки / Камеры => Покрышки для ATV";
+                    razdelmini = "Покрышки для ATV";
+                    razdelSeo = "Покрышки для ATV";
+                    break;
+                case ("/catalog/pokryshki-kamery/pokryshki-dlya-mototsiklov/"):
+                    razdel = razdel + "Покрышки / Камеры => Покрышки для мотоциклов";
+                    razdelmini = "Покрышки для мотоциклов";
+                    razdelSeo = "Покрышки для мотоциклов";
+                    break;
+                case ("/catalog/pokryshki-kamery/pokryshki-dlya-skuterov/"):
+                    razdel = razdel + "Покрышки / Камеры => Покрышки для скутеров";
+                    razdelmini = "Покрышки для скутеров";
+                    razdelSeo = "Покрышки для скутеров";
                     break;
                 case ("zapchasti-originalnye"):
                     razdel = razdel + "Запчасти => Запчасти оригинальные";
