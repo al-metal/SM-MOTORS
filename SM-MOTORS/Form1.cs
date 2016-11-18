@@ -123,6 +123,7 @@ namespace SM_MOTORS
             }
 
             File.Delete("naSite.csv");
+            File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
             otv = webRequest.getRequest("https://www.sm-motors.ru/");
@@ -164,9 +165,7 @@ namespace SM_MOTORS
                                     x++;
                             }
 
-                            System.Threading.Thread.Sleep(20000);
-
-                            
+                            System.Threading.Thread.Sleep(20000);                            
                         }
                     }
                     string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
@@ -268,8 +267,10 @@ namespace SM_MOTORS
                 }
                 #endregion
             }
-            MessageBox.Show("Изменено товаров " + countEditProduct);
 
+
+
+            MessageBox.Show("Изменено товаров " + countEditProduct);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -693,6 +694,8 @@ namespace SM_MOTORS
             string razdel = tovarSMMotors[10].ToString();
             string razdelSeo = tovarSMMotors[11].ToString();
 
+            WrireArticleTovar(article);
+
             if (!File.Exists("Pic\\" + article + ".jpg"))
             {
                 EditSizeImages(urlImage, article);
@@ -789,7 +792,6 @@ namespace SM_MOTORS
 
                     if (priceNoProd != "0")
                         webRequest.fileWriterCSV(newProduct, "naSite");
-
                 }
                 else
                 {
@@ -877,6 +879,13 @@ namespace SM_MOTORS
                     countEditProduct++;
                 }
             }
+        }
+
+        private void WrireArticleTovar(string article)
+        {
+            StreamWriter sw = new StreamWriter("allTovars", true);
+            sw.WriteLine(article);
+            sw.Close();
         }
 
         private string searchTovar(string name, string searchString)
