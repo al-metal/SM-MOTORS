@@ -284,85 +284,6 @@ namespace Bike18
             return otv;
         }
 
-        public void UploadCSVInBike18(CookieContainer cookie, string nameFile)
-        {
-            string trueOtv = null;
-            do
-            {
-                string otvimg = DownloadNaSite(cookie, nameFile);
-                string check = "{\"success\":true,\"imports\":{\"state\":1,\"errorCode\":0,\"errorLine\":0}}";
-                do
-                {
-                    System.Threading.Thread.Sleep(2000);
-                    otvimg = ChekedLoading(cookie);
-                }
-                while (otvimg == check);
-
-                trueOtv = new Regex("(?<=\":{\"state\":).*?(?=,\")").Match(otvimg).ToString();
-                string error = new Regex("(?<=errorCode\":).*?(?=,\")").Match(otvimg).ToString();
-                if (error == "13")
-                {
-                    ErrCHPUUploadInBike18(otvimg);
-                }
-                if (error == "37")
-                {
-                    ErrCHPUUploadInBike18(otvimg);
-                }
-                if (error == "10")
-                {
-
-                }
-                if (error == "21")
-                {
-
-                }
-            }
-            while (trueOtv != "2");
-        }
-
-        public string ChekedLoading(CookieContainer cookie)
-        {
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/export-import/check-import");
-            req.Accept = "application/json, text/plain, */*";
-            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
-            req.Method = "POST";
-            req.ContentLength = 0;
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.CookieContainer = cookie;
-            Stream stre1 = req.GetRequestStream();
-            stre1.Close();
-            HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
-            StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
-            string otvimg = ressrImg.ReadToEnd();
-            return otvimg;
-        }
-
-        public void ErrCHPUUploadInBike18(string otvimg)
-        {
-                string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-                string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                int u = Convert.ToInt32(errstr) - 1;
-                string[] strslug3 = naSite[u].ToString().Split(';');
-                string strslug = strslug3[strslug3.Length - 5];
-                int slug = strslug.Length;
-                int countAdd = ReturnCountAdd();
-                int countDel = countAdd.ToString().Length;
-                if (strslug.Contains("\""))
-                {
-                    countDel = countDel + 2;
-                }
-                string strslug2 = strslug.Remove(slug - countDel);
-                strslug2 += countAdd;
-                strslug2 = strslug2.Replace("”", "").Replace("~", "").Replace("#", "");
-                if (strslug2.Contains("\""))
-                {
-                    strslug2 = strslug2 + "\"";
-                    countDel = countDel - 2;
-                }
-                naSite[u] = naSite[u].Replace(strslug, strslug2);
-                File.WriteAllLines("naSite.csv", naSite, Encoding.GetEncoding(1251));
-        }
-
         public int ReturnCountAdd()
         {
             if (addCount == 99)
@@ -544,7 +465,7 @@ namespace Bike18
         private string DownloadNaSite(CookieContainer cookie, string nameFile)
         {
             string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/export-import/import-from-csv?fileapi" + epoch);
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("https://bike18.nethouse.ru/api/export-import/import-from-csv?fileapi" + epoch);
             req.Accept = "*/*";
             req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
             req.Method = "POST";
@@ -563,6 +484,25 @@ namespace Bike18
             HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
             StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
             string otvimg = ressrImg.ReadToEnd();
+            resimg.Close();
+            return otvimg;
+        }
+
+        public string ChekedLoading(CookieContainer cookie)
+        {
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("https://bike18.nethouse.ru/api/export-import/check-import");
+            req.Accept = "application/json, text/plain, */*";
+            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
+            req.Method = "POST";
+            req.ContentLength = 0;
+            req.ContentType = "application/x-www-form-urlencoded";
+            req.CookieContainer = cookie;
+            Stream stre1 = req.GetRequestStream();
+            stre1.Close();
+            HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
+            StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
+            string otvimg = ressrImg.ReadToEnd();
+            resimg.Close();
             return otvimg;
         }
 
