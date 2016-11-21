@@ -268,7 +268,11 @@ namespace SM_MOTORS
                 #endregion
             }
 
+            string[] allTovars = File.ReadAllLines("allTovars");
+            if(allTovars.Length > 1)
+            {
 
+            }
 
             MessageBox.Show("Изменено товаров " + countEditProduct);
         }
@@ -704,7 +708,7 @@ namespace SM_MOTORS
             if (availability == "1")
             {
                 //поиск по артикулу
-                urlTovarBike = searchTovar(article, article);
+                urlTovarBike = searchTovar(name, article);
 
                 //Поиск по названию товара
                 if (urlTovarBike == null)
@@ -932,7 +936,7 @@ namespace SM_MOTORS
             string article = new Regex("(?<=<span>Артикул:</span>).*?(?=</div>)").Match(otv).ToString();
 
             string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
-            name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Trim();
+            name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Replace("+", "").Replace("  ", " ").Trim();
 
             string saleMEtka = new Regex("(?<=<div class=\"old-price\">).*?(?=</div>)").Match(otv).ToString();
 
