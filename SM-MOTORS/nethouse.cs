@@ -410,6 +410,22 @@ namespace Bike18
             while (trueOtv != "2");
         }
 
+        private void ErrUpload10(string otv, string nameFile)
+        {
+            string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otv).ToString();
+            string[] naSite = File.ReadAllLines(nameFile, Encoding.GetEncoding(1251));
+            string[] newList = new string[naSite.Length - 1];
+            int i = 0;
+            string delString = naSite[Convert.ToInt32(errstr) - 1].ToString();
+            foreach (string str in naSite)
+            {
+                if (str != delString)
+                    newList[i] = str;
+                i++;
+            }
+            File.WriteAllLines(nameFile, newList, Encoding.GetEncoding(1251));
+        }
+
         private void ErrUpload27(string otv, string nameFile)
         {
             string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otv).ToString();
@@ -434,7 +450,7 @@ namespace Bike18
             }
             string strslug2 = strslug.Remove(slug - countDel);
             strslug2 += countAdd;
-            strslug2 = strslug2.Replace("”", "").Replace("~", "").Replace("#", "");
+            strslug2 = strslug2.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
             if (strslug2.Contains("\""))
             {
                 strslug2 = strslug2 + "\"";
