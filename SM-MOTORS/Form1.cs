@@ -18,8 +18,9 @@ namespace SM_MOTORS
 {
     public partial class Form1 : Form
     {
-        web.WebRequest webRequest = new web.WebRequest();
+        //web.WebRequest webRequest = new web.WebRequest();
         nethouse nethouse = new nethouse();
+        httpRequest httpRequest = new httpRequest();
         CHPU chpu = new CHPU();
 
         int addCount = 0;
@@ -108,7 +109,7 @@ namespace SM_MOTORS
             string loginSM = tbLoginSM.Text;
             string passwordSM = tbPasswordSM.Text;
 
-            CookieContainer cookieBike18 = webRequest.webCookieBike18(loginBike, passwordBike);
+            CookieContainer cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
             CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
 
             if (cookieBike18.Count != 4)
@@ -126,7 +127,7 @@ namespace SM_MOTORS
             File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
-            otv = webRequest.getRequest("https://www.sm-motors.ru/");
+            otv = httpRequest.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
             {
@@ -141,7 +142,7 @@ namespace SM_MOTORS
                         if (urlsZapchasti == "/catalog/gsm/maslo-agip-eni/" || urlsZapchasti == "/catalog/gsm/maslo-liqui-moly/" || urlsZapchasti == "/catalog/gsm/maslo-motul/" || urlsZapchasti == "/catalog/gsm/maslo-repsol/" || urlsZapchasti == "/catalog/pokryshki-kamery/aksessuary-dlya-pokryshek/" || urlsZapchasti == "/catalog/pokryshki-kamery/kamery/" || urlsZapchasti == "/catalog/pokryshki-kamery/pokryshki-dlya-atv/" || urlsZapchasti == "/catalog/pokryshki-kamery/pokryshki-dlya-mototsiklov/" || urlsZapchasti == "/catalog/pokryshki-kamery/pokryshki-dlya-skuterov/")
                         {
                             string pages = "";
-                            otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsZapchasti + "?count=60" + pages);
+                            otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsZapchasti + "?count=60" + pages);
                             int maxVal = countPagesSM(otv);
 
                             for (int x = 0; maxVal >= x; x++)
@@ -154,7 +155,7 @@ namespace SM_MOTORS
                                 if (maxVal == 0)
                                     pages = "";
 
-                                otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsZapchasti + "?count=60" + pages);
+                                otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsZapchasti + "?count=60" + pages);
                                 MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                                 for (int m = 0; tovars.Count > m; m++)
                                 {
@@ -188,7 +189,7 @@ namespace SM_MOTORS
                                 if (zapchastiUrls.Contains(urlsZapchasti))
                                 {
                                     string pages = "";
-                                    otv = webRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
+                                    otv = httpRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
                                     int maxVal = countPagesSM(otv);
 
                                     for (int x = 0; maxVal >= x; x++)
@@ -201,7 +202,7 @@ namespace SM_MOTORS
                                         if (maxVal == 0)
                                             pages = "";
 
-                                        otv = webRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
+                                        otv = httpRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
                                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                                         for (int m = 0; tovars.Count > m; m++)
                                         {
@@ -230,7 +231,7 @@ namespace SM_MOTORS
                 if (urls[i].ToString() == "/catalog/velogibridy/" || urls[i].ToString() == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urls[i].ToString() == "/catalog/akkumulyatory/" || urls[i].ToString() == "/catalog/tyuning-dlya-skuterov/" || urls[i].ToString() == "/catalog/gsm/")
                 {
                     string pages = "";
-                    otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                    otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
                     int maxVal = countPagesSM(otv);
 
                     for (int x = 0; maxVal >= x; x++)
@@ -243,7 +244,7 @@ namespace SM_MOTORS
                         if (maxVal == 0)
                             pages = "";
 
-                        otv = webRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                        otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                         for (int m = 0; tovars.Count > m; m++)
                         {
@@ -315,14 +316,14 @@ namespace SM_MOTORS
             Properties.Settings.Default.Save();
             string login = tbLoginBike.Text;
             string password = tbPasswordBike.Text;
-            CookieContainer cookieBike18 = webRequest.webCookieBike18(login, password);
+            CookieContainer cookieBike18 = nethouse.CookieNethouse(login, password);
 
             string otv = null;
-            otv = webRequest.getRequest("http://bike18.ru/products/category/1689456");
+            otv = httpRequest.getRequest("http://bike18.ru/products/category/1689456");
             MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
             for (int i = 0; razdel.Count > i; i++)
             {
-                otv = webRequest.getRequest("http://bike18.ru" + razdel[i].ToString() + "/page/all");
+                otv = httpRequest.getRequest("http://bike18.ru" + razdel[i].ToString() + "/page/all");
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                 MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -330,14 +331,14 @@ namespace SM_MOTORS
                 {
                     for (int p = 0; podRazdel.Count > p; p++)
                     {
-                        otv = webRequest.getRequest("http://bike18.ru" + podRazdel[p].ToString() + "/page/all");
+                        otv = httpRequest.getRequest("http://bike18.ru" + podRazdel[p].ToString() + "/page/all");
                         MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                         MatchCollection podRazdel2 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
                         if (podRazdel2.Count != 0)
                         {
                             for (int o = 0; podRazdel2.Count > o; o++)
                             {
-                                otv = webRequest.getRequest("http://bike18.ru" + podRazdel2[o].ToString() + "/page/all");
+                                otv = httpRequest.getRequest("http://bike18.ru" + podRazdel2[o].ToString() + "/page/all");
                                 MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                                 for (int b = 0; product3.Count > b; b++)
                                 {
@@ -374,15 +375,15 @@ namespace SM_MOTORS
         private void UploadImage(CookieContainer cookieBike18, string urlProduct)
         {
             string otv = null;
-            otv = webRequest.getRequest(urlProduct);
+            otv = httpRequest.getRequest(urlProduct);
             string artProd = new Regex("(?<=Артикул:)[\\w\\W]*?(?=</title><)").Match(otv).ToString().Trim();
             if (System.IO.File.Exists("Pic\\" + artProd + ".jpg"))
             {
 
-                otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + artProd);
+                otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + artProd);
 
                 urlProduct = urlProduct.Replace("http://bike18.ru", "http://bike18.nethouse.ru");
-                otv = webRequest.PostRequest(cookieBike18, urlProduct);
+                otv = httpRequest.PostRequest(cookieBike18, urlProduct);
 
                 MatchCollection prId = new Regex("(?<=data-id=\").*?(?=\")").Matches(otv);
                 string productId = prId[0].ToString();
@@ -700,6 +701,11 @@ namespace SM_MOTORS
 
             WrireArticleTovar(article);
 
+            if(article == "020107-811-4924")
+            {
+
+            }
+            
             if (!File.Exists("Pic\\" + article + ".jpg"))
             {
                 EditSizeImages(urlImage, article);
@@ -795,7 +801,7 @@ namespace SM_MOTORS
                     newProduct.Add("\"" + "0" + "\"");                                     //удалить
 
                     if (priceNoProd != "0")
-                        webRequest.fileWriterCSV(newProduct, "naSite");
+                        fileWriterCSV(newProduct, "naSite");
                 }
                 else
                 {
@@ -817,7 +823,7 @@ namespace SM_MOTORS
                     string priceBike = listProduct[9];
                     if (priceBike == "")
                         priceBike = 0.ToString();
-                    otv = webRequest.PostRequest(cookie, urlTovar);
+                    otv = httpRequest.PostRequest(cookie, urlTovar);
                     int price = Price(otv, discountPrice);
                     if (Convert.ToInt32(priceBike) != price)
                     {
@@ -839,7 +845,7 @@ namespace SM_MOTORS
                 bool b = false;
 
                 //поиск по артикулу
-                otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + article);
+                otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + article);
                 MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                 for (int t = 0; strUrlProd1.Count > t; t++)
                 {
@@ -856,7 +862,7 @@ namespace SM_MOTORS
                 //Поиск по названию товара
                 if (!b)
                 {
-                    otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + name);
+                    otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + name);
                     strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                     for (int t = 0; strUrlProd1.Count > t; t++)
                     {
@@ -874,7 +880,7 @@ namespace SM_MOTORS
                 if (b)
                 {
                     List<string> listProduct = nethouse.GetProductList(cookieBike18, urlTovarBike);
-                    otv = webRequest.PostRequest(cookie, urlTovar);
+                    otv = httpRequest.PostRequest(cookie, urlTovar);
                     int price = Price(otv, discountPrice);
                     listProduct[9] = price.ToString();
                     listProduct[43] = "0";
@@ -897,11 +903,11 @@ namespace SM_MOTORS
             string otv = null;
             string urlTovarBike = null;
 
-            otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + searchString);
+            otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + searchString);
             MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
             for (int t = 0; strUrlProd1.Count > t; t++)
             {
-                string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Trim();
+                string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("  ", " ").Trim();
                 if (name == nameProduct1)
                 {
                     urlTovarBike = strUrlProd1[t].ToString();
@@ -922,7 +928,7 @@ namespace SM_MOTORS
         {
             CookieContainer cookie = new CookieContainer();
             List<string> getTovar = new List<string>();
-            string otv = webRequest.getRequest(urlTovar);
+            string otv = httpRequest.getRequest(urlTovar);
 
             string razdelmini = null;
             string razdelSeo = null;
@@ -1174,6 +1180,20 @@ namespace SM_MOTORS
             stre.Close();
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
             return cookie;
+        }
+
+        internal void fileWriterCSV(List<string> newProduct, string nameFile)
+        {
+            StreamWriter newProductcsv = new StreamWriter(nameFile + ".csv", true, Encoding.GetEncoding("windows-1251"));
+            int count = newProduct.Count - 1;
+            for (int i = 0; count > i; i++)
+            {
+                newProductcsv.Write(newProduct[i], Encoding.GetEncoding("windows-1251"));
+                newProductcsv.Write(";");
+            }
+            newProductcsv.Write(newProduct[count], Encoding.GetEncoding("windows-1251"));
+            newProductcsv.WriteLine();
+            newProductcsv.Close();
         }
     }
 }
