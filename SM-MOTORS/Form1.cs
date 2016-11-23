@@ -700,11 +700,6 @@ namespace SM_MOTORS
             string razdelSeo = tovarSMMotors[11].ToString();
 
             WrireArticleTovar(article);
-
-            if(article == "020107-811-4924")
-            {
-
-            }
             
             if (!File.Exists("Pic\\" + article + ".jpg"))
             {
@@ -713,10 +708,7 @@ namespace SM_MOTORS
 
             if (availability == "1")
             {
-                //поиск по артикулу
                 urlTovarBike = searchTovar(name, article);
-
-                //Поиск по названию товара
                 if (urlTovarBike == null)
                     urlTovarBike = searchTovar(name, name);
 
