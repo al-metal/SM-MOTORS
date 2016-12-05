@@ -14,6 +14,7 @@ namespace Bike18
         {
             HttpWebResponse res = null;
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            req.Proxy = null;
             req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
             res = (HttpWebResponse)req.GetResponse();
@@ -34,8 +35,24 @@ namespace Bike18
             string otv = ressr.ReadToEnd();
             res.GetResponseStream().Close();
             req.GetResponse().Close();
-            res.Close();
 
+            return otv;
+        }
+
+        public string getRequest(CookieContainer cookie, string url)
+        {
+            HttpWebResponse res = null;
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            req.Proxy = null;
+            req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
+            req.CookieContainer = cookie;
+            res = (HttpWebResponse)req.GetResponse();
+            StreamReader ressr = new StreamReader(res.GetResponseStream());
+            string otv = ressr.ReadToEnd();
+            res.GetResponseStream().Close();
+            req.GetResponse().Close();
+            res.Close();
             return otv;
         }
 
@@ -51,7 +68,6 @@ namespace Bike18
             Stream stre = req.GetRequestStream();
             stre.Close();
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-            res.Close();
             return cooc;
         }
 
@@ -68,7 +84,6 @@ namespace Bike18
             res = (HttpWebResponse)req.GetResponse();
             StreamReader ressr = new StreamReader(res.GetResponseStream());
             otv = ressr.ReadToEnd();
-            res.Close();
 
             return otv;
         }
