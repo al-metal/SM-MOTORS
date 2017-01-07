@@ -474,24 +474,37 @@ namespace Bike18
 
                 if (error == "27")
                     ErrUpload27(otvimg, nameFile);
+
+                if (error == "10")
+                    ErrUpload13(otvimg, nameFile);
+
+
             }
             while (trueOtv != "2");
         }
 
         private void ErrUpload10(string otv, string nameFile)
         {
-            string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otv).ToString();
-            string[] naSite = File.ReadAllLines(nameFile, Encoding.GetEncoding(1251));
-            string[] newList = new string[naSite.Length - 1];
-            int i = 0;
-            string delString = naSite[Convert.ToInt32(errstr) - 1].ToString();
-            foreach (string str in naSite)
+            try
             {
-                if (str != delString)
-                    newList[i] = str;
-                i++;
+                string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otv).ToString();
+                string[] naSite = File.ReadAllLines(nameFile, Encoding.GetEncoding(1251));
+                string[] newList = new string[naSite.Length - 1];
+                int i = 0;
+                string delString = naSite[Convert.ToInt32(errstr) - 1].ToString();
+                foreach (string str in naSite)
+                {
+                    if (str != delString)
+                        newList[i] = str;
+                    i++;
+                }
+                File.WriteAllLines(nameFile, newList, Encoding.GetEncoding(1251));
             }
-            File.WriteAllLines(nameFile, newList, Encoding.GetEncoding(1251));
+            catch
+            {
+
+            }
+           
         }
 
         private void ErrUpload27(string otv, string nameFile)
@@ -541,7 +554,7 @@ namespace Bike18
             int countDel = countAdd.ToString().Length;
             string strslug2 = strslug.Remove(slug - countDel);
             strslug2 += countAdd;
-            strslug2 = strslug2.Replace(" -", "-").Replace("?", "");
+            strslug2 = strslug2.Replace(" -", "-").Replace("?", "").Replace("%", "");
             naSite[u] = naSite[u].Replace(strslug, strslug2);
             File.WriteAllLines(nameFile, naSite, Encoding.GetEncoding(1251));
         }
