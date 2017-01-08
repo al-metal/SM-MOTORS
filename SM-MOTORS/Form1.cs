@@ -182,7 +182,7 @@ namespace SM_MOTORS
                     for (int t = i; urls.Count > t; t++)
                     {
                         string urlsZapchasti = urls[t].ToString();
-                        if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/")
+                        if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/dvigateli/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-originalnye/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-snegokhody/")
                         {
                             for (int tt = ++t; urls.Count > tt; tt++)
                             {
@@ -1086,7 +1086,7 @@ namespace SM_MOTORS
             string characteristics = new Regex("(?<=<div class=\"tab-content columns-content\">)[\\w\\W]*?(?=</ul>)").Match(otv).ToString().Replace("<ul>", "").Replace("<li>", "").Replace("</li>", "").Replace("\n", " ").Trim();
 
             string urlImage = new Regex("(?<=<div class=\"gallery\">)[\\w\\W]*?(?=data-large=)").Match(otv).ToString().Replace("<a href=\"", "").Replace("\"", "").Trim();
-            urlImage = "https:" + urlImage;/*//www.sm-motors.ru*/
+            urlImage = "https:" + urlImage;
 
             int price = Price(otv, discountPrice);
             string priceNoProd = price.ToString();
@@ -1148,7 +1148,7 @@ namespace SM_MOTORS
                     razdelmini = "Запчасти оригинальные";
                     razdelSeo = "Запчасти оригинальные";
                     break;
-                case ("dvigateli"):
+                case ("/catalog/zapchasti/dvigateli/"):
                     razdel = razdel + "Запчасти => Двигатели";
                     razdelmini = "Двигатели";
                     razdelSeo = "Двигатели";
