@@ -107,6 +107,8 @@ namespace SM_MOTORS
             string passwordBike = tbPasswordBike.Text;
             string loginSM = tbLoginSM.Text;
             string passwordSM = tbPasswordSM.Text;
+            countEditProduct = 0;
+            int delTovar = 0;
 
             CookieContainer cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
             CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
@@ -275,7 +277,6 @@ namespace SM_MOTORS
             string[] allTovars = File.ReadAllLines("allTovars");
             if(allTovars.Length > 1)
             {
-                int delTovar = 0;
                 otv = null;
                 otv = httpRequest.getRequest("http://bike18.ru/products/category/1689456");
                 MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
@@ -311,16 +312,6 @@ namespace SM_MOTORS
                                 urlPodRazdel = "http://bike18.ru/products/category/2328540/page/all";
                             else if (urlPodRazdel == "/products/category/zapchasti")
                                 urlPodRazdel = "https://bike18.ru/products/category/2328541/page/all";
-                            else if (urlPodRazdel == "/products/category/2328542")
-                                urlPodRazdel = "https://bike18.ru/products/category/2328542/page/all";
-                            else if (urlPodRazdel == "/products/category/2498838")
-                                urlPodRazdel = "https://bike18.ru/products/category/2498838/page/all";
-                            else if (urlPodRazdel == "/products/category/2500751")
-                                urlPodRazdel = "https://bike18.ru/products/category/2500751/page/all";
-                            else if (urlPodRazdel == "/products/category/2501671")
-                                urlPodRazdel = "https://bike18.ru/products/category/2501671/page/all";
-                            else if (urlPodRazdel == "/products/category/2503301")
-                                urlPodRazdel = "https://bike18.ru/products/category/2503301/page/all";
                             else
                                 urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "/page/all";
 
@@ -411,7 +402,7 @@ namespace SM_MOTORS
                 }
             }
 
-            MessageBox.Show("Изменено товаров " + countEditProduct);
+            MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
         }
 
         private void button2_Click(object sender, EventArgs e)
