@@ -450,7 +450,23 @@ namespace SM_MOTORS
             MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
             for (int i = 0; razdel.Count > i; i++)
             {
-                otv = httpRequest.getRequest("http://bike18.ru" + razdel[i].ToString() + "/page/all");
+                string urlRazdel = razdel[i].ToString();
+                if (urlRazdel == "/products/category/sm-motors-zapchasti")
+                    urlRazdel = "http://bike18.ru/products/category/sm-motors-zapchasti";
+                else if (urlRazdel == "/products/category/tuning-dly-skuterov")
+                    urlRazdel = "https://bike18.ru/products/category/2078597/page/all";
+                else if (urlRazdel == "/products/category/sm-motors-pokrishki-kameri")
+                    urlRazdel = "https://bike18.ru/products/category/sm-motors-pokrishki-kameri";
+                else if (urlRazdel == "/products/category/2331797")
+                    urlRazdel = "https://bike18.ru/products/category/2331797";
+                else if (urlRazdel == "/products/category/sm-zapchasti-velogibridi")
+                    urlRazdel = "https://bike18.ru/products/category/2325564/page/all";
+                else if (urlRazdel == "/products/category/zapchasti-dly-lodochnih-motorov")
+                    urlRazdel = "https://bike18.ru/products/category/2326229/page/all";
+                else
+                    urlRazdel = "https://bike18.ru" + urlRazdel + "/page/all";
+
+                otv = httpRequest.getRequest(urlRazdel);
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                 MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -458,21 +474,33 @@ namespace SM_MOTORS
                 {
                     for (int p = 0; podRazdel.Count > p; p++)
                     {
-                        otv = httpRequest.getRequest("http://bike18.ru" + podRazdel[p].ToString() + "/page/all");
+                        string urlPodRazdel = podRazdel[p].ToString();
+                        if (urlPodRazdel == "/products/category/sm-zapchasti-dvigatel")
+                            urlPodRazdel = "http://bike18.ru/products/category/2328540/page/all";
+                        else if (urlPodRazdel == "/products/category/zapchasti")
+                            urlPodRazdel = "https://bike18.ru/products/category/2328541/page/all";
+                        else
+                            urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "/page/all";
+
+                        otv = httpRequest.getRequest(urlPodRazdel);
                         MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                         MatchCollection podRazdel2 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
                         if (podRazdel2.Count != 0)
                         {
                             for (int o = 0; podRazdel2.Count > o; o++)
                             {
-                                otv = httpRequest.getRequest("http://bike18.ru" + podRazdel2[o].ToString() + "/page/all");
+                                string urlPodRazdel2 = podRazdel2[o].ToString();
+                                otv = httpRequest.getRequest("http://bike18.ru" + urlPodRazdel2 + "/page/all");
                                 MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
+                                MatchCollection podRazdel3 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+
                                 for (int b = 0; product3.Count > b; b++)
                                 {
                                     string urlProduct = product3[b].ToString();
 
-                                    UploadImage(cookieBike18, urlProduct);
-                                }
+                                    nethouse.UploadImage(cookieBike18, urlProduct);
+                                    //UploadImage(cookieBike18, urlProduct);
+                                    }
                             }
                         }
                         if (product2.Count != 0)
@@ -481,7 +509,7 @@ namespace SM_MOTORS
                             {
                                 string urlProduct = product2[m].ToString();
 
-                                UploadImage(cookieBike18, urlProduct);
+                                nethouse.UploadImage(cookieBike18, urlProduct);
                             }
                         }
                     }
@@ -493,7 +521,7 @@ namespace SM_MOTORS
                     {
                         string urlProduct = product[n].ToString();
 
-                        UploadImage(cookieBike18, urlProduct);
+                        nethouse.UploadImage(cookieBike18, urlProduct);
                     }
                 }
             }
