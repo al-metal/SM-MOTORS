@@ -184,7 +184,7 @@ namespace SM_MOTORS
                     for (int t = i; urls.Count > t; t++)
                     {
                         string urlsZapchasti = urls[t].ToString();
-                        if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/dvigateli/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-originalnye/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-snegokhody/")
+                        if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/")
                         {
                             for (int tt = ++t; urls.Count > tt; tt++)
                             {
@@ -232,48 +232,49 @@ namespace SM_MOTORS
                 }
                 #endregion
 
-                #region Остальные каталоги
-                if (urls[i].ToString() == "/catalog/velogibridy/" || urls[i].ToString() == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urls[i].ToString() == "/catalog/akkumulyatory/" || urls[i].ToString() == "/catalog/tyuning-dlya-skuterov/" || urls[i].ToString() == "/catalog/gsm/" ||  urls[i].ToString() == "/catalog/kofry-sumki/")
-                {
-                    string pages = "";
-                    otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
-                    int maxVal = countPagesSM(otv);
+                 #region Остальные каталоги
+                 if (urlsCategory == "/catalog/velogibridy/" || urlsCategory == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urlsCategory == "/catalog/akkumulyatory/" || urlsCategory == "/catalog/tyuning-dlya-skuterov/" || urlsCategory == "/catalog/gsm/" || urlsCategory == "/catalog/kofry-sumki/" || urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/" || urlsCategory == "/catalog/zapchasti/zapchasti-originalnye/" || urlsCategory == "/catalog/zapchasti/dvigateli/")
+                 {
+                     string pages = "";
+                     otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                     int maxVal = countPagesSM(otv);
 
-                    for (int x = 0; maxVal >= x; x++)
-                    {
-                        if (x == 1)
-                            pages = "";
-                        else
-                            pages = "&PAGEN_1=" + x;
+                     for (int x = 0; maxVal >= x; x++)
+                     {
+                         if (x == 1)
+                             pages = "";
+                         else
+                             pages = "&PAGEN_1=" + x;
 
-                        if (maxVal == 0)
-                            pages = "";
+                         if (maxVal == 0)
+                             pages = "";
 
-                        otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
-                        MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
-                        for (int m = 0; tovars.Count > m; m++)
-                        {
-                            string urlTovar = "https://www.sm-motors.ru" + tovars[m].ToString();
-                            AddTovarInCSV(cookieBike18, urlTovar, discountPrice, urlsCategory);
-                        }
-                        if (x == 0)
-                        {
-                            x++;
-                        }
-                    }
-                    
-                    System.Threading.Thread.Sleep(20000);
+                         otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
+                         for (int m = 0; tovars.Count > m; m++)
+                         {
+                             string urlTovar = "https://www.sm-motors.ru" + tovars[m].ToString();
+                             AddTovarInCSV(cookieBike18, urlTovar, discountPrice, urlsCategory);
+                         }
+                         if (x == 0)
+                         {
+                             x++;
+                         }
+                     }
 
-                    string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                    if (naSite1.Length > 1)
-                        nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
+                     System.Threading.Thread.Sleep(20000);
 
-                    File.Delete("naSite.csv");
-                    nethouse.NewListUploadinBike18("naSite");
-                }
-                #endregion
+                     string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
+                     if (naSite1.Length > 1)
+                         nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
+
+                     File.Delete("naSite.csv");
+                     nethouse.NewListUploadinBike18("naSite");
+                 }
+                 #endregion
             }
-            
+
+            #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
             string[] allTovars = File.ReadAllLines("allTovars");
             if(allTovars.Length > 1)
             {
@@ -401,6 +402,7 @@ namespace SM_MOTORS
                     }
                 }
             }
+            #endregion
 
             MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
         }
