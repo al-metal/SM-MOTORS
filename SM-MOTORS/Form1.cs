@@ -165,16 +165,12 @@ namespace SM_MOTORS
                                 }
                                 if (x == 0)
                                     x++;
-                            }
-
-                            System.Threading.Thread.Sleep(20000);                            
+                            }     
                         }
                     }
-                    string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                    if (naSite1.Length > 1)
-                        nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
-                    File.Delete("naSite.csv");
-                    nethouse.NewListUploadinBike18("naSite");
+
+                    uploadNewTovar(cookieBike18);
+
                 }
                 #endregion
                 
@@ -220,13 +216,7 @@ namespace SM_MOTORS
                                 }
                             }
 
-                            System.Threading.Thread.Sleep(20000);
-
-                            string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                            if (naSite1.Length > 1)
-                                nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
-                            File.Delete("naSite.csv");
-                            nethouse.NewListUploadinBike18("naSite");
+                            uploadNewTovar(cookieBike18);
                         }
                     }
                 }
@@ -262,14 +252,8 @@ namespace SM_MOTORS
                          }
                      }
 
-                     System.Threading.Thread.Sleep(20000);
+                    uploadNewTovar(cookieBike18);
 
-                     string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-                     if (naSite1.Length > 1)
-                         nethouse.UploadCSVNethouse(cookieBike18, "naSite.csv");
-
-                     File.Delete("naSite.csv");
-                     nethouse.NewListUploadinBike18("naSite");
                  }
                  #endregion
             }
@@ -405,6 +389,16 @@ namespace SM_MOTORS
             #endregion
 
             MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
+        }
+
+        private void uploadNewTovar(CookieContainer cookie)
+        {
+            System.Threading.Thread.Sleep(20000);
+            string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
+            if (naSite1.Length > 1)
+                nethouse.UploadCSVNethouse(cookie, "naSite.csv");
+            File.Delete("naSite.csv");
+            nethouse.NewListUploadinBike18("naSite");
         }
 
         private void button2_Click(object sender, EventArgs e)
