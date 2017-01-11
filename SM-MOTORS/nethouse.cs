@@ -346,8 +346,13 @@ namespace Bike18
             {
                 for (int i = 1; 5 > i; i++)
                 {
-                    alsoBuy += "&alsoBuy[" + count + "]=" + searchTovars[i].ToString();
-                    count++;
+                    if (searchTovars.Count > i)
+                    {
+                        alsoBuy += "&alsoBuy[" + count + "]=" + searchTovars[i].ToString();
+                        count++;
+                    }
+                    else
+                        break;
                 }
             }
             return alsoBuy;
