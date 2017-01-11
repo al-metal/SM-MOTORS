@@ -23,6 +23,7 @@ namespace SM_MOTORS
         CHPU chpu = new CHPU();
 
         int addCount = 0;
+        int editTovar = 0;
         int countEditProduct = 0;
         double discountPrice = 0.02;
         string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
@@ -222,7 +223,7 @@ namespace SM_MOTORS
                 }
                 #endregion
 
-                 #region Остальные каталоги
+                #region Остальные каталоги
                  if (urlsCategory == "/catalog/velogibridy/" || urlsCategory == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urlsCategory == "/catalog/akkumulyatory/" || urlsCategory == "/catalog/tyuning-dlya-skuterov/" || urlsCategory == "/catalog/gsm/" || urlsCategory == "/catalog/kofry-sumki/" || urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/" || urlsCategory == "/catalog/zapchasti/zapchasti-originalnye/" || urlsCategory == "/catalog/zapchasti/dvigateli/")
                  {
                      string pages = "";
@@ -440,6 +441,7 @@ namespace SM_MOTORS
             string login = tbLoginBike.Text;
             string password = tbPasswordBike.Text;
             CookieContainer cookieBike18 = nethouse.CookieNethouse(login, password);
+            editTovar = 0;
 
             string otv = null;
             otv = httpRequest.getRequest("http://bike18.ru/products/category/1689456");
@@ -494,9 +496,8 @@ namespace SM_MOTORS
                                 {
                                     string urlProduct = product3[b].ToString();
 
-                                    nethouse.UploadImage(cookieBike18, urlProduct);
-                                    //UploadImage(cookieBike18, urlProduct);
-                                    }
+                                    UpdateTovar(cookieBike18, urlProduct);
+                                }
                             }
                         }
                         if (product2.Count != 0)
@@ -505,7 +506,7 @@ namespace SM_MOTORS
                             {
                                 string urlProduct = product2[m].ToString();
 
-                                nethouse.UploadImage(cookieBike18, urlProduct);
+                                UpdateTovar(cookieBike18, urlProduct);
                             }
                         }
                     }
@@ -517,11 +518,51 @@ namespace SM_MOTORS
                     {
                         string urlProduct = product[n].ToString();
 
-                        nethouse.UploadImage(cookieBike18, urlProduct);
+                        UpdateTovar(cookieBike18, urlProduct);
                     }
                 }
             }
+            MessageBox.Show("Обновлено товаров " + editTovar);
         } //загрузка картинок
+
+        private void UpdateTovar(CookieContainer cookieBike18, string urlProduct)
+        {
+            bool b = false;
+            List<string> listProduct = nethouse.GetProductList(cookieBike18, urlProduct);
+
+            string article = listProduct[6].ToString();
+            string images = listProduct[32];
+            string alsoby = listProduct[42];
+            string productGroupe = listProduct[3];
+
+
+            if (images == "")
+            {
+                if (File.Exists("Pic\\" + article + ".jpg"))
+                {
+                    nethouse.UploadImage(cookieBike18, urlProduct);
+                    b = true;
+                    editTovar++;
+                }
+            }
+
+            if (alsoby == "")
+            {
+                listProduct[42] = nethouse.alsoBuyTovars(listProduct);
+                b = true;
+                editTovar++;
+            }
+
+            if (productGroupe != "10833347")
+            {
+                listProduct[3] = "10833347";
+                b = true;
+                editTovar++;
+            }
+
+            if (b)
+                nethouse.SaveTovar(cookieBike18, listProduct);
+        }
 
         private void UploadImage(CookieContainer cookieBike18, string urlProduct)
         {
