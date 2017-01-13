@@ -546,7 +546,7 @@ namespace SM_MOTORS
                 }
             }
 
-            if (alsoby == "")
+            if (alsoby == "&alsoBuy[0]=0")
             {
                 listProduct[42] = nethouse.alsoBuyTovars(listProduct);
                 b = true;
@@ -1199,7 +1199,7 @@ namespace SM_MOTORS
                     razdelmini = "Покрышки для скутеров";
                     razdelSeo = "Покрышки для скутеров";
                     break;
-                case ("zapchasti-originalnye"):
+                case ("/catalog/zapchasti/zapchasti-originalnye/"):
                     razdel = razdel + "Запчасти => Запчасти оригинальные";
                     razdelmini = "Запчасти оригинальные";
                     razdelSeo = "Запчасти оригинальные";
@@ -1224,7 +1224,7 @@ namespace SM_MOTORS
                     razdelmini = titlesMenu[2].ToString();
                     razdelSeo = titlesMenu[2].ToString();
                     break;
-                case ("zapchasti-snegokhody"):
+                case ("/catalog/zapchasti/zapchasti-snegokhody/"):
                     razdel = razdel + "Запчасти => Запчасти снегоходы";
                     razdelmini = "Запчасти снегоходы";
                     razdelSeo = "Запчасти снегоходы";
