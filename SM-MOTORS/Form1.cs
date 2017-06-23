@@ -462,7 +462,7 @@ namespace SM_MOTORS
                 else if (urlRazdel == "/products/category/zapchasti-dly-lodochnih-motorov")
                     urlRazdel = "https://bike18.ru/products/category/2326229/page/all";
                 else
-                    urlRazdel = "https://bike18.ru" + urlRazdel + "/page/all";
+                    urlRazdel = "https://bike18.ru" + urlRazdel + "?page=all";
 
                 otv = httpRequest.getRequest(urlRazdel);
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
@@ -478,7 +478,7 @@ namespace SM_MOTORS
                         else if (urlPodRazdel == "/products/category/zapchasti")
                             urlPodRazdel = "https://bike18.ru/products/category/2328541/page/all";
                         else
-                            urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "/page/all";
+                            urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "?page=all";
 
                         otv = httpRequest.getRequest(urlPodRazdel);
                         MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
@@ -488,7 +488,7 @@ namespace SM_MOTORS
                             for (int o = 0; podRazdel2.Count > o; o++)
                             {
                                 string urlPodRazdel2 = podRazdel2[o].ToString();
-                                otv = httpRequest.getRequest("http://bike18.ru" + urlPodRazdel2 + "/page/all");
+                                otv = httpRequest.getRequest("http://bike18.ru" + urlPodRazdel2 + "?page=all");
                                 MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                                 MatchCollection podRazdel3 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -535,7 +535,13 @@ namespace SM_MOTORS
             string alsoby = listProduct[42];
             string productGroupe = listProduct[3];
 
-
+            if (!article.Contains("SM_"))
+            {
+                listProduct[6] = "SM_" + article;
+                b = true;
+            }
+            
+            /*
             if (images == "")
             {
                 if (File.Exists("Pic\\" + article + ".jpg"))
@@ -558,7 +564,7 @@ namespace SM_MOTORS
                 listProduct[3] = "10833347";
                 b = true;
                 editTovar++;
-            }
+            }*/
 
             if (b)
                 nethouse.SaveTovar(cookieBike18, listProduct);
