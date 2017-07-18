@@ -48,9 +48,9 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(695, 3);
+            this.btnUpdate.Location = new System.Drawing.Point(574, 9);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(208, 55);
+            this.btnUpdate.Size = new System.Drawing.Size(208, 31);
             this.btnUpdate.TabIndex = 0;
             this.btnUpdate.Text = "Обработать SM-MOTORS";
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -58,9 +58,9 @@
             // 
             // btnSaveTempale
             // 
-            this.btnSaveTempale.Location = new System.Drawing.Point(704, 301);
+            this.btnSaveTempale.Location = new System.Drawing.Point(576, 83);
             this.btnSaveTempale.Name = "btnSaveTempale";
-            this.btnSaveTempale.Size = new System.Drawing.Size(164, 23);
+            this.btnSaveTempale.Size = new System.Drawing.Size(206, 31);
             this.btnSaveTempale.TabIndex = 2;
             this.btnSaveTempale.Text = "Сохранить текст";
             this.btnSaveTempale.UseVisualStyleBackColor = true;
@@ -68,9 +68,9 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(2, 3);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 9);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(687, 111);
+            this.richTextBox1.Size = new System.Drawing.Size(565, 111);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "";
             // 
@@ -78,7 +78,7 @@
             // 
             this.richTextBox2.Location = new System.Drawing.Point(2, 135);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(687, 111);
+            this.richTextBox2.Size = new System.Drawing.Size(565, 111);
             this.richTextBox2.TabIndex = 4;
             this.richTextBox2.Text = "";
             // 
@@ -86,28 +86,28 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(2, 252);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(687, 20);
+            this.textBox1.Size = new System.Drawing.Size(565, 20);
             this.textBox1.TabIndex = 5;
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(2, 278);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(687, 20);
+            this.textBox2.Size = new System.Drawing.Size(565, 20);
             this.textBox2.TabIndex = 6;
             // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(2, 304);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(687, 20);
+            this.textBox3.Size = new System.Drawing.Size(565, 20);
             this.textBox3.TabIndex = 7;
             // 
             // btnUpdateImages
             // 
-            this.btnUpdateImages.Location = new System.Drawing.Point(695, 64);
+            this.btnUpdateImages.Location = new System.Drawing.Point(575, 46);
             this.btnUpdateImages.Name = "btnUpdateImages";
-            this.btnUpdateImages.Size = new System.Drawing.Size(208, 35);
+            this.btnUpdateImages.Size = new System.Drawing.Size(208, 31);
             this.btnUpdateImages.TabIndex = 8;
             this.btnUpdateImages.Text = "Обновить картинки";
             this.btnUpdateImages.UseVisualStyleBackColor = true;
@@ -132,7 +132,7 @@
             // 
             this.gbBike18.Controls.Add(this.tbLoginBike);
             this.gbBike18.Controls.Add(this.tbPasswordBike);
-            this.gbBike18.Location = new System.Drawing.Point(696, 105);
+            this.gbBike18.Location = new System.Drawing.Point(575, 120);
             this.gbBike18.Name = "gbBike18";
             this.gbBike18.Size = new System.Drawing.Size(207, 47);
             this.gbBike18.TabIndex = 11;
@@ -143,7 +143,7 @@
             // 
             this.gbSMMOTORS.Controls.Add(this.tbLoginSM);
             this.gbSMMOTORS.Controls.Add(this.tbPasswordSM);
-            this.gbSMMOTORS.Location = new System.Drawing.Point(696, 158);
+            this.gbSMMOTORS.Location = new System.Drawing.Point(575, 173);
             this.gbSMMOTORS.Name = "gbSMMOTORS";
             this.gbSMMOTORS.Size = new System.Drawing.Size(207, 47);
             this.gbSMMOTORS.TabIndex = 12;
@@ -169,7 +169,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(928, 344);
+            this.ClientSize = new System.Drawing.Size(792, 344);
             this.Controls.Add(this.gbSMMOTORS);
             this.Controls.Add(this.gbBike18);
             this.Controls.Add(this.btnUpdateImages);
@@ -181,7 +181,7 @@
             this.Controls.Add(this.btnSaveTempale);
             this.Controls.Add(this.btnUpdate);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Запчасти SM-MOTORS";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.gbBike18.ResumeLayout(false);
             this.gbBike18.PerformLayout();
