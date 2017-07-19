@@ -906,8 +906,10 @@ namespace SM_MOTORS
 
             if (availability == "1")
             {
-                urlTovarBike = searchTovar(name, article);
-                
+                urlTovarBike = searchTovar(name, article.Replace("-", "_"));
+                if(urlTovarBike == null)
+                    urlTovarBike = searchTovar(name, "SM_" + article.Replace("-", "_"));
+
                 if (urlTovarBike == null)
                 {
                     string minitext = null;
@@ -1234,7 +1236,7 @@ namespace SM_MOTORS
                     razdelSeo = "Запчасти снегоходы";
                     break;
                 case ("/catalog/akkumulyatory/"):
-                    razdel = razdel + "Аккумуляторы";
+                    razdel = "Запчасти и расходники => Расходники для мототехники => Аккумуляторы";
                     razdelmini = "Аккумуляторы";
                     razdelSeo = "Аккумуляторы";
                     break;
