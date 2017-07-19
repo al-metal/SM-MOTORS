@@ -28,6 +28,8 @@ namespace SM_MOTORS
         double discountPrice = 0.02;
         string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
         string boldClose = "</span>";
+        bool chekedSEO;
+        bool chekedFullText;
 
         public Form1()
         {
@@ -102,6 +104,9 @@ namespace SM_MOTORS
             Properties.Settings.Default.loginSM = tbLoginSM.Text;
             Properties.Settings.Default.passwordSM = tbPasswordSM.Text;
             Properties.Settings.Default.Save();
+
+            chekedSEO = cbSEO.Checked;
+            chekedFullText = cbFullText.Checked;
 
             string otv = null;
             string loginBike = tbLoginBike.Text;
@@ -995,39 +1000,85 @@ namespace SM_MOTORS
                 }
                 else
                 {
-                    string fullText = null;
-                    string razdelmini = null;
-                    string podRazdel = null;
-                    fullText = FullText();
-                    
-                    podRazdel = boldOpen + podRazdelSeo + boldClose;
-                    razdelmini = boldOpen + razdelSeo + boldClose;
-                    string nameText = boldOpen + name + boldClose;
-                    string nameNoProd = name;
-
-                    fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
-                    fullText = specChar(fullText);
-
-                    //обновить цену
                     List<string> listProduct = nethouse.GetProductList(cookieBike18, urlTovarBike);
+
+                    otv = httpRequest.PostRequest(cookie, urlTovar);
+                    int price = Price(otv, discountPrice);
+
+                    string fullText = null;
+                    bool edits = false;
+                    
                     string priceBike = listProduct[9];
                     if (priceBike == "")
                         priceBike = 0.ToString();
-                    otv = httpRequest.PostRequest(cookie, urlTovar);
-                    int price = Price(otv, discountPrice);
+                                        
                     if (Convert.ToInt32(priceBike) != price)
                     {
+                        string razdelmini = null;
+                        string podRazdel = null;
+                        fullText = FullText();
+
+                        podRazdel = boldOpen + podRazdelSeo + boldClose;
+                        razdelmini = boldOpen + razdelSeo + boldClose;
+                        string nameText = boldOpen + name + boldClose;
+                        string nameNoProd = name;
+
+                        fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
+                        fullText = specChar(fullText);
+
                         listProduct[9] = price.ToString();
                         listProduct[8] = fullText;
                         nethouse.SaveTovar(cookieBike18, listProduct);
                         countEditProduct++;
                     }
-                    else
+
+                    if(chekedFullText)
                     {
-                        //Обновление поля "Полное описание" товара
-                        //listProduct[8] = fullText;
-                        //nethouse.SaveTovar(cookieBike18, listProduct);
+                        listProduct[8] = fullText;
+                        edits = true;
                     }
+
+                    if (chekedSEO)
+                    {
+                        string titleText = textBox1.Lines[0].ToString();
+                        string descriptionText = textBox2.Lines[0].ToString();
+                        string keywordsText = textBox3.Lines[0].ToString();
+
+                        string podRazdel = boldOpen + podRazdelSeo + boldClose;
+                        string artNoProd = article;
+
+                        titleText = titleText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
+
+                        descriptionText = descriptionText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdelSeo).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
+
+                        keywordsText = keywordsText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
+
+                        if (titleText.Length > 255)
+                        {
+                            titleText = titleText.Remove(255);
+                            titleText = titleText.Remove(titleText.LastIndexOf(" "));
+                        }
+                        if (descriptionText.Length > 200)
+                        {
+                            descriptionText = descriptionText.Remove(200);
+                            descriptionText = descriptionText.Remove(descriptionText.LastIndexOf(" "));
+                        }
+                        if (keywordsText.Length > 100)
+                        {
+                            keywordsText = keywordsText.Remove(100);
+                            keywordsText = keywordsText.Remove(keywordsText.LastIndexOf(" "));
+                        }
+
+                        listProduct[11] = descriptionText;
+                        listProduct[12] = keywordsText;
+                        listProduct[13] = titleText;
+
+                        edits = true;
+
+                    }
+
+                    if(edits)
+                        nethouse.SaveTovar(cookieBike18, listProduct);
                 }
             }
             else

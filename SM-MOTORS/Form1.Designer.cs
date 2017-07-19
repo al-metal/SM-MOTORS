@@ -42,13 +42,15 @@
             this.gbSMMOTORS = new System.Windows.Forms.GroupBox();
             this.tbLoginSM = new System.Windows.Forms.TextBox();
             this.tbPasswordSM = new System.Windows.Forms.TextBox();
+            this.cbFullText = new System.Windows.Forms.CheckBox();
+            this.cbSEO = new System.Windows.Forms.CheckBox();
             this.gbBike18.SuspendLayout();
             this.gbSMMOTORS.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(574, 9);
+            this.btnUpdate.Location = new System.Drawing.Point(454, 12);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(208, 31);
             this.btnUpdate.TabIndex = 0;
@@ -58,9 +60,9 @@
             // 
             // btnSaveTempale
             // 
-            this.btnSaveTempale.Location = new System.Drawing.Point(576, 83);
+            this.btnSaveTempale.Location = new System.Drawing.Point(454, 86);
             this.btnSaveTempale.Name = "btnSaveTempale";
-            this.btnSaveTempale.Size = new System.Drawing.Size(206, 31);
+            this.btnSaveTempale.Size = new System.Drawing.Size(208, 31);
             this.btnSaveTempale.TabIndex = 2;
             this.btnSaveTempale.Text = "Сохранить текст";
             this.btnSaveTempale.UseVisualStyleBackColor = true;
@@ -70,7 +72,7 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(3, 9);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(565, 111);
+            this.richTextBox1.Size = new System.Drawing.Size(445, 111);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "";
             // 
@@ -78,7 +80,7 @@
             // 
             this.richTextBox2.Location = new System.Drawing.Point(2, 135);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(565, 111);
+            this.richTextBox2.Size = new System.Drawing.Size(445, 111);
             this.richTextBox2.TabIndex = 4;
             this.richTextBox2.Text = "";
             // 
@@ -86,26 +88,26 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(2, 252);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(565, 20);
+            this.textBox1.Size = new System.Drawing.Size(445, 20);
             this.textBox1.TabIndex = 5;
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(2, 278);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(565, 20);
+            this.textBox2.Size = new System.Drawing.Size(445, 20);
             this.textBox2.TabIndex = 6;
             // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(2, 304);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(565, 20);
+            this.textBox3.Size = new System.Drawing.Size(445, 20);
             this.textBox3.TabIndex = 7;
             // 
             // btnUpdateImages
             // 
-            this.btnUpdateImages.Location = new System.Drawing.Point(575, 46);
+            this.btnUpdateImages.Location = new System.Drawing.Point(454, 49);
             this.btnUpdateImages.Name = "btnUpdateImages";
             this.btnUpdateImages.Size = new System.Drawing.Size(208, 31);
             this.btnUpdateImages.TabIndex = 8;
@@ -132,9 +134,9 @@
             // 
             this.gbBike18.Controls.Add(this.tbLoginBike);
             this.gbBike18.Controls.Add(this.tbPasswordBike);
-            this.gbBike18.Location = new System.Drawing.Point(575, 120);
+            this.gbBike18.Location = new System.Drawing.Point(454, 123);
             this.gbBike18.Name = "gbBike18";
-            this.gbBike18.Size = new System.Drawing.Size(207, 47);
+            this.gbBike18.Size = new System.Drawing.Size(208, 47);
             this.gbBike18.TabIndex = 11;
             this.gbBike18.TabStop = false;
             this.gbBike18.Text = "Bike18.ru";
@@ -143,9 +145,9 @@
             // 
             this.gbSMMOTORS.Controls.Add(this.tbLoginSM);
             this.gbSMMOTORS.Controls.Add(this.tbPasswordSM);
-            this.gbSMMOTORS.Location = new System.Drawing.Point(575, 173);
+            this.gbSMMOTORS.Location = new System.Drawing.Point(454, 176);
             this.gbSMMOTORS.Name = "gbSMMOTORS";
-            this.gbSMMOTORS.Size = new System.Drawing.Size(207, 47);
+            this.gbSMMOTORS.Size = new System.Drawing.Size(208, 47);
             this.gbSMMOTORS.TabIndex = 12;
             this.gbSMMOTORS.TabStop = false;
             this.gbSMMOTORS.Text = "SM-MOTORS";
@@ -165,11 +167,35 @@
             this.tbPasswordSM.TabIndex = 10;
             this.tbPasswordSM.UseSystemPasswordChar = true;
             // 
+            // cbFullText
+            // 
+            this.cbFullText.AutoSize = true;
+            this.cbFullText.Location = new System.Drawing.Point(454, 229);
+            this.cbFullText.Name = "cbFullText";
+            this.cbFullText.Size = new System.Drawing.Size(160, 17);
+            this.cbFullText.TabIndex = 13;
+            this.cbFullText.Text = "Замена полного описания";
+            this.cbFullText.UseVisualStyleBackColor = true;
+            // 
+            // cbSEO
+            // 
+            this.cbSEO.AutoSize = true;
+            this.cbSEO.Checked = true;
+            this.cbSEO.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbSEO.Location = new System.Drawing.Point(453, 252);
+            this.cbSEO.Name = "cbSEO";
+            this.cbSEO.Size = new System.Drawing.Size(90, 17);
+            this.cbSEO.TabIndex = 14;
+            this.cbSEO.Text = "Замена СЕО";
+            this.cbSEO.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 344);
+            this.ClientSize = new System.Drawing.Size(672, 344);
+            this.Controls.Add(this.cbSEO);
+            this.Controls.Add(this.cbFullText);
             this.Controls.Add(this.gbSMMOTORS);
             this.Controls.Add(this.gbBike18);
             this.Controls.Add(this.btnUpdateImages);
@@ -208,6 +234,8 @@
         private System.Windows.Forms.GroupBox gbSMMOTORS;
         private System.Windows.Forms.TextBox tbLoginSM;
         private System.Windows.Forms.TextBox tbPasswordSM;
+        private System.Windows.Forms.CheckBox cbFullText;
+        private System.Windows.Forms.CheckBox cbSEO;
     }
 }
 
