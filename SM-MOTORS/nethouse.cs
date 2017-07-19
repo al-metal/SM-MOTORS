@@ -403,16 +403,11 @@ namespace Bike18
             string urlTovarBike = null;
 
             otv = webRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + searchString);
-            MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-            for (int t = 0; strUrlProd1.Count > t; t++)
-            {
-                string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("  ", " ").Trim();
-                if (name == nameProduct1)
-                {
-                    urlTovarBike = strUrlProd1[t].ToString();
-                    break;
-                }
-            }
+            urlTovarBike = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Match(otv).ToString();
+
+            if (urlTovarBike == "")
+                urlTovarBike = null;
+
             return urlTovarBike;
         }
 

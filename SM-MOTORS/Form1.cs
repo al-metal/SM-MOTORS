@@ -783,7 +783,7 @@ namespace SM_MOTORS
 
         public string Discount()
         {
-            string discount = "<p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> Сделай ТРОЙНОЙ удар по нашим ценам! </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> 1. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Скидки за отзывы о товарах!</a> </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> 2. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Друзьям скидки и подарки!</a> </span></p><p style=\"\"text-align: right;\"\"><span style=\"\"font-weight: bold; font-weight: bold; \"\"> 3. <a target=\"\"_blank\"\" href =\"\"http://bike18.ru/stock\"\"> Нашли дешевле!? 110% разницы Ваши!</a></span></p>";
+            string discount = "<p style=\"text-align: right;\"><span style=\"font-weight: bold; font-weight: bold;\"> 1. <a href=\"https://bike18.ru/oplata-dostavka\">Выгодные условия доставки по всей России!</a></span></p><p style=\"text-align: right;\"><span style=\"font-weight: bold; font-weight: bold;\"> 2. <a href=\"https://bike18.ru/stock\">Нашли дешевле!? 110% разницы Ваши!</a></span></p><p style=\"text-align: right;\"><span style=\"font-weight: bold; font-weight: bold;\"> 3. <a href=\"https://bike18.ru/service\">Также обращайтесь в наш сервис центр в Ижевске!</a></span></p>";
             return discount;
         }
 
@@ -907,9 +907,7 @@ namespace SM_MOTORS
             if (availability == "1")
             {
                 urlTovarBike = searchTovar(name, article);
-                if (urlTovarBike == null)
-                    urlTovarBike = searchTovar(name, name);
-
+                
                 if (urlTovarBike == null)
                 {
                     string minitext = null;
