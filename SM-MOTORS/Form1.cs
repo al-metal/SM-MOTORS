@@ -1008,6 +1008,16 @@ namespace SM_MOTORS
                     string fullText = null;
                     bool edits = false;
 
+                    if (metka == "" && listProduct[39] != "")
+                    {
+                        listProduct[39] = "";
+                        edits = true;
+                    }
+                    else
+                    {
+
+                    }
+
                     string priceBike = listProduct[9];
                     if (priceBike == "")
                         priceBike = 0.ToString();
@@ -1070,11 +1080,11 @@ namespace SM_MOTORS
                         }
 
                         string slugNew = chpu.vozvr(name);
-                        if(slugNew != listProduct[1])
+                        if (slugNew != listProduct[1])
                         {
                             nethouse.Redirect(cookieBike18, listProduct[1], slugNew);
                         }
-                        
+
                         listProduct[11] = descriptionText;
                         listProduct[12] = keywordsText;
                         listProduct[13] = titleText;
