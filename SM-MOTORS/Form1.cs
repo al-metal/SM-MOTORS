@@ -25,6 +25,7 @@ namespace SM_MOTORS
         int addCount = 0;
         int editTovar = 0;
         int countEditProduct = 0;
+        int delTovar = 0;
         double discountPrice = 0.02;
         string boldOpen;
         string boldOpenCSV = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
@@ -118,7 +119,6 @@ namespace SM_MOTORS
             string loginSM = tbLoginSM.Text;
             string passwordSM = tbPasswordSM.Text;
             countEditProduct = 0;
-            int delTovar = 0;
 
             CookieContainer cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
             CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
@@ -1107,7 +1107,11 @@ namespace SM_MOTORS
                         edits = true;
                     }
 
-                    if( li)
+                    if (listProduct[42] == "&alsoBuy[0]=0")
+                    {
+                        listProduct[42] = nethouse.alsoBuyTovars(listProduct);
+                        edits = true;
+                    }
 
                     if (edits)
                     {
@@ -1118,51 +1122,14 @@ namespace SM_MOTORS
             }
             else
             {
-                bool b = false;
+                urlTovarBike = searchTovar(name, article.Replace("-", "_"));
+                if (urlTovarBike == null)
+                    urlTovarBike = searchTovar(name, "SM_" + article.Replace("-", "_"));
 
-                //поиск по артикулу
-                otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + article);
-                MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                for (int t = 0; strUrlProd1.Count > t; t++)
+                if (urlTovarBike != null)
                 {
-                    string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Trim();
-                    nameProduct1 = specChar(nameProduct1);
-                    if (name == nameProduct1)
-                    {
-                        b = true;
-                        urlTovarBike = strUrlProd1[t].ToString();
-                        break;
-                    }
-                }
-
-                //Поиск по названию товара
-                if (!b)
-                {
-                    otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + name);
-                    strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                    for (int t = 0; strUrlProd1.Count > t; t++)
-                    {
-                        string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Trim();
-                        nameProduct1 = specChar(nameProduct1);
-                        if (name == nameProduct1)
-                        {
-                            b = true;
-                            urlTovarBike = strUrlProd1[t].ToString();
-                            break;
-                        }
-                    }
-                }
-
-                if (b)
-                {
-                    List<string> listProduct = nethouse.GetProductList(cookieBike18, urlTovarBike);
-                    otv = httpRequest.PostRequest(cookie, urlTovar);
-                    int price = Price(otv, discountPrice);
-                    listProduct[9] = price.ToString();
-                    listProduct[43] = "0";
-
-                    nethouse.SaveTovar(cookieBike18, listProduct);
-                    countEditProduct++;
+                    nethouse.DeleteProduct(cookie, urlTovarBike);
+                    delTovar++;
                 }
             }
         }
