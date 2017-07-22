@@ -44,6 +44,7 @@
             this.tbPasswordSM = new System.Windows.Forms.TextBox();
             this.cbFullText = new System.Windows.Forms.CheckBox();
             this.cbSEO = new System.Windows.Forms.CheckBox();
+            this.cbMiniText = new System.Windows.Forms.CheckBox();
             this.gbBike18.SuspendLayout();
             this.gbSMMOTORS.SuspendLayout();
             this.SuspendLayout();
@@ -170,7 +171,7 @@
             // cbFullText
             // 
             this.cbFullText.AutoSize = true;
-            this.cbFullText.Location = new System.Drawing.Point(454, 229);
+            this.cbFullText.Location = new System.Drawing.Point(453, 252);
             this.cbFullText.Name = "cbFullText";
             this.cbFullText.Size = new System.Drawing.Size(160, 17);
             this.cbFullText.TabIndex = 13;
@@ -182,18 +183,31 @@
             this.cbSEO.AutoSize = true;
             this.cbSEO.Checked = true;
             this.cbSEO.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSEO.Location = new System.Drawing.Point(453, 252);
+            this.cbSEO.Location = new System.Drawing.Point(454, 275);
             this.cbSEO.Name = "cbSEO";
             this.cbSEO.Size = new System.Drawing.Size(90, 17);
             this.cbSEO.TabIndex = 14;
             this.cbSEO.Text = "Замена СЕО";
             this.cbSEO.UseVisualStyleBackColor = true;
             // 
+            // cbMiniText
+            // 
+            this.cbMiniText.AutoSize = true;
+            this.cbMiniText.Checked = true;
+            this.cbMiniText.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbMiniText.Location = new System.Drawing.Point(453, 229);
+            this.cbMiniText.Name = "cbMiniText";
+            this.cbMiniText.Size = new System.Drawing.Size(165, 17);
+            this.cbMiniText.TabIndex = 15;
+            this.cbMiniText.Text = "Замена краткого описания";
+            this.cbMiniText.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(672, 344);
+            this.Controls.Add(this.cbMiniText);
             this.Controls.Add(this.cbSEO);
             this.Controls.Add(this.cbFullText);
             this.Controls.Add(this.gbSMMOTORS);
@@ -236,6 +250,7 @@
         private System.Windows.Forms.TextBox tbPasswordSM;
         private System.Windows.Forms.CheckBox cbFullText;
         private System.Windows.Forms.CheckBox cbSEO;
+        private System.Windows.Forms.CheckBox cbMiniText;
     }
 }
 

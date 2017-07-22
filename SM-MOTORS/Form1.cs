@@ -30,6 +30,7 @@ namespace SM_MOTORS
         string boldClose = "</span>";
         bool chekedSEO;
         bool chekedFullText;
+        bool chekedMiniText;
 
         public Form1()
         {
@@ -107,6 +108,7 @@ namespace SM_MOTORS
 
             chekedSEO = cbSEO.Checked;
             chekedFullText = cbFullText.Checked;
+            chekedMiniText = cbMiniText.Checked;
 
             string otv = null;
             string loginBike = tbLoginBike.Text;
@@ -1004,9 +1006,23 @@ namespace SM_MOTORS
 
                     otv = httpRequest.PostRequest(cookie, urlTovar);
                     int price = Price(otv, discountPrice);
-
-                    string fullText = null;
                     bool edits = false;
+
+                    string razdelmini = null;
+                    string podRazdel = null;
+                    podRazdel = boldOpen + podRazdelSeo + boldClose;
+                    razdelmini = boldOpen + razdelSeo + boldClose;
+                    string nameText = boldOpen + name + boldClose;
+                    string nameNoProd = name;
+                    string fullText = null;
+                    fullText = FullText();
+                    fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
+                    fullText = specChar(fullText);
+
+                    string minitext = MiniText();
+                    minitext = minitext.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p><p></p><p><br /></p>", "<p><br /></p>").Replace("<p><br /></p><p><br /></p><p><br /></p>", "");
+                    minitext = specChar(minitext);
+
 
                     if (metka == "" && listProduct[39] != "")
                     {
@@ -1024,18 +1040,6 @@ namespace SM_MOTORS
 
                     if (Convert.ToInt32(priceBike) != price)
                     {
-                        string razdelmini = null;
-                        string podRazdel = null;
-                        fullText = FullText();
-
-                        podRazdel = boldOpen + podRazdelSeo + boldClose;
-                        razdelmini = boldOpen + razdelSeo + boldClose;
-                        string nameText = boldOpen + name + boldClose;
-                        string nameNoProd = name;
-
-                        fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
-                        fullText = specChar(fullText);
-
                         listProduct[9] = price.ToString();
                         listProduct[8] = fullText;
                         nethouse.SaveTovar(cookieBike18, listProduct);
@@ -1048,13 +1052,18 @@ namespace SM_MOTORS
                         edits = true;
                     }
 
+                    if (chekedMiniText)
+                    {
+                        listProduct[7] = minitext;
+                        edits = true;
+                    }
+
                     if (chekedSEO)
                     {
                         string titleText = textBox1.Lines[0].ToString();
                         string descriptionText = textBox2.Lines[0].ToString();
                         string keywordsText = textBox3.Lines[0].ToString();
 
-                        string podRazdel = boldOpen + podRazdelSeo + boldClose;
                         string artNoProd = article;
 
                         titleText = titleText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);

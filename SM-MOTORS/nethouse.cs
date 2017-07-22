@@ -90,7 +90,7 @@ namespace Bike18
 
                 otv = webRequest.PostRequest(cookie, "https://bike18.nethouse.ru/api/catalog/getproduct?id=" + productId);
                 string slug = new Regex("(?<=\",\"slug\":\").*?(?=\")").Match(otv).ToString();
-                string balance = new Regex("(?<=,\"balance\":\").*?(?=\",\")").Match(otv).ToString();
+                string balance = new Regex("(?<=balance\":).*?(?=,)").Match(otv).ToString();
                 string productCastomGroup = new Regex("(?<=productCustomGroup\":).*?(?=,\")").Match(otv).ToString();
                 string discountCoast = new Regex("(?<=discountCost\":\").*?(?=\")").Match(otv).Value;
                 string serial = new Regex("(?<=serial\":\").*?(?=\")").Match(otv).Value;
