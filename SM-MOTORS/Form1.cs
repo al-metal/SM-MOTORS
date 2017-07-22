@@ -1128,7 +1128,7 @@ namespace SM_MOTORS
 
                 if (urlTovarBike != null)
                 {
-                    nethouse.DeleteProduct(cookie, urlTovarBike);
+                    nethouse.DeleteProduct(cookieBike18, urlTovarBike);
                     delTovar++;
                 }
             }
