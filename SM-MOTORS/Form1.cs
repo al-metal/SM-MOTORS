@@ -26,7 +26,9 @@ namespace SM_MOTORS
         int editTovar = 0;
         int countEditProduct = 0;
         double discountPrice = 0.02;
-        string boldOpen = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
+        string boldOpen;
+        string boldOpenCSV = "<span style=\"\"font-weight: bold; font-weight: bold;\"\">";
+        string boldOpenSite = "<span style=\"font-weight: bold; font-weight: bold;\">";
         string boldClose = "</span>";
         bool chekedSEO;
         bool chekedFullText;
@@ -919,6 +921,7 @@ namespace SM_MOTORS
 
                 if (urlTovarBike == null)
                 {
+                    boldOpen = boldOpenCSV;
                     string minitext = null;
                     string titleText = null;
                     string descriptionText = null;
@@ -1002,6 +1005,8 @@ namespace SM_MOTORS
                 }
                 else
                 {
+                    boldOpen = boldOpenSite;
+
                     List<string> listProduct = nethouse.GetProductList(cookieBike18, urlTovarBike);
 
                     otv = httpRequest.PostRequest(cookie, urlTovar);
@@ -1102,6 +1107,8 @@ namespace SM_MOTORS
                         edits = true;
                     }
 
+                    if( li)
+
                     if (edits)
                     {
                         nethouse.SaveTovar(cookieBike18, listProduct);
@@ -1188,7 +1195,7 @@ namespace SM_MOTORS
 
         private string specChar(string text)
         {
-            text = text.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&laquo;", "«").Replace("&raquo;", "»").Replace("&ndash;", "-").Replace("&mdash;", "-").Replace("&lsquo;", "‘").Replace("&rsquo;", "’").Replace("&sbquo;", "‚").Replace("&ldquo;", "\"").Replace("&rdquo;", "”").Replace("&bdquo;", "„").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&#39;", "'").Replace(",", "").Replace("\"", "");
+            text = text.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&laquo;", "«").Replace("&raquo;", "»").Replace("&ndash;", "-").Replace("&mdash;", "-").Replace("&lsquo;", "‘").Replace("&rsquo;", "’").Replace("&sbquo;", "‚").Replace("&ldquo;", "\"").Replace("&rdquo;", "”").Replace("&bdquo;", "„").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&#39;", "'");
 
             return text;
         }
