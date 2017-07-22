@@ -411,6 +411,25 @@ namespace Bike18
             return urlTovarBike;
         }
 
+        public string Redirect(CookieContainer cookie, string oldCHPU, string newCHPU)
+        {
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("https://bike18.nethouse.ru/redirect/savelink");
+            req.Accept = "application/json, text/plain, */*";
+            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
+            req.Method = "POST";
+            req.ContentType = "application/x-www-form-urlencoded";
+            req.CookieContainer = cookie;
+            byte[] saveImg = Encoding.ASCII.GetBytes("fromlink=/products/" + oldCHPU + "&tolink=/products/" + newCHPU);
+            req.ContentLength = saveImg.Length;
+            Stream srSave = req.GetRequestStream();
+            srSave.Write(saveImg, 0, saveImg.Length);
+            srSave.Close();
+            HttpWebResponse resSave = (HttpWebResponse)req.GetResponse();
+            StreamReader ressrSave = new StreamReader(resSave.GetResponseStream());
+            string otvSave = ressrSave.ReadToEnd();
+            return otvSave;
+        }
+
         #region Загрузка картинки товара на сайта Bike18.ru
         public void UploadImage(CookieContainer cookieBike18, string urlProduct)
         {
