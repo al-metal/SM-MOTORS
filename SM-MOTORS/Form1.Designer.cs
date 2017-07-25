@@ -45,6 +45,7 @@
             this.cbFullText = new System.Windows.Forms.CheckBox();
             this.cbSEO = new System.Windows.Forms.CheckBox();
             this.cbMiniText = new System.Windows.Forms.CheckBox();
+            this.btnRezina = new System.Windows.Forms.Button();
             this.gbBike18.SuspendLayout();
             this.gbSMMOTORS.SuspendLayout();
             this.SuspendLayout();
@@ -202,11 +203,22 @@
             this.cbMiniText.Text = "Замена краткого описания";
             this.cbMiniText.UseVisualStyleBackColor = true;
             // 
+            // btnRezina
+            // 
+            this.btnRezina.Location = new System.Drawing.Point(668, 12);
+            this.btnRezina.Name = "btnRezina";
+            this.btnRezina.Size = new System.Drawing.Size(90, 23);
+            this.btnRezina.TabIndex = 16;
+            this.btnRezina.Text = "Моторезина";
+            this.btnRezina.UseVisualStyleBackColor = true;
+            this.btnRezina.Click += new System.EventHandler(this.btnRezina_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(672, 344);
+            this.ClientSize = new System.Drawing.Size(946, 344);
+            this.Controls.Add(this.btnRezina);
             this.Controls.Add(this.cbMiniText);
             this.Controls.Add(this.cbSEO);
             this.Controls.Add(this.cbFullText);
@@ -251,6 +263,7 @@
         private System.Windows.Forms.CheckBox cbFullText;
         private System.Windows.Forms.CheckBox cbSEO;
         private System.Windows.Forms.CheckBox cbMiniText;
+        private System.Windows.Forms.Button btnRezina;
     }
 }
 
