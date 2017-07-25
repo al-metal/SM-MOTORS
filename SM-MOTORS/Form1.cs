@@ -1107,14 +1107,9 @@ namespace SM_MOTORS
                         edits = true;
                     }
 
-                    if (listProduct[42] == "&alsoBuy[0]=0")
-                    {
-                        listProduct[42] = nethouse.alsoBuyTovars(listProduct);
-                        edits = true;
-                    }
-
                     if (edits)
                     {
+                        listProduct[42] = nethouse.alsoBuyTovars(listProduct);
                         nethouse.SaveTovar(cookieBike18, listProduct);
                         editTovar++;
                     }
@@ -1279,7 +1274,7 @@ namespace SM_MOTORS
                     razdelSeo = titlesMenu[2].ToString();
                     break;
                 case ("zapchasti-dlya-skuterov"):
-                    razdel = razdel + "Запчасти => Запчасти для скутеров => " + titlesMenu[2].ToString();
+                    razdel = "Запчасти и расходники => Запчасти для скутеров => " + titlesMenu[2].ToString();
                     razdelmini = titlesMenu[2].ToString();
                     razdelSeo = titlesMenu[2].ToString();
                     break;
