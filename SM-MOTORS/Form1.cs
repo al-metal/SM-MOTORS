@@ -849,7 +849,6 @@ namespace SM_MOTORS
             List<string> newProduct = new List<string>();
             string urlTovarBike = null;
             CookieContainer cookie = new CookieContainer();
-            string otv = null;
             string dblProduct = "НАЗВАНИЕ также подходит для аналогичных моделей.";
             string discount = Discount();
 
@@ -875,12 +874,10 @@ namespace SM_MOTORS
                 EditSizeImages(urlImage, article);
             }
 
-            if (availability == "1")
-            {
-                urlTovarBike = searchTovar(name, article.Replace("-", "_"));
-                if (urlTovarBike == null)
-                    urlTovarBike = searchTovar(name, "SM_" + article.Replace("-", "_"));
+            urlTovarBike = searchTovar(name, article.Replace("-", "_"));
 
+            if (availability == "1")
+            {                
                 if (urlTovarBike == null)
                 {
                     boldOpen = boldOpenCSV;
@@ -1074,14 +1071,11 @@ namespace SM_MOTORS
                         nethouse.SaveTovar(cookieBike18, listProduct);
                         editTovar++;
                     }
-                }
+                }   
             }
             else
             {
-                urlTovarBike = searchTovar(name, article.Replace("-", "_"));
-                if (urlTovarBike == null)
-                    urlTovarBike = searchTovar(name, "SM_" + article.Replace("-", "_"));
-
+                // Товар есть на сайте но нет в наличии, удаляем его у нас с сайта
                 if (urlTovarBike != null)
                 {
                     nethouse.DeleteProduct(cookieBike18, urlTovarBike);
@@ -1140,7 +1134,7 @@ namespace SM_MOTORS
             string availability = new Regex("(?<=<input type=\"text\" maxlength=\"3\" value=\").*(?=\" data-max)").Match(otv).ToString();
 
             string article = new Regex("(?<=<span>Артикул:</span>).*?(?=</div>)").Match(otv).ToString();
-            article = article.Replace("-", "_");
+            article = "SM_" + article.Replace("-", "_");
 
             string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
             name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Replace("+", "").Replace("  ", " ").Trim();
