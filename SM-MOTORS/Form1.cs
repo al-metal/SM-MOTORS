@@ -1023,6 +1023,12 @@ namespace SM_MOTORS
 
                     if (chekedSEO)
                     {
+                        if (listProduct[1] != "" && chpuNoProd != listProduct[1])
+                        {
+                            nethouse.Redirect(cookieBike18, listProduct[1], chpuNoProd);
+                            listProduct[1] = chpuNoProd;
+                        }
+                            
                         string titleText = textBox1.Lines[0].ToString();
                         string descriptionText = textBox2.Lines[0].ToString();
                         string keywordsText = textBox3.Lines[0].ToString();
@@ -1473,9 +1479,7 @@ namespace SM_MOTORS
 
             #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/moto-rezina?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");
-
-            
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");            
             #endregion
 
             MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
