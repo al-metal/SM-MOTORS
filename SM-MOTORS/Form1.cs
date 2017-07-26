@@ -874,7 +874,7 @@ namespace SM_MOTORS
                 EditSizeImages(urlImage, article);
             }
 
-            urlTovarBike = searchTovar(name, article.Replace("-", "_"));
+            urlTovarBike = nethouse.searchTovar(name, article.Replace("-", "_"));
 
             if (availability == "1")
             {                
@@ -1089,25 +1089,6 @@ namespace SM_MOTORS
             StreamWriter sw = new StreamWriter("allTovars", true);
             sw.WriteLine(article);
             sw.Close();
-        }
-
-        private string searchTovar(string name, string searchString)
-        {
-            string otv = null;
-            string urlTovarBike = null;
-
-            otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + searchString);
-            MatchCollection strUrlProd1 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-            for (int t = 0; strUrlProd1.Count > t; t++)
-            {
-                string nameProduct1 = new Regex("(?<=<a href=\\\"" + strUrlProd1[t].ToString() + "\" >).*?(?=</a>)").Match(otv).ToString().Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("  ", " ").Trim();
-                if (name == nameProduct1)
-                {
-                    urlTovarBike = strUrlProd1[t].ToString();
-                    break;
-                }
-            }
-            return urlTovarBike;
         }
 
         private string specChar(string text)
