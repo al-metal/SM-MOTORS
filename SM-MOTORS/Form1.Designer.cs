@@ -207,9 +207,9 @@
             // 
             this.btnRezina.Location = new System.Drawing.Point(668, 12);
             this.btnRezina.Name = "btnRezina";
-            this.btnRezina.Size = new System.Drawing.Size(90, 23);
+            this.btnRezina.Size = new System.Drawing.Size(165, 23);
             this.btnRezina.TabIndex = 16;
-            this.btnRezina.Text = "Моторезина";
+            this.btnRezina.Text = "Моторезина и Аккумуляторы";
             this.btnRezina.UseVisualStyleBackColor = true;
             this.btnRezina.Click += new System.EventHandler(this.btnRezina_Click);
             // 
