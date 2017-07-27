@@ -46,6 +46,7 @@
             this.cbSEO = new System.Windows.Forms.CheckBox();
             this.cbMiniText = new System.Windows.Forms.CheckBox();
             this.btnRezina = new System.Windows.Forms.Button();
+            this.btnRazdels = new System.Windows.Forms.Button();
             this.gbBike18.SuspendLayout();
             this.gbSMMOTORS.SuspendLayout();
             this.SuspendLayout();
@@ -213,11 +214,22 @@
             this.btnRezina.UseVisualStyleBackColor = true;
             this.btnRezina.Click += new System.EventHandler(this.btnRezina_Click);
             // 
+            // btnRazdels
+            // 
+            this.btnRazdels.Location = new System.Drawing.Point(668, 41);
+            this.btnRazdels.Name = "btnRazdels";
+            this.btnRazdels.Size = new System.Drawing.Size(165, 23);
+            this.btnRazdels.TabIndex = 17;
+            this.btnRazdels.Text = "Отдельные разделы";
+            this.btnRazdels.UseVisualStyleBackColor = true;
+            this.btnRazdels.Click += new System.EventHandler(this.btnRazdels_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(946, 344);
+            this.Controls.Add(this.btnRazdels);
             this.Controls.Add(this.btnRezina);
             this.Controls.Add(this.cbMiniText);
             this.Controls.Add(this.cbSEO);
@@ -264,6 +276,7 @@
         private System.Windows.Forms.CheckBox cbSEO;
         private System.Windows.Forms.CheckBox cbMiniText;
         private System.Windows.Forms.Button btnRezina;
+        private System.Windows.Forms.Button btnRazdels;
     }
 }
 

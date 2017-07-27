@@ -144,8 +144,6 @@ namespace SM_MOTORS
             {
                 string urlsCategory = urls[i].ToString();
 
-
-
                 #region Запчасти
                 if (urlsCategory == "/catalog/zapchasti/")
                 {
@@ -195,7 +193,7 @@ namespace SM_MOTORS
                 #endregion
 
                 #region Остальные каталоги
-                if (urlsCategory == "/catalog/velogibridy/" || urlsCategory == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urlsCategory == "/catalog/tyuning-dlya-skuterov/" || urlsCategory == "/catalog/gsm/" || urlsCategory == "/catalog/kofry-sumki/" || urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/" || urlsCategory == "/catalog/zapchasti/zapchasti-originalnye/" || urlsCategory == "/catalog/zapchasti/dvigateli/")
+                if ( urlsCategory == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urlsCategory == "/catalog/tyuning-dlya-skuterov/" || urlsCategory == "/catalog/gsm/" || urlsCategory == "/catalog/kofry-sumki/" || urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/" || urlsCategory == "/catalog/zapchasti/zapchasti-originalnye/" || urlsCategory == "/catalog/zapchasti/dvigateli/")
                 {
                     string pages = "";
                     otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
@@ -1517,6 +1515,91 @@ namespace SM_MOTORS
                     }
                 }
             }
+        }
+
+        private void btnRazdels_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.login = tbLoginBike.Text;
+            Properties.Settings.Default.password = tbPasswordBike.Text;
+            Properties.Settings.Default.loginSM = tbLoginSM.Text;
+            Properties.Settings.Default.passwordSM = tbPasswordSM.Text;
+            Properties.Settings.Default.Save();
+
+            chekedSEO = cbSEO.Checked;
+            chekedFullText = cbFullText.Checked;
+            chekedMiniText = cbMiniText.Checked;
+
+            string otv = null;
+            string loginBike = tbLoginBike.Text;
+            string passwordBike = tbPasswordBike.Text;
+            string loginSM = tbLoginSM.Text;
+            string passwordSM = tbPasswordSM.Text;
+            countEditProduct = 0;
+
+            CookieContainer cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
+            CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
+
+            if (cookieBike18.Count != 4)
+            {
+                MessageBox.Show("Логин/пароль для сайта BIKE18.RU введен не верно!");
+                return;
+            }
+            if (cookieSM.Count != 4)
+            {
+                MessageBox.Show("Логин/пароль для сайта SM-MOTORS введен не верно!");
+                return;
+            }
+
+            File.Delete("naSite.csv");
+            File.Delete("allTovars");
+            nethouse.NewListUploadinBike18("naSite");
+
+            otv = httpRequest.getRequest("https://www.sm-motors.ru/");
+            MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
+            for (int i = 0; urls.Count > i; i++)
+            {
+                string urlsCategory = urls[i].ToString();
+
+                if (urlsCategory == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || urlsCategory == "/catalog/tyuning-dlya-skuterov/" || urlsCategory == "/catalog/gsm/" || urlsCategory == "/catalog/kofry-sumki/" || urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/" || urlsCategory == "/catalog/zapchasti/dvigateli/")
+                {
+                    string pages = "";
+                    otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                    int maxVal = countPagesSM(otv);
+
+                    for (int x = 0; maxVal >= x; x++)
+                    {
+                        if (x == 1)
+                            pages = "";
+                        else
+                            pages = "&PAGEN_1=" + x;
+
+                        if (maxVal == 0)
+                            pages = "";
+
+                        otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                        MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
+                        for (int m = 0; tovars.Count > m; m++)
+                        {
+                            string urlTovar = "https://www.sm-motors.ru" + tovars[m].ToString();
+                            AddTovarInCSV(cookieBike18, urlTovar, discountPrice, urlsCategory);
+                        }
+                        if (x == 0)
+                        {
+                            x++;
+                        }
+                    }
+
+                    uploadNewTovar(cookieBike18);
+
+                }
+            }
+
+            #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/moto-rezina?page=all");
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");
+            #endregion
+
+            MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
         }
     }
 }
