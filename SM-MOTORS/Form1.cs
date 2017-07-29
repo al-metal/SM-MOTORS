@@ -1574,15 +1574,13 @@ namespace SM_MOTORS
             {
                 string urlsCategory = urls[i].ToString();
 
-                if (urlsCategory == "/catalog/zapchasti-dlya-lodochnykh-motorov/" || 
-                    urlsCategory == "/catalog/tyuning-dlya-skuterov/" ||
+                if (urlsCategory == "/catalog/tyuning-dlya-skuterov/" ||
                     urlsCategory == "/catalog/gsm/" || 
                     urlsCategory == "/catalog/kofry-sumki/" || 
                     urlsCategory == "/catalog/zapchasti/dvigateli/" ||
                     urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/snowmax-t-200/" ||
                     urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/buran-rys-tayga/" ||
                     urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/remni-variatora_1/" ||
-                    urlsCategory == "/catalog/pokryshki-kamery/aksessuary-dlya-pokryshek/" ||
                     urlsCategory == "/catalog/pokryshki-kamery/kamery/" ||
                     urlsCategory == "/catalog/pokryshki-kamery/pokryshki-dlya-atv/" ||
                     urlsCategory == "/catalog/pokryshki-kamery/pokryshki-dlya-mototsiklov/" ||
@@ -1628,31 +1626,19 @@ namespace SM_MOTORS
             }
 
             #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/dvigateli?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-buran?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-tayga?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-raznoe?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2514653?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2939667?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2939957?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/maslo-repsol?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/maslo-agip-eni?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/maslo-liqui-moly?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/maslo-motul?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/ipone?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/masla-i-smazki?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2939917?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/tuning-dly-skuterov?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/moto-rezina?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941046?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941047?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941048?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941049?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941050?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941051?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941052?page=all");
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941053?page=all");
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/tuning-dly-skuterov?page=all");    //  Тюнинг для скутеров
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/gsm-all?page=all");    //  ГСМ
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2078659?page=all");    //  Кофры и сумки
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/dvigateli?page=all");  //  Двигатели
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-raznoe?page=all");  //  Запчасти на снегоходы
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohod-ris?page=all");  //  Запчасти на снегоходы
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-buran?page=all");   //    Запчасти на снегоходы
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/snowmax-t200?page=all");   //  Запчасти на снегоход Т200
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-tayga?page=all");   //  Запчасти на снегоход тайга
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2514653?page=all");    //  Запчасти для снегоходов - ремни вариатора
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/moto-rezina?page=all"); //  Покрышки и камеры
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");   //  аккумуляторы
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941045");  //  Лодочные моторы с подкаталогами
             #endregion
 
             MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
