@@ -150,7 +150,10 @@ namespace SM_MOTORS
                     for (int t = i; urls.Count > t; t++)
                     {
                         string urlsZapchasti = urls[t].ToString();
-                        if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" || urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/")
+                        if (/*urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" ||
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || 
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" ||*/
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/")
                         {
                             for (int tt = ++t; urls.Count > tt; tt++)
                             {
@@ -1223,9 +1226,18 @@ namespace SM_MOTORS
                     razdelSeo = "Двигатели";
                     break;
                 case ("zapchasti-dlya-mototsiklov"):
-                    razdel = razdel + "Запчасти => Запчасти для мотоциклов => " + titlesMenu[2].ToString();
-                    razdelmini = titlesMenu[2].ToString();
-                    razdelSeo = titlesMenu[2].ToString();
+                    if(titlesMenu[2].ToString() == "Запчасти для Кроссовых мотоциклов")
+                    {
+                        razdel = razdel + "Запчасти => Запчасти для кроссовых и эндуро мотоциклов => " + titlesMenu[3].ToString();
+                        razdelmini = titlesMenu[3].ToString();
+                        razdelSeo = titlesMenu[3].ToString();
+                    }
+                    else
+                    {
+                        razdel = razdel + "Запчасти => Запчасти для японских, европейских, американских мотоциклов => " + titlesMenu[2].ToString();
+                        razdelmini = titlesMenu[2].ToString();
+                        razdelSeo = titlesMenu[2].ToString();
+                    }
                     break;
                 case ("zapchasti-dlya-kvadrotsiklov"):
                     razdel = razdel + "Запчасти => Запчасти для квадроциклов => " + titlesMenu[2].ToString();

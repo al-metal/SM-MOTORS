@@ -54,9 +54,9 @@
             // 
             this.btnUpdate.Location = new System.Drawing.Point(454, 12);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(208, 31);
+            this.btnUpdate.Size = new System.Drawing.Size(208, 23);
             this.btnUpdate.TabIndex = 0;
-            this.btnUpdate.Text = "Обработать SM-MOTORS";
+            this.btnUpdate.Text = "Обработать запчасти";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -205,7 +205,7 @@
             // 
             // btnRazdels
             // 
-            this.btnRazdels.Location = new System.Drawing.Point(668, 41);
+            this.btnRazdels.Location = new System.Drawing.Point(668, 12);
             this.btnRazdels.Name = "btnRazdels";
             this.btnRazdels.Size = new System.Drawing.Size(165, 23);
             this.btnRazdels.TabIndex = 17;
