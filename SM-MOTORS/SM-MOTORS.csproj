@@ -37,17 +37,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="NehouseLibrary">
+      <HintPath>..\..\NehouseLibrary\NehouseLibrary\bin\Debug\NehouseLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="xNet">
+      <HintPath>..\..\IrbisMoto\xNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CHPU.cs" />
@@ -57,8 +62,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="httpRequest.cs" />
-    <Compile Include="nethouse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

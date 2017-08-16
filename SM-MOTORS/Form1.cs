@@ -1,25 +1,22 @@
-﻿using Bike18;
-using OfficeOpenXml;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Формирование_ЧПУ;
+using NehouseLibrary;
+using System.Drawing;
+using xNet.Net;
 
 namespace SM_MOTORS
 {
     public partial class Form1 : Form
     {
         nethouse nethouse = new nethouse();
-        httpRequest httpRequest = new httpRequest();
+
         CHPU chpu = new CHPU();
 
         int addCount = 0;
@@ -120,7 +117,7 @@ namespace SM_MOTORS
             string passwordSM = tbPasswordSM.Text;
             countEditProduct = 0;
 
-            CookieContainer cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
+            CookieDictionary cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
             CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
 
             if (cookieBike18.Count != 4)
@@ -138,7 +135,7 @@ namespace SM_MOTORS
             File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
-            otv = httpRequest.getRequest("https://www.sm-motors.ru/");
+            otv = nethouse.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
             {
@@ -150,9 +147,9 @@ namespace SM_MOTORS
                     for (int t = i; urls.Count > t; t++)
                     {
                         string urlsZapchasti = urls[t].ToString();
-                        if (/*urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" ||
-                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" || 
-                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" ||*/
+                        if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" ||
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" ||
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" ||
                             urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/")
                         {
                             for (int tt = ++t; urls.Count > tt; tt++)
@@ -161,7 +158,7 @@ namespace SM_MOTORS
                                 if (zapchastiUrls.Contains(urlsZapchasti))
                                 {
                                     string pages = "";
-                                    otv = httpRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
+                                    otv = nethouse.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
                                     int maxVal = countPagesSM(otv);
 
                                     for (int x = 0; maxVal >= x; x++)
@@ -174,7 +171,7 @@ namespace SM_MOTORS
                                         if (maxVal == 0)
                                             pages = "";
 
-                                        otv = httpRequest.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
+                                        otv = nethouse.getRequest("https://www.sm-motors.ru" + zapchastiUrls + "?count=60" + pages);
                                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                                         for (int m = 0; tovars.Count > m; m++)
                                         {
@@ -201,7 +198,7 @@ namespace SM_MOTORS
             if (allTovars.Length > 1)
             {
                 otv = null;
-                otv = httpRequest.getRequest("http://bike18.ru/products/category/1689456");
+                otv = nethouse.getRequest("http://bike18.ru/products/category/1689456");
                 MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
                 for (int i = 0; razdel.Count > i; i++)
                 {
@@ -222,7 +219,7 @@ namespace SM_MOTORS
                     else
                         urlRazdel = "https://bike18.ru" + urlRazdel + "/page/all";
 
-                    otv = httpRequest.getRequest(urlRazdel);
+                    otv = nethouse.getRequest(urlRazdel);
                     MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                     MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -238,7 +235,7 @@ namespace SM_MOTORS
                             else
                                 urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "/page/all";
 
-                            otv = httpRequest.getRequest(urlPodRazdel);
+                            otv = nethouse.getRequest(urlPodRazdel);
                             MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                             MatchCollection podRazdel2 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -247,7 +244,7 @@ namespace SM_MOTORS
                                 for (int d = 0; podRazdel2.Count > d; d++)
                                 {
                                     string urlPodRazdel2 = podRazdel2[d].ToString();
-                                    otv = httpRequest.getRequest("http://bike18.ru" + urlPodRazdel2 + "/page/all");
+                                    otv = nethouse.getRequest("http://bike18.ru" + urlPodRazdel2 + "/page/all");
                                     MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                                     MatchCollection podRazdel3 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -329,7 +326,7 @@ namespace SM_MOTORS
             MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
         }
 
-        private void uploadNewTovar(CookieContainer cookie)
+        private void uploadNewTovar(CookieDictionary cookie)
         {
             System.Threading.Thread.Sleep(20000);
             string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
@@ -377,11 +374,11 @@ namespace SM_MOTORS
             Properties.Settings.Default.Save();
             string login = tbLoginBike.Text;
             string password = tbPasswordBike.Text;
-            CookieContainer cookieBike18 = nethouse.CookieNethouse(login, password);
+            CookieDictionary cookieBike18 = nethouse.CookieNethouse(login, password);
             editTovar = 0;
 
             string otv = null;
-            otv = httpRequest.getRequest("http://bike18.ru/products/category/1689456");
+            otv = nethouse.getRequest("http://bike18.ru/products/category/1689456");
             MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
             for (int i = 0; razdel.Count > i; i++)
             {
@@ -401,7 +398,7 @@ namespace SM_MOTORS
                 else
                     urlRazdel = "https://bike18.ru" + urlRazdel + "?page=all";
 
-                otv = httpRequest.getRequest(urlRazdel);
+                otv = nethouse.getRequest(urlRazdel);
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                 MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -417,7 +414,7 @@ namespace SM_MOTORS
                         else
                             urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "?page=all";
 
-                        otv = httpRequest.getRequest(urlPodRazdel);
+                        otv = nethouse.getRequest(urlPodRazdel);
                         MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                         MatchCollection podRazdel2 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
                         if (podRazdel2.Count != 0)
@@ -425,7 +422,7 @@ namespace SM_MOTORS
                             for (int o = 0; podRazdel2.Count > o; o++)
                             {
                                 string urlPodRazdel2 = podRazdel2[o].ToString();
-                                otv = httpRequest.getRequest("http://bike18.ru" + urlPodRazdel2 + "?page=all");
+                                otv = nethouse.getRequest("http://bike18.ru" + urlPodRazdel2 + "?page=all");
                                 MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                                 MatchCollection podRazdel3 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
@@ -462,7 +459,7 @@ namespace SM_MOTORS
             MessageBox.Show("Обновлено товаров " + editTovar);
         } //загрузка картинок
 
-        private void UpdateTovar(CookieContainer cookieBike18, string urlProduct)
+        private void UpdateTovar(CookieDictionary cookieBike18, string urlProduct)
         {
             bool b = false;
             List<string> listProduct = nethouse.GetProductList(cookieBike18, urlProduct);
@@ -507,96 +504,96 @@ namespace SM_MOTORS
                 nethouse.SaveTovar(cookieBike18, listProduct);
         }
 
-        private void UploadImage(CookieContainer cookieBike18, string urlProduct)
-        {
-            string otv = null;
-            otv = httpRequest.getRequest(urlProduct);
-            string artProd = new Regex("(?<=Артикул:)[\\w\\W]*?(?=</title><)").Match(otv).ToString().Trim();
-            if (System.IO.File.Exists("Pic\\" + artProd + ".jpg"))
-            {
+        /* private void UploadImage(CookieContainer cookieBike18, string urlProduct)
+         {
+             string otv = null;
+             otv = nethouse.getRequest(urlProduct);
+             string artProd = new Regex("(?<=Артикул:)[\\w\\W]*?(?=</title><)").Match(otv).ToString().Trim();
+             if (System.IO.File.Exists("Pic\\" + artProd + ".jpg"))
+             {
 
-                otv = httpRequest.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + artProd);
+                 otv = nethouse.getRequest("http://bike18.ru/products/search/page/1?sort=0&balance=&categoryId=&min_cost=&max_cost=&text=" + artProd);
 
-                urlProduct = urlProduct.Replace("http://bike18.ru", "http://bike18.nethouse.ru");
-                otv = httpRequest.PostRequest(cookieBike18, urlProduct);
+                 urlProduct = urlProduct.Replace("http://bike18.ru", "http://bike18.nethouse.ru");
+                 otv = nethouse.PostRequest(cookieBike18, urlProduct);
 
-                MatchCollection prId = new Regex("(?<=data-id=\").*?(?=\")").Matches(otv);
-                string productId = prId[0].ToString();
+                 MatchCollection prId = new Regex("(?<=data-id=\").*?(?=\")").Matches(otv);
+                 string productId = prId[0].ToString();
 
-                Image newImg = Image.FromFile("Pic\\" + artProd + ".jpg");
-                double widthImg = newImg.Width;
-                double heigthImg = newImg.Height;
-                if (widthImg > heigthImg)
-                {
-                    double dblx = widthImg * 0.9;
-                    if (dblx < heigthImg)
-                    {
-                        heigthImg = heigthImg * 0.9;
-                    }
-                    else
-                        widthImg = widthImg * 0.9;
-                }
-                else
-                {
-                    double dblx = heigthImg * 0.9;
-                    if (dblx < widthImg)
-                    {
-                        widthImg = widthImg * 0.9;
-                    }
-                    else
-                        heigthImg = heigthImg * 0.9;
-                }
+                 Image newImg = Image.FromFile("Pic\\" + artProd + ".jpg");
+                 double widthImg = newImg.Width;
+                 double heigthImg = newImg.Height;
+                 if (widthImg > heigthImg)
+                 {
+                     double dblx = widthImg * 0.9;
+                     if (dblx < heigthImg)
+                     {
+                         heigthImg = heigthImg * 0.9;
+                     }
+                     else
+                         widthImg = widthImg * 0.9;
+                 }
+                 else
+                 {
+                     double dblx = heigthImg * 0.9;
+                     if (dblx < widthImg)
+                     {
+                         widthImg = widthImg * 0.9;
+                     }
+                     else
+                         heigthImg = heigthImg * 0.9;
+                 }
 
-                UploadImageInBike18(cookieBike18, artProd, productId, widthImg, heigthImg);
+                 UploadImageInBike18(cookieBike18, artProd, productId, widthImg, heigthImg);
 
-                List<string> listProd = nethouse.GetProductList(cookieBike18, urlProduct);
-                listProd[3] = "10833347";
+                 List<string> listProd = nethouse.GetProductList(cookieBike18, urlProduct);
+                 listProd[3] = "10833347";
 
-                nethouse.SaveTovar(cookieBike18, listProd);
-            }
-        }
+                 nethouse.SaveTovar(cookieBike18, listProd);
+             }
+         }
+         */
+        /* private void UploadImageInBike18(CookieContainer cookieBike18, string artProd, string productId, double widthImg, double heigthImg)
+          {
+              string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
+              HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/putimg?fileapi" + epoch);
+              req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*//**;q=0.8";
+              req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
+              req.Method = "POST";
+              req.ContentType = "multipart/form-data; boundary=---------------------------12709277337355";
+              req.CookieContainer = cookieBike18;
+              req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+              byte[] pic = File.ReadAllBytes("Pic\\" + artProd + ".jpg");
+              byte[] end = Encoding.ASCII.GetBytes("\r\n-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"_file\"\r\n\r\n" + artProd + ".jpg\r\n-----------------------------12709277337355--\r\n");
+              byte[] ms1 = Encoding.ASCII.GetBytes("-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"file\"; filename=\"" + artProd + ".jpg\"\r\nContent-Type: image/jpeg\r\n\r\n");
+              req.ContentLength = ms1.Length + pic.Length + end.Length;
+              Stream stre1 = req.GetRequestStream();
+              stre1.Write(ms1, 0, ms1.Length);
+              stre1.Write(pic, 0, pic.Length);
+              stre1.Write(end, 0, end.Length);
+              stre1.Close();
+              HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
+              StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
+              string otvimg = ressrImg.ReadToEnd();
 
-        private void UploadImageInBike18(CookieContainer cookieBike18, string artProd, string productId, double widthImg, double heigthImg)
-        {
-            string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/putimg?fileapi" + epoch);
-            req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
-            req.Method = "POST";
-            req.ContentType = "multipart/form-data; boundary=---------------------------12709277337355";
-            req.CookieContainer = cookieBike18;
-            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
-            byte[] pic = File.ReadAllBytes("Pic\\" + artProd + ".jpg");
-            byte[] end = Encoding.ASCII.GetBytes("\r\n-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"_file\"\r\n\r\n" + artProd + ".jpg\r\n-----------------------------12709277337355--\r\n");
-            byte[] ms1 = Encoding.ASCII.GetBytes("-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"file\"; filename=\"" + artProd + ".jpg\"\r\nContent-Type: image/jpeg\r\n\r\n");
-            req.ContentLength = ms1.Length + pic.Length + end.Length;
-            Stream stre1 = req.GetRequestStream();
-            stre1.Write(ms1, 0, ms1.Length);
-            stre1.Write(pic, 0, pic.Length);
-            stre1.Write(end, 0, end.Length);
-            stre1.Close();
-            HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
-            StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
-            string otvimg = ressrImg.ReadToEnd();
+              string urlSaveImg = new Regex("(?</*=url\":\").*?(?=\")").Match(otvimg).Value.Replace("\\/", "%2F");
 
-            string urlSaveImg = new Regex("(?<=url\":\").*?(?=\")").Match(otvimg).Value.Replace("\\/", "%2F");
-
-            req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/catalog/save-image");
-            req.Accept = "application/json, text/plain, */*";
-            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
-            req.Method = "POST";
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.CookieContainer = cookieBike18;
-            byte[] saveImg = Encoding.ASCII.GetBytes("url=" + urlSaveImg + "&id=0&type=4&objectId=" + productId + "&imgCrop[x]=0&imgCrop[y]=0&imgCrop[width]=" + widthImg + "&imgCrop[height]=" + heigthImg + "&imageId=0&iObjectId=" + productId + "&iImageType=4&replacePhoto=0");
-            req.ContentLength = saveImg.Length;
-            Stream srSave = req.GetRequestStream();
-            srSave.Write(saveImg, 0, saveImg.Length);
-            srSave.Close();
-            HttpWebResponse resSave = (HttpWebResponse)req.GetResponse();
-            StreamReader ressrSave = new StreamReader(resSave.GetResponseStream());
-            String otvSave = ressrSave.ReadToEnd();
-        }
-
+              req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/catalog/save-image");
+              req.Accept = "application/json, text/plain, *//**";
+              req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
+              req.Method = "POST";
+              req.ContentType = "application/x-www-form-urlencoded";
+              req.CookieContainer = cookieBike18;
+              byte[] saveImg = Encoding.ASCII.GetBytes("url=" + urlSaveImg + "&id=0&type=4&objectId=" + productId + "&imgCrop[x]=0&imgCrop[y]=0&imgCrop[width]=" + widthImg + "&imgCrop[height]=" + heigthImg + "&imageId=0&iObjectId=" + productId + "&iImageType=4&replacePhoto=0");
+              req.ContentLength = saveImg.Length;
+              Stream srSave = req.GetRequestStream();
+              srSave.Write(saveImg, 0, saveImg.Length);
+              srSave.Close();
+              HttpWebResponse resSave = (HttpWebResponse)req.GetResponse();
+              StreamReader ressrSave = new StreamReader(resSave.GetResponseStream());
+              String otvSave = ressrSave.ReadToEnd();
+          }
+          */
         public int countPagesSM(string otv)
         {
             int max = 0;
@@ -617,13 +614,13 @@ namespace SM_MOTORS
             return max;
         }
 
-        private int ReturnCountAdd()
+        /*private int ReturnCountAdd()
         {
             if (addCount == 99)
                 addCount = 0;
             addCount++;
             return addCount;
-        }
+        }*/
 
         public string descriptionsTovar(string otv)
         {
@@ -669,7 +666,7 @@ namespace SM_MOTORS
             }
         }
 
-        public int Price(string otv, double discountPrice)
+        /*public int Price(string otv, double discountPrice)
         {
             int price = 0;
             string strPrice = new Regex("(?<=<span class=\"price\">).*(?=</span>)").Match(otv).ToString();
@@ -682,7 +679,7 @@ namespace SM_MOTORS
                 price = (price / 10) * 10;
             }
             return price;
-        }
+        }*/
 
         public string MiniText()
         {
@@ -718,17 +715,17 @@ namespace SM_MOTORS
             return fullText;
         }
 
-        public string Discount()
+        /*public string Discount()
         {
             string discount = "<p style=\"text-align: right;\"><span style=\"font-weight: bold; font-weight: bold;\"> 1. <a href=\"https://bike18.ru/oplata-dostavka\">Выгодные условия доставки по всей России!</a></span></p><p style=\"text-align: right;\"><span style=\"font-weight: bold; font-weight: bold;\"> 2. <a href=\"https://bike18.ru/stock\">Нашли дешевле!? 110% разницы Ваши!</a></span></p><p style=\"text-align: right;\"><span style=\"font-weight: bold; font-weight: bold;\"> 3. <a href=\"https://bike18.ru/service\">Также обращайтесь в наш сервис центр в Ижевске!</a></span></p>";
             return discount;
-        }
+        }*/
 
-        public string DownloadNaSite(CookieContainer cookie)
+        /*public string DownloadNaSite(CookieContainer cookie)
         {
             string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/export-import/import-from-csv?fileapi" + epoch);
-            req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*//**;q=0.8";
             req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
             req.Method = "POST";
             req.ContentType = "multipart/form-data; boundary=---------------------------12709277337355";
@@ -747,12 +744,12 @@ namespace SM_MOTORS
             StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
             string otvimg = ressrImg.ReadToEnd();
             return otvimg;
-        }
+        }*/
 
-        public string ChekedLoading(CookieContainer cookie)
+        /*public string ChekedLoading(CookieContainer cookie)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/export-import/check-import");
-            req.Accept = "application/json, text/plain, */*";
+            req.Accept = "application/json, text/plain, *//**";
             req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
             req.Method = "POST";
             req.ContentLength = 0;
@@ -765,58 +762,58 @@ namespace SM_MOTORS
             string otvimg = ressrImg.ReadToEnd();
             return otvimg;
         }
-
-        public string DownloadImages(CookieContainer cookie, string artProd)
-        {
-            string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/putimg?fileapi" + epoch);
-            req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
-            req.Method = "POST";
-            req.ContentType = "multipart/form-data; boundary=---------------------------12709277337355";
-            req.CookieContainer = cookie;
-            req.Headers.Add("X-Requested-With", "XMLHttpRequest");
-            byte[] pic = File.ReadAllBytes("Pic\\" + artProd + ".jpg");
-            byte[] end = Encoding.ASCII.GetBytes("\r\n-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"_files\"\r\n\r\n" + artProd + ".jpg\r\n-----------------------------12709277337355--\r\n");
-            byte[] ms1 = Encoding.ASCII.GetBytes("-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"files\"; filename=\"" + artProd + ".jpg\"\r\nContent-Type: image/jpeg\r\n\r\n");
-            req.ContentLength = ms1.Length + pic.Length + end.Length;
-            Stream stre1 = req.GetRequestStream();
-            stre1.Write(ms1, 0, ms1.Length);
-            stre1.Write(pic, 0, pic.Length);
-            stre1.Write(end, 0, end.Length);
-            stre1.Close();
-            HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
-            StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
-            string otvimg = ressrImg.ReadToEnd();
-            return otvimg;
-        }
-
-        public string SaveImages(CookieContainer cookie, string urlSaveImg, int prodId, double widthImg, double heigthImg)
-        {
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/catalog/save-image");
-            req.Accept = "application/json, text/plain, */*";
-            req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
-            req.Method = "POST";
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.CookieContainer = cookie;
-            byte[] saveImg = Encoding.ASCII.GetBytes("url=" + urlSaveImg + "&id=0&type=4&objectId=" + prodId + "&imgCrop[x]=0&imgCrop[y]=0&imgCrop[width]=" + widthImg + "&imgCrop[height]=" + heigthImg + "&imageId=0&iObjectId=" + prodId + "&iImageType=4&replacePhoto=0");
-            req.ContentLength = saveImg.Length;
-            Stream srSave = req.GetRequestStream();
-            srSave.Write(saveImg, 0, saveImg.Length);
-            srSave.Close();
-            HttpWebResponse resSave = (HttpWebResponse)req.GetResponse();
-            StreamReader ressrSave = new StreamReader(resSave.GetResponseStream());
-            string otvSave = ressrSave.ReadToEnd();
-            return otvSave;
-        }
-
-        public void AddTovarInCSV(CookieContainer cookieBike18, string urlTovar, double discountPrice, string urlsCategory)
+    */
+        /* public string DownloadImages(CookieContainer cookie, string artProd)
+         {
+             string epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString().Replace(",", "");
+             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/putimg?fileapi" + epoch);
+             req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*//**;q=0.8";
+             req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
+             req.Method = "POST";
+             req.ContentType = "multipart/form-data; boundary=---------------------------12709277337355";
+             req.CookieContainer = cookie;
+             req.Headers.Add("X-Requested-With", "XMLHttpRequest");
+             byte[] pic = File.ReadAllBytes("Pic\\" + artProd + ".jpg");
+             byte[] end = Encoding.ASCII.GetBytes("\r\n-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"_files\"\r\n\r\n" + artProd + ".jpg\r\n-----------------------------12709277337355--\r\n");
+             byte[] ms1 = Encoding.ASCII.GetBytes("-----------------------------12709277337355\r\nContent-Disposition: form-data; name=\"files\"; filename=\"" + artProd + ".jpg\"\r\nContent-Type: image/jpeg\r\n\r\n");
+             req.ContentLength = ms1.Length + pic.Length + end.Length;
+             Stream stre1 = req.GetRequestStream();
+             stre1.Write(ms1, 0, ms1.Length);
+             stre1.Write(pic, 0, pic.Length);
+             stre1.Write(end, 0, end.Length);
+             stre1.Close();
+             HttpWebResponse resimg = (HttpWebResponse)req.GetResponse();
+             StreamReader ressrImg = new StreamReader(resimg.GetResponseStream());
+             string otvimg = ressrImg.ReadToEnd();
+             return otvimg;
+         }
+     */
+        /* public string SaveImages(CookieContainer cookie, string urlSaveImg, int prodId, double widthImg, double heigthImg)
+         {
+             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create("http://bike18.nethouse.ru/api/catalog/save-image");
+             req.Accept = "application/json, text/plain, *//**";
+             req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0";
+             req.Method = "POST";
+             req.ContentType = "application/x-www-form-urlencoded";
+             req.CookieContainer = cookie;
+             byte[] saveImg = Encoding.ASCII.GetBytes("url=" + urlSaveImg + "&id=0&type=4&objectId=" + prodId + "&imgCrop[x]=0&imgCrop[y]=0&imgCrop[width]=" + widthImg + "&imgCrop[height]=" + heigthImg + "&imageId=0&iObjectId=" + prodId + "&iImageType=4&replacePhoto=0");
+             req.ContentLength = saveImg.Length;
+             Stream srSave = req.GetRequestStream();
+             srSave.Write(saveImg, 0, saveImg.Length);
+             srSave.Close();
+             HttpWebResponse resSave = (HttpWebResponse)req.GetResponse();
+             StreamReader ressrSave = new StreamReader(resSave.GetResponseStream());
+             string otvSave = ressrSave.ReadToEnd();
+             return otvSave;
+         }
+     */
+        public void AddTovarInCSV(CookieDictionary cookieBike18, string urlTovar, double discountPrice, string urlsCategory)
         {
             List<string> newProduct = new List<string>();
             string urlTovarBike = null;
             CookieContainer cookie = new CookieContainer();
             string dblProduct = "НАЗВАНИЕ также подходит для аналогичных моделей.";
-            string discount = Discount();
+            string discount = nethouse.Discount();
 
             List<string> tovarSMMotors = getTovarSMMotors(urlTovar, urlsCategory);
 
@@ -869,10 +866,10 @@ namespace SM_MOTORS
                     string nameText = boldOpen + name + boldClose;
 
                     minitext = minitext.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p><p></p><p><br /></p>", "<p><br /></p>").Replace("<p><br /></p><p><br /></p><p><br /></p>", "");
-                    minitext = specChar(minitext);
+                    minitext = nethouse.ReplaceAmpersandsChar(minitext);
 
                     fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
-                    fullText = specChar(fullText);
+                    fullText = nethouse.ReplaceAmpersandsChar(fullText);
 
                     titleText = titleText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelSeo).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", name).Replace("АРТИКУЛ", artNoProd).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics);
 
@@ -927,7 +924,7 @@ namespace SM_MOTORS
                     newProduct.Add("\"" + "0" + "\"");                                     //удалить
 
                     if (priceNoProd != "0")
-                        fileWriterCSV(newProduct, "naSite");
+                        nethouse.WriteFileInCSV(newProduct, "naSite");
                 }
                 else
                 {
@@ -946,12 +943,11 @@ namespace SM_MOTORS
                     string fullText = null;
                     fullText = FullText();
                     fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
-                    fullText = specChar(fullText);
+                    fullText = nethouse.ReplaceAmpersandsChar(fullText);
 
                     string minitext = MiniText();
                     minitext = minitext.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p><p></p><p><br /></p>", "<p><br /></p>").Replace("<p><br /></p><p><br /></p><p><br /></p>", "");
-                    minitext = specChar(minitext);
-
+                    minitext = nethouse.ReplaceAmpersandsChar(minitext);
 
                     if (metka == "" && listProduct[39] != "")
                     {
@@ -1040,6 +1036,7 @@ namespace SM_MOTORS
                     if (edits)
                     {
                         listProduct[42] = nethouse.alsoBuyTovars(listProduct);
+                        listProduct[43] = "100";
                         nethouse.SaveTovar(cookieBike18, listProduct);
                         editTovar++;
                     }
@@ -1063,19 +1060,19 @@ namespace SM_MOTORS
             sw.Close();
         }
 
-        private string specChar(string text)
+        /*private string specChar(string text)
         {
             text = text.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&laquo;", "«").Replace("&raquo;", "»").Replace("&ndash;", "-").Replace("&mdash;", "-").Replace("&lsquo;", "‘").Replace("&rsquo;", "’").Replace("&sbquo;", "‚").Replace("&ldquo;", "\"").Replace("&rdquo;", "”").Replace("&bdquo;", "„").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&amp;quot;", "").Replace("&#039;", "'").Replace("&amp;gt;", ">").Replace("&#43;", "+").Replace("&#40;", "(").Replace("&nbsp;", " ").Replace("&#41;", ")").Replace("&#39;", "'");
 
             return text;
-        }
+        }*/
 
         private List<string> getTovarSMMotors(string urlTovar, string urlsCategory)
         {
             CookieContainer cookie = new CookieContainer();
             List<string> getTovar = new List<string>();
-            string otv = httpRequest.getRequest(urlTovar);
-            string otvPrice = httpRequest.getRequest(urlTovar + "?bxrand =1500970347631");
+            string otv = nethouse.getRequest(urlTovar);
+            string otvPrice = nethouse.getRequest(urlTovar + "?bxrand =1500970347631");
 
             string razdelmini = null;
             string razdelSeo = null;
@@ -1108,7 +1105,14 @@ namespace SM_MOTORS
             string urlImage = new Regex("(?<=<div class=\"gallery\">)[\\w\\W]*?(?=data-large=)").Match(otv).ToString().Replace("<a href=\"", "").Replace("\"", "").Trim();
             urlImage = "https:" + urlImage;
 
-            int price = Price(otvPrice, discountPrice);
+            int price = 0;
+            string strPrice = new Regex("(?<=<span class=\"price\">).*(?=</span>)").Match(otvPrice).ToString();
+            if (strPrice != "")
+            {
+                double priceD = Convert.ToDouble(strPrice);
+                price = nethouse.ReturnPrice(priceD, discountPrice);
+            }
+
             string priceNoProd = price.ToString();
 
             string chpuNoProd = chpu.vozvr(name);
@@ -1226,7 +1230,7 @@ namespace SM_MOTORS
                     razdelSeo = "Двигатели";
                     break;
                 case ("zapchasti-dlya-mototsiklov"):
-                    if(titlesMenu[2].ToString() == "Запчасти для Кроссовых мотоциклов")
+                    if (titlesMenu[2].ToString() == "Запчасти для Кроссовых мотоциклов")
                     {
                         razdel = razdel + "Запчасти => Запчасти для кроссовых и эндуро мотоциклов => " + titlesMenu[3].ToString();
                         razdelmini = titlesMenu[3].ToString();
@@ -1383,52 +1387,52 @@ namespace SM_MOTORS
             return getTovar;
         }
 
-        private void ErrorDownloadInSite37(string otvimg)
-        {
-            string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-            string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-            int u = Convert.ToInt32(errstr) - 1;
-            string[] strslug3 = naSite[u].ToString().Split(';');
-            string strslug = strslug3[strslug3.Length - 5];
-            int slug = strslug.Length;
-            int countAdd = ReturnCountAdd();
-            int countDel = countAdd.ToString().Length;
-            if (strslug.Contains("\""))
-            {
-                countDel = countDel + 2;
-            }
-            string strslug2 = strslug.Remove(slug - countDel);
-            strslug2 += countAdd;
-            strslug2 = strslug2.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
-            if (strslug2.Contains("\""))
-            {
-                strslug2 = strslug2 + "\"";
-                countDel = countDel - 2;
-            }
-            naSite[u] = naSite[u].Replace(strslug, strslug2);
-            File.WriteAllLines("naSite.csv", naSite, Encoding.GetEncoding(1251));
-        }
+        /* private void ErrorDownloadInSite37(string otvimg)
+         {
+             string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
+             string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
+             int u = Convert.ToInt32(errstr) - 1;
+             string[] strslug3 = naSite[u].ToString().Split(';');
+             string strslug = strslug3[strslug3.Length - 5];
+             int slug = strslug.Length;
+             int countAdd = ReturnCountAdd();
+             int countDel = countAdd.ToString().Length;
+             if (strslug.Contains("\""))
+             {
+                 countDel = countDel + 2;
+             }
+             string strslug2 = strslug.Remove(slug - countDel);
+             strslug2 += countAdd;
+             strslug2 = strslug2.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
+             if (strslug2.Contains("\""))
+             {
+                 strslug2 = strslug2 + "\"";
+                 countDel = countDel - 2;
+             }
+             naSite[u] = naSite[u].Replace(strslug, strslug2);
+             File.WriteAllLines("naSite.csv", naSite, Encoding.GetEncoding(1251));
+         }
 
-        private void ErrorDownloadInSite13(string otvimg)
-        {
-            string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
-            string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
-            int u = Convert.ToInt32(errstr) - 1;
-            string[] strslug3 = naSite[u].ToString().Split(';');
-            string strslug = strslug3[strslug3.Length - 5];
-            int slug = strslug.Length;
-            int countAdd = ReturnCountAdd();
-            int countDel = countAdd.ToString().Length;
-            if (strslug.Contains("\""))
-                countDel = countDel + 1;
-            string strslug2 = strslug.Remove(slug - countDel);
-            if (strslug.Contains("\""))
-                strslug2 += countAdd + "\"";
-            else
-                strslug2 += countAdd;
-            naSite[u] = naSite[u].Replace(strslug, strslug2);
-            File.WriteAllLines("naSite.csv", naSite, Encoding.GetEncoding(1251));
-        }
+         private void ErrorDownloadInSite13(string otvimg)
+         {
+             string errstr = new Regex("(?<=errorLine\":).*?(?=,\")").Match(otvimg).ToString();
+             string[] naSite = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
+             int u = Convert.ToInt32(errstr) - 1;
+             string[] strslug3 = naSite[u].ToString().Split(';');
+             string strslug = strslug3[strslug3.Length - 5];
+             int slug = strslug.Length;
+             int countAdd = ReturnCountAdd();
+             int countDel = countAdd.ToString().Length;
+             if (strslug.Contains("\""))
+                 countDel = countDel + 1;
+             string strslug2 = strslug.Remove(slug - countDel);
+             if (strslug.Contains("\""))
+                 strslug2 += countAdd + "\"";
+             else
+                 strslug2 += countAdd;
+             naSite[u] = naSite[u].Replace(strslug, strslug2);
+             File.WriteAllLines("naSite.csv", naSite, Encoding.GetEncoding(1251));
+         }*/
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -1458,30 +1462,16 @@ namespace SM_MOTORS
             return cookie;
         }
 
-        internal void fileWriterCSV(List<string> newProduct, string nameFile)
-        {
-            StreamWriter newProductcsv = new StreamWriter(nameFile + ".csv", true, Encoding.GetEncoding("windows-1251"));
-            int count = newProduct.Count - 1;
-            for (int i = 0; count > i; i++)
-            {
-                newProductcsv.Write(newProduct[i], Encoding.GetEncoding("windows-1251"));
-                newProductcsv.Write(";");
-            }
-            newProductcsv.Write(newProduct[count], Encoding.GetEncoding("windows-1251"));
-            newProductcsv.WriteLine();
-            newProductcsv.Close();
-        }
-
-        private void DeleteTovarsInBike18(CookieContainer cookie, string url)
+        private void DeleteTovarsInBike18(CookieDictionary cookie, string url)
         {
             string[] allTovars = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
             if (allTovars.Length > 1)
             {
                 string otv = null;
-                otv = httpRequest.getRequest(url);
+                otv = nethouse.getRequest(url);
                 MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                 MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
-                if(razdel.Count == 0)
+                if (razdel.Count == 0)
                 {
                     List<string> tovar = new List<string>();
                     if (product.Count != 0)
@@ -1509,10 +1499,10 @@ namespace SM_MOTORS
                 }
                 else
                 {
-                    for(int i = 0; razdel.Count > i; i++)
+                    for (int i = 0; razdel.Count > i; i++)
                     {
                         url = razdel[i].ToString();
-                        otv = httpRequest.getRequest(url);
+                        otv = nethouse.getRequest(url);
                         product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
                         List<string> tovar = new List<string>();
                         if (product.Count != 0)
@@ -1539,7 +1529,7 @@ namespace SM_MOTORS
                         }
                     }
                 }
-                
+
             }
         }
 
@@ -1562,7 +1552,7 @@ namespace SM_MOTORS
             string passwordSM = tbPasswordSM.Text;
             countEditProduct = 0;
 
-            CookieContainer cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
+            CookieDictionary cookieBike18 = nethouse.CookieNethouse(loginBike, passwordBike);
             CookieContainer cookieSM = LoginSMMOTORS(loginSM, passwordSM);
 
             if (cookieBike18.Count != 4)
@@ -1580,15 +1570,15 @@ namespace SM_MOTORS
             File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
-            otv = httpRequest.getRequest("https://www.sm-motors.ru/");
+            otv = nethouse.getRequest("https://www.sm-motors.ru/");
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
             {
                 string urlsCategory = urls[i].ToString();
 
                 if (urlsCategory == "/catalog/tyuning-dlya-skuterov/" ||
-                    urlsCategory == "/catalog/gsm/" || 
-                    urlsCategory == "/catalog/kofry-sumki/" || 
+                    urlsCategory == "/catalog/gsm/" ||
+                    urlsCategory == "/catalog/kofry-sumki/" ||
                     urlsCategory == "/catalog/zapchasti/dvigateli/" ||
                     urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/snowmax-t-200/" ||
                     urlsCategory == "/catalog/zapchasti/zapchasti-snegokhody/buran-rys-tayga/" ||
@@ -1608,7 +1598,7 @@ namespace SM_MOTORS
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/")
                 {
                     string pages = "";
-                    otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                    otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
                     int maxVal = countPagesSM(otv);
 
                     for (int x = 0; maxVal >= x; x++)
@@ -1621,7 +1611,7 @@ namespace SM_MOTORS
                         if (maxVal == 0)
                             pages = "";
 
-                        otv = httpRequest.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                        otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                         for (int m = 0; tovars.Count > m; m++)
                         {
