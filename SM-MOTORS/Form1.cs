@@ -816,6 +816,8 @@ namespace SM_MOTORS
             string discount = nethouse.Discount();
 
             List<string> tovarSMMotors = getTovarSMMotors(urlTovar, urlsCategory);
+            if (tovarSMMotors == null)
+                return;
 
             string name = tovarSMMotors[0].ToString();
             string article = tovarSMMotors[1].ToString();
@@ -931,7 +933,8 @@ namespace SM_MOTORS
                     boldOpen = boldOpenSite;
 
                     List<string> listProduct = nethouse.GetProductList(cookieBike18, urlTovarBike);
-
+                    if (listProduct == null)
+                        return;
                     bool edits = false;
 
                     string razdelmini = null;
@@ -1071,8 +1074,25 @@ namespace SM_MOTORS
         {
             CookieContainer cookie = new CookieContainer();
             List<string> getTovar = new List<string>();
-            string otv = nethouse.getRequest(urlTovar);
-            string otvPrice = nethouse.getRequest(urlTovar + "?bxrand =1500970347631");
+            string otv;
+            try
+            {
+                otv = nethouse.getRequest(urlTovar);
+            }
+            catch
+            {
+                return getTovar = null;
+            }
+
+            string otvPrice;
+            try
+            {
+                otvPrice = nethouse.getRequest(urlTovar + "?bxrand =1500970347631");
+            }
+            catch
+            {
+                return getTovar = null;
+            }
 
             string razdelmini = null;
             string razdelSeo = null;
@@ -1571,6 +1591,10 @@ namespace SM_MOTORS
             nethouse.NewListUploadinBike18("naSite");
 
             otv = nethouse.getRequest("https://www.sm-motors.ru/");
+
+            if (otv == "err")
+                return;
+
             MatchCollection urls = new Regex("(?<=<li><a href=\")/catalog.*?(?=\">)").Matches(otv);
             for (int i = 0; urls.Count > i; i++)
             {
@@ -1598,6 +1622,8 @@ namespace SM_MOTORS
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/")
                 {
                     string pages = "";
+
+
                     try
                     {
                         otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
@@ -1606,7 +1632,7 @@ namespace SM_MOTORS
                     {
                         continue;
                     }
-                    
+
                     int maxVal = countPagesSM(otv);
 
                     for (int x = 0; maxVal >= x; x++)
@@ -1627,7 +1653,7 @@ namespace SM_MOTORS
                         {
                             continue;
                         }
-                        
+
                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                         for (int m = 0; tovars.Count > m; m++)
                         {
