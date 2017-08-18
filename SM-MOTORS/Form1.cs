@@ -1598,7 +1598,15 @@ namespace SM_MOTORS
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/")
                 {
                     string pages = "";
-                    otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                    try
+                    {
+                        otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    
                     int maxVal = countPagesSM(otv);
 
                     for (int x = 0; maxVal >= x; x++)
@@ -1611,7 +1619,15 @@ namespace SM_MOTORS
                         if (maxVal == 0)
                             pages = "";
 
-                        otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                        try
+                        {
+                            otv = nethouse.getRequest("https://www.sm-motors.ru" + urlsCategory + "?count=60" + pages);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                        
                         MatchCollection tovars = new Regex("(?<=<a class=\"image-container\" href=\").*?(?=\" title=\")").Matches(otv);
                         for (int m = 0; tovars.Count > m; m++)
                         {

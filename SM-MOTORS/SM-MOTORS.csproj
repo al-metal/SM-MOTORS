@@ -38,7 +38,7 @@
       <HintPath>.\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="NehouseLibrary">
-      <HintPath>..\..\NehouseLibrary\NehouseLibrary\bin\Debug\NehouseLibrary.dll</HintPath>
+      <HintPath>.\NehouseLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
