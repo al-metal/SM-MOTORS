@@ -331,7 +331,7 @@ namespace SM_MOTORS
             System.Threading.Thread.Sleep(20000);
             string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
             if (naSite1.Length > 1)
-                nethouse.UploadCSVNethouse(cookie, "naSite.csv");
+                nethouse.UploadCSVNethouse(cookie, "naSite.csv", tbLoginBike.Text, tbPasswordBike.Text);
             File.Delete("naSite.csv");
             nethouse.NewListUploadinBike18("naSite");
         }
