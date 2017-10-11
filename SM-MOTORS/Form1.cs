@@ -132,7 +132,6 @@ namespace SM_MOTORS
             }
 
             File.Delete("naSite.csv");
-            File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
             otv = nethouse.getRequest("https://www.sm-motors.ru/");
@@ -641,6 +640,7 @@ namespace SM_MOTORS
                 if (urlTovarBike == null)
                 {
                     boldOpen = boldOpenCSV;
+
                     string minitext = null;
                     string titleText = null;
                     string descriptionText = null;
@@ -737,9 +737,9 @@ namespace SM_MOTORS
                     podRazdel = boldOpen + podRazdelSeo + boldClose;
                     razdelmini = boldOpen + razdelSeo + boldClose;
                     string nameText = boldOpen + name + boldClose;
-                    string nameNoProd = name;
+                    //string nameNoProd = name;
                     string fullText = null;
-                    fullText = FullText();
+                    fullText = FullText().Replace("\"\"", "\"");
                     fullText = fullText.Replace("СКИДКА", discount).Replace("ПОДРАЗДЕЛ", podRazdel).Replace("РАЗДЕЛ", razdelmini).Replace("ДУБЛЬ", dblProduct).Replace("НАЗВАНИЕ", nameText).Replace("АРТИКУЛ", article).Replace("ОПИСАНИЕ", descriptionTovar).Replace("ХАРАКТЕРИСТИКА", characteristics).Replace("<p><br /></p>", "");
                     fullText = nethouse.ReplaceAmpersandsChar(fullText);
 
@@ -752,11 +752,7 @@ namespace SM_MOTORS
                         listProduct[39] = "";
                         edits = true;
                     }
-                    else
-                    {
-
-                    }
-
+                    
                     string priceBike = listProduct[9];
                     if (priceBike == "")
                         priceBike = 0.ToString();
@@ -764,9 +760,7 @@ namespace SM_MOTORS
                     if (Convert.ToInt32(priceBike) != Convert.ToInt32(priceNoProd))
                     {
                         listProduct[9] = priceNoProd;
-                        listProduct[8] = fullText;
-                        nethouse.SaveTovar(cookieBike18, listProduct);
-                        countEditProduct++;
+                        edits = true;
                     }
 
                     if (chekedFullText)
@@ -783,12 +777,6 @@ namespace SM_MOTORS
 
                     if (chekedSEO)
                     {
-                        if (listProduct[1] != "" && chpuNoProd != listProduct[1])
-                        {
-                            nethouse.Redirect(cookieBike18, listProduct[1], chpuNoProd);
-                            listProduct[1] = chpuNoProd;
-                        }
-
                         string titleText = textBox1.Lines[0].ToString();
                         string descriptionText = textBox2.Lines[0].ToString();
                         string keywordsText = textBox3.Lines[0].ToString();
@@ -821,13 +809,13 @@ namespace SM_MOTORS
                         if (slugNew != listProduct[1])
                         {
                             nethouse.Redirect(cookieBike18, listProduct[1], slugNew);
+                            listProduct[1] = slugNew;
                         }
 
                         listProduct[11] = descriptionText;
                         listProduct[12] = keywordsText;
                         listProduct[13] = titleText;
-                        listProduct[1] = slugNew;
-
+                        
                         edits = true;
                     }
 
