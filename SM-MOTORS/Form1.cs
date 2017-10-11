@@ -752,7 +752,7 @@ namespace SM_MOTORS
                         listProduct[39] = "";
                         edits = true;
                     }
-                    
+
                     string priceBike = listProduct[9];
                     if (priceBike == "")
                         priceBike = 0.ToString();
@@ -815,7 +815,7 @@ namespace SM_MOTORS
                         listProduct[11] = descriptionText;
                         listProduct[12] = keywordsText;
                         listProduct[13] = titleText;
-                        
+
                         edits = true;
                     }
 
@@ -1351,7 +1351,6 @@ namespace SM_MOTORS
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/")
                 {
                     string pages = "";
-
 
                     try
                     {
