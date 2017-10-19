@@ -851,13 +851,14 @@ namespace SM_MOTORS
             CookieContainer cookie = new CookieContainer();
             List<string> getTovar = new List<string>();
             string otv;
-            try
+            otv = nethouse.getRequest(urlTovar);
+
+            if (otv == "err" || otv == null || otv == "")
             {
                 otv = nethouse.getRequest(urlTovar);
-            }
-            catch
-            {
-                return getTovar = null;
+
+                if (otv == "err" || otv == null || otv == "")
+                    return getTovar = null;
             }
 
             string otvPrice;
@@ -884,6 +885,11 @@ namespace SM_MOTORS
 
             string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
             name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Replace("+", "").Replace("  ", " ").Trim();
+
+            if (name == "")
+            {
+
+            }
 
             string saleMEtka = new Regex("(?<=<div class=\"old-price\">).*?(?=</div>)").Match(otv).ToString();
 
@@ -1155,6 +1161,21 @@ namespace SM_MOTORS
                     razdelmini = "Электрооборудование и принадлежности";
                     razdelSeo = "Электрооборудование и принадлежности";
                     break;
+                case ("/catalog/gsm/maslo-ipone_1/"):
+                    razdel = "Запчасти и расходники => ГСМ => IPONE";
+                    razdelmini = "IPONE";
+                    razdelSeo = "IPONE";
+                    break;
+                case ("/catalog/gsm/maslo-bel-ray_1/"):
+                    razdel = "Запчасти и расходники => ГСМ => Масло BEL-RAY";
+                    razdelmini = "Масло BEL-RAY";
+                    razdelSeo = "Масло BEL-RAY";
+                    break;
+                case ("/catalog/gsm/maslo-maxima_1/"):
+                    razdel = "Запчасти и расходники => ГСМ => Maxima";
+                    razdelmini = "Maxima";
+                    razdelSeo = "Maxima";
+                    break;
                 default:
                     break;
             }
@@ -1218,8 +1239,8 @@ namespace SM_MOTORS
             {
                 string otv = null;
                 otv = nethouse.getRequest(url);
-                MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+                MatchCollection product = new Regex("(?<=<div class=\"product-item__content\"><a href=\").*?(?=\")").Matches(otv);
+                MatchCollection razdel = new Regex("(?<=<div class=\"category-item__link\"><a href=\").*?(?=\">)").Matches(otv);
                 if (razdel.Count == 0)
                 {
                     List<string> tovar = new List<string>();
@@ -1399,7 +1420,7 @@ namespace SM_MOTORS
 
             #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/tuning-dly-skuterov?page=all");    //  Тюнинг для скутеров
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/gsm-all?page=all");    //  ГСМ
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/3022582");    //  ГСМ
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2078659?page=all");    //  Кофры и сумки
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/dvigateli?page=all");  //  Двигатели
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-raznoe?page=all");  //  Запчасти на снегоходы
