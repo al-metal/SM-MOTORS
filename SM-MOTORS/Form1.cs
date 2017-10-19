@@ -1420,7 +1420,7 @@ namespace SM_MOTORS
 
             #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/tuning-dly-skuterov?page=all");    //  Тюнинг для скутеров
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/3022582");    //  ГСМ
+            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/3022582?page=all");    //  ГСМ
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2078659?page=all");    //  Кофры и сумки
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/dvigateli?page=all");  //  Двигатели
             DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-raznoe?page=all");  //  Запчасти на снегоходы
