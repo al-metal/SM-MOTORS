@@ -333,9 +333,9 @@ namespace SM_MOTORS
             {
 
 
-             //   nethouse.UploadCSVNethouse(cookie, "naSite.csv", tbLoginBike.Text, tbPasswordBike.Text);
+                //   nethouse.UploadCSVNethouse(cookie, "naSite.csv", tbLoginBike.Text, tbPasswordBike.Text);
             }
-               // File.Delete("naSite.csv");
+            // File.Delete("naSite.csv");
             //nethouse.NewListUploadinBike18("naSite");
         }
 
@@ -607,6 +607,11 @@ namespace SM_MOTORS
 
         public void AddTovarInCSV(CookieDictionary cookieBike18, string urlTovar, double discountPrice, string urlsCategory)
         {
+            List<string> newProduct = new List<string>();
+            CookieContainer cookie = new CookieContainer();
+
+            string dblProduct = "НАЗВАНИЕ также подходит для аналогичных моделей.";
+            string urlTovarBike = null;
             string name = "";
             string article = "";
             string availability = "";
@@ -620,15 +625,11 @@ namespace SM_MOTORS
             string razdel = "";
             string razdelSeo = "";
 
-            List<string> newProduct = new List<string>();
-            string urlTovarBike = null;
-            CookieContainer cookie = new CookieContainer();
-            string dblProduct = "НАЗВАНИЕ также подходит для аналогичных моделей.";
             string discount = nethouse.Discount();
-
             List<string> tovarSMMotors = getTovarSMMotors(urlTovar, urlsCategory);
             if (tovarSMMotors == null)
                 return;
+
             try
             {
                 name = tovarSMMotors[0].ToString();
@@ -636,27 +637,20 @@ namespace SM_MOTORS
                 availability = tovarSMMotors[2].ToString();
                 descriptionTovar = tovarSMMotors[3].ToString();
                 characteristics = tovarSMMotors[4].ToString();
-                 urlImage = tovarSMMotors[5].ToString();
-                 podRazdelSeo = tovarSMMotors[6].ToString();
-                 priceNoProd = tovarSMMotors[7].ToString();
-                 chpuNoProd = tovarSMMotors[8].ToString();
-                 metka = tovarSMMotors[9].ToString();
-                 razdel = tovarSMMotors[10].ToString();
-                 razdelSeo = tovarSMMotors[11].ToString();
+                urlImage = tovarSMMotors[5].ToString();
+                podRazdelSeo = tovarSMMotors[6].ToString();
+                priceNoProd = tovarSMMotors[7].ToString();
+                chpuNoProd = tovarSMMotors[8].ToString();
+                metka = tovarSMMotors[9].ToString();
+                razdel = tovarSMMotors[10].ToString();
+                razdelSeo = tovarSMMotors[11].ToString();
             }
             catch
             {
                 return;
             }
-            
 
-            bool malossi = false;
-
-            if (name.Contains("Malossi"))
-            {
-                malossi = true;
-                priceNoProd = "0";
-            }
+            bool malossi = ReturnMalossi(name, ref priceNoProd);
 
             WrireArticleTovar(article);
 
@@ -910,6 +904,19 @@ namespace SM_MOTORS
             }
         }
 
+        private static bool ReturnMalossi(string name, ref string priceNoProd)
+        {
+            bool malossi = false;
+
+            if (name.Contains("Malossi"))
+            {
+                malossi = true;
+                priceNoProd = "0";
+            }
+
+            return malossi;
+        }
+
         private void WrireArticleTovar(string article)
         {
             StreamWriter sw = new StreamWriter("allTovars", true);
@@ -922,6 +929,8 @@ namespace SM_MOTORS
             CookieContainer cookie = new CookieContainer();
             List<string> getTovar = new List<string>();
             string otv;
+            int price = 0;
+
             otv = nethouse.getRequest(urlTovar);
 
             if (otv == "err" || otv == null || otv == "")
@@ -957,11 +966,6 @@ namespace SM_MOTORS
             string name = new Regex("(?<=<h1>).*(?=</h1>)").Match(otv).ToString();
             name = name.Replace("&quot;", "").Replace("&gt;", ">").Replace("&#039;", "'").Replace("+", "").Replace("  ", " ").Trim();
 
-            if (name == "")
-            {
-
-            }
-
             string saleMEtka = new Regex("(?<=<div class=\"old-price\">).*?(?=</div>)").Match(otv).ToString();
 
             string newMetka = new Regex("(?<=<div class=\"icons-container\">)[\\w\\W]*?(?=<div class=\"ico\"></div></div>)").Match(otv).ToString().Trim();
@@ -978,15 +982,13 @@ namespace SM_MOTORS
             string urlImage = new Regex("(?<=<div class=\"gallery\">)[\\w\\W]*?(?=data-large=)").Match(otv).ToString().Replace("<a href=\"", "").Replace("\"", "").Trim();
             urlImage = "https:" + urlImage;
 
-            int price = 0;
             string strPrice = new Regex("(?<=<span class=\"price\">).*(?=</span>)").Match(otvPrice).ToString();
             if (strPrice != "")
             {
                 double priceD = Convert.ToDouble(strPrice);
-                price = nethouse.ReturnPrice(priceD, discountPrice);
+                if (priceD > 200)
+                    price = nethouse.ReturnPrice(priceD, discountPrice);
             }
-
-            string priceNoProd = price.ToString();
 
             string chpuNoProd = chpu.vozvr(name);
 
@@ -1007,6 +1009,36 @@ namespace SM_MOTORS
                 if (objProduct == "")
                     objProduct = "/catalog/gsm/";
             }
+
+            objProduct = ReturnNameRazdel(objProduct);
+
+            ReturnRazdel(ref razdelmini, ref razdelSeo, ref razdel, name, objProduct, titlesMenu);
+
+            podRazdel = new Regex("(?<=\">" + razdelmini + "</a></span><span><a href=\").*?(?=>)").Match(otv).ToString();
+            podRazdel = new Regex("(?<=title=\").*?(?=\")").Match(podRazdel).ToString();
+            string str = new Regex("(?<=<div class=\"breadcrumbs-container\"><span><a href=\"/\" title=\").*?(?=</span></div></div></section>)").Match(otv).ToString();
+
+            string podrazdelSeo = podRazdel;
+
+            getTovar.Add(name);
+            getTovar.Add(article);
+            getTovar.Add(availability);
+            getTovar.Add(descriptionTovar);
+            getTovar.Add(characteristics);
+            getTovar.Add(urlImage);
+            getTovar.Add(podRazdel);
+            getTovar.Add(price.ToString());
+            getTovar.Add(chpuNoProd);
+            getTovar.Add(metka);
+            getTovar.Add(razdel);
+            getTovar.Add(razdelSeo);
+            getTovar.Add(podrazdelSeo);
+
+            return getTovar;
+        }
+
+        private static string ReturnNameRazdel(string objProduct)
+        {
             if (objProduct.Contains("/catalog/zapchasti-lodochnykh-motorov/anodnaya-zashchita/"))
                 objProduct = "/catalog/zapchasti-lodochnykh-motorov/anodnaya-zashchita/";
             else if (objProduct.Contains("/catalog/zapchasti-lodochnykh-motorov/zapchasti-dlya-podvesnykh-lodochnykh-motorov/"))
@@ -1023,7 +1055,11 @@ namespace SM_MOTORS
                 objProduct = "/catalog/zapchasti-lodochnykh-motorov/toplivnye-sistema/";
             else if (objProduct.Contains("/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/"))
                 objProduct = "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/";
+            return objProduct;
+        }
 
+        private static void ReturnRazdel(ref string razdelmini, ref string razdelSeo, ref string razdel, string name, string objProduct, MatchCollection titlesMenu)
+        {
             switch (objProduct)
             {
                 case ("/catalog/zapchasti/zapchasti-snegokhody/buran-rys-tayga/"):
@@ -1250,29 +1286,6 @@ namespace SM_MOTORS
                 default:
                     break;
             }
-
-            podRazdel = new Regex("(?<=\">" + razdelmini + "</a></span><span><a href=\").*?(?=>)").Match(otv).ToString();
-            podRazdel = new Regex("(?<=title=\").*?(?=\")").Match(podRazdel).ToString();
-            string str = new Regex("(?<=<div class=\"breadcrumbs-container\"><span><a href=\"/\" title=\").*?(?=</span></div></div></section>)").Match(otv).ToString();
-
-            string podrazdelSeo = podRazdel;
-
-
-            getTovar.Add(name);
-            getTovar.Add(article);
-            getTovar.Add(availability);
-            getTovar.Add(descriptionTovar);
-            getTovar.Add(characteristics);
-            getTovar.Add(urlImage);
-            getTovar.Add(podRazdel);
-            getTovar.Add(priceNoProd);
-            getTovar.Add(chpuNoProd);
-            getTovar.Add(metka);
-            getTovar.Add(razdel);
-            getTovar.Add(razdelSeo);
-            getTovar.Add(podrazdelSeo);
-
-            return getTovar;
         }
 
         private void Form1_Load(object sender, EventArgs e)
