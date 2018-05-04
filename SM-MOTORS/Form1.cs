@@ -135,6 +135,7 @@ namespace SM_MOTORS
             }
 
             File.Delete("naSite.csv");
+            File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
             FileInfo file = new FileInfo("bike18.xlsx");
@@ -157,7 +158,8 @@ namespace SM_MOTORS
                         if (urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-pitbaykov-i-kitayskikh-mototsiklov/" ||
                             urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-skuterov/" ||
                             urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-kvadrotsiklov/" ||
-                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/")
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-mototsiklov/" ||
+                            urlsZapchasti == "/catalog/zapchasti/zapchasti-dlya-snegokhodov/")
                         {
                             for (int tt = ++t; urls.Count > tt; tt++)
                             {
@@ -193,7 +195,7 @@ namespace SM_MOTORS
                                 }
                             }
 
-                            uploadNewTovar(cookieBike18);
+                            //uploadNewTovar(cookieBike18);
                         }
                     }
                 }
@@ -201,136 +203,136 @@ namespace SM_MOTORS
             }
 
             #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
-            string[] allTovars = File.ReadAllLines("allTovars");
-            if (allTovars.Length > 1)
-            {
-                otv = null;
-                otv = nethouse.getRequest("http://bike18.ru/products/category/1689456");
-                MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
-                for (int i = 0; razdel.Count > i; i++)
-                {
-                    List<string> tovar = new List<string>();
-                    string urlRazdel = razdel[i].ToString();
-                    if (urlRazdel == "/products/category/sm-motors-zapchasti")
-                        urlRazdel = "http://bike18.ru/products/category/sm-motors-zapchasti";
-                    else if (urlRazdel == "/products/category/tuning-dly-skuterov")
-                        urlRazdel = "https://bike18.ru/products/category/2078597/page/all";
-                    else if (urlRazdel == "/products/category/sm-motors-pokrishki-kameri")
-                        urlRazdel = "https://bike18.ru/products/category/sm-motors-pokrishki-kameri";
-                    else if (urlRazdel == "/products/category/2331797")
-                        urlRazdel = "https://bike18.ru/products/category/2331797";
-                    else if (urlRazdel == "/products/category/sm-zapchasti-velogibridi")
-                        urlRazdel = "https://bike18.ru/products/category/2325564/page/all";
-                    else if (urlRazdel == "/products/category/zapchasti-dly-lodochnih-motorov")
-                        urlRazdel = "https://bike18.ru/products/category/2326229/page/all";
-                    else
-                        urlRazdel = "https://bike18.ru" + urlRazdel + "/page/all";
+            //string[] allTovars = File.ReadAllLines("allTovars");
+            //if (allTovars.Length > 1)
+            //{
+            //    otv = null;
+            //    otv = nethouse.getRequest("http://bike18.ru/products/category/1689456");
+            //    MatchCollection razdel = new Regex("(?<=<div class=\"category-capt-txt -text-center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+            //    for (int i = 0; razdel.Count > i; i++)
+            //    {
+            //        List<string> tovar = new List<string>();
+            //        string urlRazdel = razdel[i].ToString();
+            //        if (urlRazdel == "/products/category/sm-motors-zapchasti")
+            //            urlRazdel = "http://bike18.ru/products/category/sm-motors-zapchasti";
+            //        else if (urlRazdel == "/products/category/tuning-dly-skuterov")
+            //            urlRazdel = "https://bike18.ru/products/category/2078597/page/all";
+            //        else if (urlRazdel == "/products/category/sm-motors-pokrishki-kameri")
+            //            urlRazdel = "https://bike18.ru/products/category/sm-motors-pokrishki-kameri";
+            //        else if (urlRazdel == "/products/category/2331797")
+            //            urlRazdel = "https://bike18.ru/products/category/2331797";
+            //        else if (urlRazdel == "/products/category/sm-zapchasti-velogibridi")
+            //            urlRazdel = "https://bike18.ru/products/category/2325564/page/all";
+            //        else if (urlRazdel == "/products/category/zapchasti-dly-lodochnih-motorov")
+            //            urlRazdel = "https://bike18.ru/products/category/2326229/page/all";
+            //        else
+            //            urlRazdel = "https://bike18.ru" + urlRazdel + "/page/all";
 
-                    otv = nethouse.getRequest(urlRazdel);
-                    MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                    MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+            //        otv = nethouse.getRequest(urlRazdel);
+            //        MatchCollection product = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
+            //        MatchCollection podRazdel = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
-                    if (podRazdel.Count != 0)
-                    {
-                        for (int p = 0; podRazdel.Count > p; p++)
-                        {
-                            string urlPodRazdel = podRazdel[p].ToString();
-                            if (urlPodRazdel == "/products/category/sm-zapchasti-dvigatel")
-                                urlPodRazdel = "http://bike18.ru/products/category/2328540/page/all";
-                            else if (urlPodRazdel == "/products/category/zapchasti")
-                                urlPodRazdel = "https://bike18.ru/products/category/2328541/page/all";
-                            else
-                                urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "/page/all";
+            //        if (podRazdel.Count != 0)
+            //        {
+            //            for (int p = 0; podRazdel.Count > p; p++)
+            //            {
+            //                string urlPodRazdel = podRazdel[p].ToString();
+            //                if (urlPodRazdel == "/products/category/sm-zapchasti-dvigatel")
+            //                    urlPodRazdel = "http://bike18.ru/products/category/2328540/page/all";
+            //                else if (urlPodRazdel == "/products/category/zapchasti")
+            //                    urlPodRazdel = "https://bike18.ru/products/category/2328541/page/all";
+            //                else
+            //                    urlPodRazdel = "https://bike18.ru" + urlPodRazdel + "/page/all";
 
-                            otv = nethouse.getRequest(urlPodRazdel);
-                            MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                            MatchCollection podRazdel2 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+            //                otv = nethouse.getRequest(urlPodRazdel);
+            //                MatchCollection product2 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
+            //                MatchCollection podRazdel2 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
-                            if (podRazdel2.Count != 0)
-                            {
-                                for (int d = 0; podRazdel2.Count > d; d++)
-                                {
-                                    string urlPodRazdel2 = podRazdel2[d].ToString();
-                                    otv = nethouse.getRequest("http://bike18.ru" + urlPodRazdel2 + "/page/all");
-                                    MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
-                                    MatchCollection podRazdel3 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
+            //                if (podRazdel2.Count != 0)
+            //                {
+            //                    for (int d = 0; podRazdel2.Count > d; d++)
+            //                    {
+            //                        string urlPodRazdel2 = podRazdel2[d].ToString();
+            //                        otv = nethouse.getRequest("http://bike18.ru" + urlPodRazdel2 + "/page/all");
+            //                        MatchCollection product3 = new Regex("(?<=<a href=\").*(?=\"><div class=\"-relative item-image\")").Matches(otv);
+            //                        MatchCollection podRazdel3 = new Regex("(?<=center\"><a href=\").*?(?=\" class=\"blue\">)").Matches(otv);
 
-                                    if (product3.Count != 0)
-                                    {
-                                        for (int m = 0; product3.Count > m; m++)
-                                        {
-                                            tovar = nethouse.GetProductList(cookieBike18, product3[m].ToString());
-                                            string article = tovar[6].ToString();
-                                            string[] all = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
-                                            bool b = false;
-                                            foreach (string s in all)
-                                            {
-                                                if (s == article)
-                                                    b = true;
-                                            }
-                                            if (!b)
-                                            {
-                                                nethouse.DeleteProduct(cookieBike18, tovar);
-                                                delTovar++;
-                                            }
-                                        }
-                                    }
+            //                        if (product3.Count != 0)
+            //                        {
+            //                            for (int m = 0; product3.Count > m; m++)
+            //                            {
+            //                                tovar = nethouse.GetProductList(cookieBike18, product3[m].ToString());
+            //                                string article = tovar[6].ToString();
+            //                                string[] all = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
+            //                                bool b = false;
+            //                                foreach (string s in all)
+            //                                {
+            //                                    if (s == article)
+            //                                        b = true;
+            //                                }
+            //                                if (!b)
+            //                                {
+            //                                    nethouse.DeleteProduct(cookieBike18, tovar);
+            //                                    delTovar++;
+            //                                }
+            //                            }
+            //                        }
 
-                                    if (podRazdel3.Count != 0)
-                                    {
+            //                        if (podRazdel3.Count != 0)
+            //                        {
 
-                                    }
-                                }
-                            }
+            //                        }
+            //                    }
+            //                }
 
-                            if (product2.Count != 0)
-                            {
-                                for (int m = 0; product2.Count > m; m++)
-                                {
-                                    tovar = nethouse.GetProductList(cookieBike18, product2[m].ToString());
-                                    string article = tovar[6].ToString();
-                                    string[] all = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
-                                    bool b = false;
-                                    foreach (string s in all)
-                                    {
-                                        if (s == article)
-                                            b = true;
-                                    }
-                                    if (!b)
-                                    {
-                                        nethouse.DeleteProduct(cookieBike18, tovar);
-                                        delTovar++;
-                                    }
-                                }
-                            }
-                        }
-                    }
+            //                if (product2.Count != 0)
+            //                {
+            //                    for (int m = 0; product2.Count > m; m++)
+            //                    {
+            //                        tovar = nethouse.GetProductList(cookieBike18, product2[m].ToString());
+            //                        string article = tovar[6].ToString();
+            //                        string[] all = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
+            //                        bool b = false;
+            //                        foreach (string s in all)
+            //                        {
+            //                            if (s == article)
+            //                                b = true;
+            //                        }
+            //                        if (!b)
+            //                        {
+            //                            nethouse.DeleteProduct(cookieBike18, tovar);
+            //                            delTovar++;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
 
-                    if (product.Count != 0)
-                    {
-                        for (int m = 0; product.Count > m; m++)
-                        {
-                            tovar = nethouse.GetProductList(cookieBike18, product[m].ToString());
-                            string article = tovar[6].ToString();
-                            string[] all = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
-                            bool b = false;
-                            foreach (string s in all)
-                            {
-                                if (s == article)
-                                    b = true;
-                            }
-                            if (!b)
-                            {
-                                nethouse.DeleteProduct(cookieBike18, tovar);
-                                delTovar++;
-                            }
-                        }
-                    }
-                }
-            }
+            //        if (product.Count != 0)
+            //        {
+            //            for (int m = 0; product.Count > m; m++)
+            //            {
+            //                tovar = nethouse.GetProductList(cookieBike18, product[m].ToString());
+            //                string article = tovar[6].ToString();
+            //                string[] all = File.ReadAllLines("allTovars", Encoding.GetEncoding(1251));
+            //                bool b = false;
+            //                foreach (string s in all)
+            //                {
+            //                    if (s == article)
+            //                        b = true;
+            //                }
+            //                if (!b)
+            //                {
+            //                    nethouse.DeleteProduct(cookieBike18, tovar);
+            //                    delTovar++;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
             #endregion
 
-            MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
+            MessageBox.Show("Измененные и новые товары находятся в файле nasite.csv в папке с программой\nНеобходимо загрузить данный файл на сайт");
         }
 
         private void uploadNewTovar(CookieDictionary cookie)
@@ -339,8 +341,6 @@ namespace SM_MOTORS
             string[] naSite1 = File.ReadAllLines("naSite.csv", Encoding.GetEncoding(1251));
             if (naSite1.Length > 1)
             {
-
-
                 //   nethouse.UploadCSVNethouse(cookie, "naSite.csv", tbLoginBike.Text, tbPasswordBike.Text);
             }
             // File.Delete("naSite.csv");
@@ -634,11 +634,6 @@ namespace SM_MOTORS
 
             string discount = nethouse.Discount();
 
-            if(urlTovar == "https://www.sm-motors.ru/catalog/zapchasti/zapchasti-dlya-skuterov/tormoznye-kolodki_1/kolodki-barabannogo-tormoza-yamaha-yamasida-tw/")
-            {
-
-            }
-
             List<string> tovarSMMotors = getTovarSMMotors(urlTovar, urlsCategory);
             if (tovarSMMotors == null)
                 return;
@@ -714,6 +709,8 @@ namespace SM_MOTORS
                         newProduct.Add("\"" + tovarB18[18] + "\"");
 
                         if (priceNoProd != "0")
+                            nethouse.WriteFileInCSV(newProduct, "naSite");
+                        else if (priceNoProd == "0" && malossi)
                             nethouse.WriteFileInCSV(newProduct, "naSite");
                     }
                 }
@@ -823,13 +820,17 @@ namespace SM_MOTORS
             for (int i = 1; q > i; i++)
             {
                 string articleB18 = (string)w.Cells[i, 2].Value.ToString();
+                if (article == "020233_803_2892")
+                {
 
+                }
 
                 if (article == articleB18)
                 {
                     string oldPriceB18 = "";
                     string alsoByB18 = "";
                     string reklamaB18 = "";
+                    string slugB18 = "";
 
                     string idB18 = (string)w.Cells[i, 1].Value.ToString();
                     string nameB18 = (string)w.Cells[i, 3].Value.ToString();
@@ -853,7 +854,14 @@ namespace SM_MOTORS
                     string titleB18 = (string)w.Cells[i, 12].Value.ToString();
                     string descriptionB18 = (string)w.Cells[i, 13].Value.ToString();
                     string keywordsB18 = (string)w.Cells[i, 14].Value.ToString();
-                    string slugB18 = (string)w.Cells[i, 15].Value.ToString();
+                    try
+                    {
+                        slugB18 = (string)w.Cells[i, 15].Value.ToString();
+                    }
+                    catch
+                    {
+                        slugB18 = "";
+                    }
                     try
                     {
                         alsoByB18 = (string)w.Cells[i, 16].Value.ToString();
@@ -904,7 +912,7 @@ namespace SM_MOTORS
         {
             bool malossi = false;
 
-            if (name.Contains("Malossi"))
+            if (name.Contains("Malossi") || name.Contains("malossi"))
             {
                 malossi = true;
                 priceNoProd = "0";
@@ -972,8 +980,10 @@ namespace SM_MOTORS
                 metka = "акция";
 
             string descriptionTovar = descriptionsTovar(otv);
+            descriptionTovar = nethouse.ReplaceAmpersandsChar(descriptionTovar).Replace("\"", "");
 
-            string characteristics = new Regex("(?<=<div class=\"tab-content columns-content\">)[\\w\\W]*?(?=</ul>)").Match(otv).ToString().Replace("<ul>", "").Replace("<li>", "").Replace("</li>", "").Replace("\n", " ").Trim();
+            string characteristics = new Regex("(?<=<div class=\"tab-content columns-content\">)[\\w\\W]*?(?=</ul>)").Match(otv).ToString().Replace("<ul>", "").Replace("<li>", "").Replace("</li>", "").Replace("\n", " ").Replace("\"", "\"\"").Trim();
+            characteristics = nethouse.ReplaceAmpersandsChar(characteristics).Replace("\"", "");
 
             string urlImage = new Regex("(?<=<div class=\"gallery\">)[\\w\\W]*?(?=data-large=)").Match(otv).ToString().Replace("<a href=\"", "").Replace("\"", "").Trim();
             urlImage = "https:" + urlImage;
@@ -1279,8 +1289,70 @@ namespace SM_MOTORS
                     razdelmini = "Maxima";
                     razdelSeo = "Maxima";
                     break;
-                default:
+                case ("/catalog/aksessuary/servis-i-perevozka/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Сервис и перевозка";
+                    razdelmini = "Сервис и перевозка";
+                    razdelSeo = "Сервис и перевозка";
                     break;
+                case ("/catalog/aksessuary/zashchita-ruk/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Защита рук";
+                    razdelmini = "Защита рук";
+                    razdelSeo = "Защита рук";
+                    break;
+                case ("/catalog/aksessuary/schetchiki-motochasov/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Счетчики моточасов";
+                    razdelmini = "Счетчики моточасов";
+                    razdelSeo = "Счетчики моточасов";
+                    break;
+                case ("/catalog/aksessuary/aksessuary-dlya-kolesnykh-diskov/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Аксессуары для колесных дисков";
+                    razdelmini = "Аксессуары для колесных дисков";
+                    razdelSeo = "Аксессуары для колесных дисков";
+                    break;
+                case ("/catalog/aksessuary/bolty-krepyezh/"):
+                    break;
+                case ("/catalog/aksessuary/brelki/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Брелки";
+                    razdelmini = "Брелки";
+                    razdelSeo = "Брелки";
+                    break;
+                case ("/catalog/aksessuary/gruziki-rulya/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Грузики руля";
+                    razdelmini = "Грузики руля";
+                    razdelSeo = "Грузики руля";
+                    break;
+                case ("/catalog/aksessuary/zamki-protivougonnye/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Замки противоугонные";
+                    razdelmini = "Замки противоугонные";
+                    razdelSeo = "Замки противоугонные";
+                    break;
+                case ("/catalog/aksessuary/zashchitnye-chekhly/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Защитные чехлы";
+                    razdelmini = "Защитные чехлы";
+                    razdelSeo = "Защитные чехлы";
+                    break;
+                case ("/catalog/aksessuary/ramki-dlya-nomera/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Рамки для номера";
+                    razdelmini = "Рамки для номера";
+                    razdelSeo = "Рамки для номера";
+                    break;
+                case ("/catalog/aksessuary/setki-bagazhnye/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Сетки багажные";
+                    razdelmini = "Сетки багажные";
+                    razdelSeo = "Сетки багажные";
+                    break;
+                case ("/catalog/aksessuary/stekla-vetrovye/"):
+                    razdel = "Аксессуары и инструменты => Аксессуары SM-MOTORS => Стекла ветровые";
+                    razdelmini = "Стекла ветровые";
+                    razdelSeo = "Стекла ветровые";
+                    break;
+                case ("/catalog/gsm/maslo-twin-air/"):
+                    break;
+                default:
+                    {
+                        break;
+                    }
+                    
             }
         }
 
@@ -1329,6 +1401,8 @@ namespace SM_MOTORS
                         for (int m = 0; product.Count > m; m++)
                         {
                             tovar = nethouse.GetProductList(cookie, product[m].ToString());
+                            if (tovar == null)
+                                continue;
                             string article = tovar[6].ToString();
 
                             if (!article.Contains("SM_"))
@@ -1420,6 +1494,11 @@ namespace SM_MOTORS
             File.Delete("allTovars");
             nethouse.NewListUploadinBike18("naSite");
 
+            FileInfo file = new FileInfo("bike18.xlsx");
+            ExcelPackage ep = new ExcelPackage(file);
+            w = ep.Workbook.Worksheets[1];
+            q = w.Dimension.Rows;
+
             otv = nethouse.getRequest("https://www.sm-motors.ru/");
 
             if (otv == "err")
@@ -1449,7 +1528,19 @@ namespace SM_MOTORS
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/distantsionnoe-upravlenie/" ||
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/toplivnye-sistema/" ||
                     urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/filtry_1/" ||
-                    urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/")
+                    urlsCategory == "/catalog/zapchasti-lodochnykh-motorov/elektrooborudovanie-i-prinadlezhnosti-/" ||
+                    urlsCategory == "/catalog/aksessuary/zashchita-ruk/" ||
+                    urlsCategory == "/catalog/aksessuary/schetchiki-motochasov/" ||
+                    urlsCategory == "/catalog/aksessuary/aksessuary-dlya-kolesnykh-diskov/" ||
+                    urlsCategory == "/catalog/aksessuary/bolty-krepyezh/" ||
+                    urlsCategory == "/catalog/aksessuary/brelki/" ||
+                    urlsCategory == "/catalog/aksessuary/gruziki-rulya/" ||
+                    urlsCategory == "/catalog/aksessuary/zamki-protivougonnye/" ||
+                    urlsCategory == "/catalog/aksessuary/zashchitnye-chekhly/" ||
+                    urlsCategory == "/catalog/aksessuary/ramki-dlya-nomera/" ||
+                    urlsCategory == "/catalog/aksessuary/servis-i-perevozka/" ||
+                    urlsCategory == "/catalog/aksessuary/setki-bagazhnye/" ||
+                    urlsCategory == "/catalog/aksessuary/stekla-vetrovye/")
                 {
                     string pages = "";
 
@@ -1487,6 +1578,10 @@ namespace SM_MOTORS
                         for (int m = 0; tovars.Count > m; m++)
                         {
                             string urlTovar = "https://www.sm-motors.ru" + tovars[m].ToString();
+                            if(urlTovar == "https://www.sm-motors.ru/catalog/aksessuary/servis-i-perevozka/podkat-pod-zadniy-mayatnik-sm-parts/")
+                            {
+
+                            }
                             AddTovarInCSV(cookieBike18, urlTovar, discountPrice, urlsCategory);
                         }
                         if (x == 0)
@@ -1499,22 +1594,22 @@ namespace SM_MOTORS
             }
 
             #region Удаление товаров с сайта байк18 если его нет на сайте см-моторс
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/tuning-dly-skuterov?page=all");    //  Тюнинг для скутеров
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/3022582?page=all");    //  ГСМ
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2078659?page=all");    //  Кофры и сумки
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/dvigateli?page=all");  //  Двигатели
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-raznoe?page=all");  //  Запчасти на снегоходы
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohod-ris?page=all");  //  Запчасти на снегоходы
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-buran?page=all");   //    Запчасти на снегоходы
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/snowmax-t200?page=all");   //  Запчасти на снегоход Т200
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-tayga?page=all");   //  Запчасти на снегоход тайга
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2514653?page=all");    //  Запчасти для снегоходов - ремни вариатора
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/moto-rezina?page=all"); //  Покрышки и камеры
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");   //  аккумуляторы
-            DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941045");  //  Лодочные моторы с подкаталогами
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/tuning-dly-skuterov?page=all");    //  Тюнинг для скутеров
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/3022582?page=all");    //  ГСМ
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2078659?page=all");    //  Кофры и сумки
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/dvigateli?page=all");  //  Двигатели
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-raznoe?page=all");  //  Запчасти на снегоходы
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohod-ris?page=all");  //  Запчасти на снегоходы
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-buran?page=all");   //    Запчасти на снегоходы
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/snowmax-t200?page=all");   //  Запчасти на снегоход Т200
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/zapchasti-na-snegohody-tayga?page=all");   //  Запчасти на снегоход тайга
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2514653?page=all");    //  Запчасти для снегоходов - ремни вариатора
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/moto-rezina?page=all"); //  Покрышки и камеры
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/akkumulyatory?page=all");   //  аккумуляторы
+            //DeleteTovarsInBike18(cookieBike18, "https://bike18.ru/products/category/2941045");  //  Лодочные моторы с подкаталогами
             #endregion
 
-            MessageBox.Show("Изменено товаров " + countEditProduct + "\n Товаров удалено: " + delTovar);
+            MessageBox.Show("Измененные и новые товары находятся в файле nasite.csv в папке с программой\nНеобходимо загрузить данный файл на сайт");
         }
     }
 }

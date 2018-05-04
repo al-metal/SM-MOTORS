@@ -62,7 +62,7 @@
             // 
             // btnSaveTempale
             // 
-            this.btnSaveTempale.Location = new System.Drawing.Point(454, 86);
+            this.btnSaveTempale.Location = new System.Drawing.Point(454, 70);
             this.btnSaveTempale.Name = "btnSaveTempale";
             this.btnSaveTempale.Size = new System.Drawing.Size(208, 31);
             this.btnSaveTempale.TabIndex = 2;
@@ -109,12 +109,13 @@
             // 
             // btnUpdateImages
             // 
-            this.btnUpdateImages.Location = new System.Drawing.Point(454, 49);
+            this.btnUpdateImages.Location = new System.Drawing.Point(454, 293);
             this.btnUpdateImages.Name = "btnUpdateImages";
             this.btnUpdateImages.Size = new System.Drawing.Size(208, 31);
             this.btnUpdateImages.TabIndex = 8;
             this.btnUpdateImages.Text = "Обновить картинки";
             this.btnUpdateImages.UseVisualStyleBackColor = true;
+            this.btnUpdateImages.Visible = false;
             this.btnUpdateImages.Click += new System.EventHandler(this.button3_Click);
             // 
             // tbLoginBike
@@ -136,7 +137,7 @@
             // 
             this.gbBike18.Controls.Add(this.tbLoginBike);
             this.gbBike18.Controls.Add(this.tbPasswordBike);
-            this.gbBike18.Location = new System.Drawing.Point(454, 123);
+            this.gbBike18.Location = new System.Drawing.Point(454, 107);
             this.gbBike18.Name = "gbBike18";
             this.gbBike18.Size = new System.Drawing.Size(208, 47);
             this.gbBike18.TabIndex = 11;
@@ -147,7 +148,7 @@
             // 
             this.gbSMMOTORS.Controls.Add(this.tbLoginSM);
             this.gbSMMOTORS.Controls.Add(this.tbPasswordSM);
-            this.gbSMMOTORS.Location = new System.Drawing.Point(454, 176);
+            this.gbSMMOTORS.Location = new System.Drawing.Point(454, 160);
             this.gbSMMOTORS.Name = "gbSMMOTORS";
             this.gbSMMOTORS.Size = new System.Drawing.Size(208, 47);
             this.gbSMMOTORS.TabIndex = 12;
@@ -172,7 +173,7 @@
             // cbFullText
             // 
             this.cbFullText.AutoSize = true;
-            this.cbFullText.Location = new System.Drawing.Point(453, 252);
+            this.cbFullText.Location = new System.Drawing.Point(453, 236);
             this.cbFullText.Name = "cbFullText";
             this.cbFullText.Size = new System.Drawing.Size(160, 17);
             this.cbFullText.TabIndex = 13;
@@ -184,7 +185,7 @@
             this.cbSEO.AutoSize = true;
             this.cbSEO.Checked = true;
             this.cbSEO.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSEO.Location = new System.Drawing.Point(454, 275);
+            this.cbSEO.Location = new System.Drawing.Point(454, 259);
             this.cbSEO.Name = "cbSEO";
             this.cbSEO.Size = new System.Drawing.Size(90, 17);
             this.cbSEO.TabIndex = 14;
@@ -196,7 +197,7 @@
             this.cbMiniText.AutoSize = true;
             this.cbMiniText.Checked = true;
             this.cbMiniText.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMiniText.Location = new System.Drawing.Point(453, 229);
+            this.cbMiniText.Location = new System.Drawing.Point(453, 213);
             this.cbMiniText.Name = "cbMiniText";
             this.cbMiniText.Size = new System.Drawing.Size(165, 17);
             this.cbMiniText.TabIndex = 15;
@@ -205,9 +206,9 @@
             // 
             // btnRazdels
             // 
-            this.btnRazdels.Location = new System.Drawing.Point(668, 12);
+            this.btnRazdels.Location = new System.Drawing.Point(454, 41);
             this.btnRazdels.Name = "btnRazdels";
-            this.btnRazdels.Size = new System.Drawing.Size(165, 23);
+            this.btnRazdels.Size = new System.Drawing.Size(206, 23);
             this.btnRazdels.TabIndex = 17;
             this.btnRazdels.Text = "Отдельные разделы";
             this.btnRazdels.UseVisualStyleBackColor = true;
@@ -217,7 +218,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(946, 344);
+            this.ClientSize = new System.Drawing.Size(671, 344);
             this.Controls.Add(this.btnRazdels);
             this.Controls.Add(this.cbMiniText);
             this.Controls.Add(this.cbSEO);
